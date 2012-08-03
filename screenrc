@@ -1,0 +1,18 @@
+
+escape ``
+startup_message off
+
+# don't block command ouput:
+# nonblock on
+
+# window list at bottom of screen:
+# hardstatus alwayslastline
+# hardstatus string "%-w%{= BW}%50>%n %t%{-}%+w%<"
+
+
+# hardstatus off
+# caption always "%?%F%{= Kk}%:%{=u kR}%?  %h %-024=%{+b} %C%a %D %d %M %Y%{= db}"
+# hardstatus alwayslastline "%{= kR} %-Lw%{=b Kk} %n%f %t %{-}%+Lw %=%{= dd}"
+
+
+

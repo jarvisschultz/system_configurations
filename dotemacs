@@ -232,7 +232,8 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp)
 
 ;; make python mode recognize _ as a word separator
-(add-hook 'python-mode-hook (function (lambda () (modify-syntax-entry ?_ "." py-mode-syntax-table))))
+(modify-syntax-entry ?_ "." py-mode-syntax-table)
+(modify-syntax-entry ?_ "." python-mode-syntax-table)
 
 ;; add a function for formatting c-code within the LaTeX major mode:
 (defun indent-region-as-c (beg end)

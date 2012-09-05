@@ -40,9 +40,9 @@
 (setq c-basic-offset 4)
 
 ;; Add autocomplete package:
-(add-to-list 'load-path "~/.emacs.d/auto-complete-1.3.1/")
+(add-to-list 'load-path "~/.emacs.d/auto-complete/")
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete-1.3.1/ac-dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 
@@ -106,35 +106,8 @@
 (global-set-key (kbd "C-c C-`") 'TeX-next-error)
 (global-set-key (kbd "C-c C-g") 'top-level)
 
-;; Add wordcount function:
-;;; Final version: while
-(defun count-words-region (beginning end)
-  "Print number of words in the region."
-  (interactive "r")
-  (message "Counting words in region ... ")
-
-;;; 1. Set up appropriate conditions.
-  (save-excursion
-    (let ((count 0))
-      (goto-char beginning)
-
-;;; 2. Run the while loop.
-      (while (and (< (point) end)
-                  (re-search-forward "\\w+\\W*" end t))
-        (setq count (1+ count)))
-
-;;; 3. Send a message to the user.
-      (cond ((zerop count)
-             (message
-              "The region does NOT have any words."))
-            ((= 1 count)
-             (message
-              "The region has 1 word."))
-            (t
-             (message
-              "The region has %d words." count))))))
-
-(global-set-key (kbd "C-c C-=") 'count-words-region)
+;; bind key for the new emacs24 function count-words
+(global-set-key (kbd "C-c C-=") 'count-words)
 
 
 ;; Turn on FlySpell for LaTeX by default

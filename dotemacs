@@ -67,7 +67,8 @@
  '(save-place t nil (saveplace))
  '(show-paren-mode t)
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
- '(warning-suppress-types (quote ((\(quote\ \(\(undo\ discard-info\)\)\))))))
+ '(warning-suppress-types (quote ((\(quote\ \(\(undo\ discard-info\)\)\)))))
+ '(wdired-allow-to-change-permissions t))
 
 ;; Bind a new key for changing line wrapping properties:
 (define-key global-map [f5] 'toggle-truncate-lines)

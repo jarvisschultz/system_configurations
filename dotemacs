@@ -309,5 +309,5 @@
 ;; add functionality for magit mode
 (require 'magit)
 
-
-
+;; something keeps resetting the indentation settings 
+(setq nxml-child-indent 2)

@@ -153,6 +153,8 @@
 	  (lambda () (subword-mode 1)))
 (add-hook 'c++-mode-common-hook
 	  (lambda () (subword-mode 1)))
+(add-hook 'python-mode-hook
+	  (lambda () (subword-mode 1)))
 
 ;; Icicle functionality
 (add-to-list 'load-path "~/.emacs.d/icicles")

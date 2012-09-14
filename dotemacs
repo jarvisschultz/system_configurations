@@ -45,6 +45,17 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
+;; add LaTeX-auto-complete mode
+(require 'ac-math)
+(add-to-list 'ac-modes 'latex-mode)   ; make auto-complete aware of {{{latex-mode}}}
+(defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
+  (setq ac-sources
+     (append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
+               ac-sources))
+)
+(add-hook 'LaTeX-mode-hook 'auto-complete-mode)
+(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
+(ac-flyspell-workaround)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -111,7 +122,7 @@
 (global-set-key (kbd "C-c C-=") 'count-words)
 
 
-;; Turn on FlySpell for LaTeX by default
+;; Turn on FlySpell for some things by default
 ;(add-hook          'c-mode-hook 'flyspell-prog-mode)
 ;(add-hook         'sh-mode-hook 'flyspell-prog-mode)
 ;(add-hook        'c++-mode-hook 'flyspell-prog-mode)
@@ -122,14 +133,13 @@
 ;(add-hook   'autotest-mode-hook 'flyspell-prog-mode)
 ;(add-hook   'makefile-mode-hook 'flyspell-prog-mode)
 ;(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
-
+(add-hook 'text-mode-hook 'flyspell-mode-on)
+(add-hook 'change-log-mode-hook 'flyspell-mode-on)
+(add-hook 'tex-mode-hook 'flyspell-mode-on)
 (add-hook 'tex-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode
 	  '(lambda () (setq flyspell-generic-check-word-p
 			    'texinfo-mode-flyspell-verify)))
-
-(add-hook 'change-log-mode-hook (lambda () (flyspell-mode 1)))
-(add-hook       'text-mode-hook (lambda () (flyspell-mode 1)))
 
 ;; Add matlab-emacs mode
 (add-to-list 'load-path "~/src/emacs_stuff/matlab-emacs/")

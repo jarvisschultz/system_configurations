@@ -136,9 +136,10 @@
 ;(add-hook   'autotest-mode-hook 'flyspell-prog-mode)
 ;(add-hook   'makefile-mode-hook 'flyspell-prog-mode)
 ;(add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode)
-(add-hook 'text-mode-hook 'flyspell-mode-on)
-(add-hook 'change-log-mode-hook 'flyspell-mode-on)
-(add-hook 'tex-mode-hook 'flyspell-mode-on)
+(setq flyspell-use-meta-tab nil)
+(add-hook 'text-mode-hook 'turn-on-flyspell)
+(add-hook 'change-log-mode-hook 'turn-on-flyspell)
+(add-hook 'tex-mode-hook 'turn-on-flyspell)
 (add-hook 'tex-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode
 	  '(lambda () (setq flyspell-generic-check-word-p

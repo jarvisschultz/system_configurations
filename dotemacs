@@ -191,7 +191,7 @@
 ;; for narrowing editing to a single region:
 (put 'narrow-to-region 'disabled nil)
 ;; don't want browsing kill ring to mess up my display:
-(setq browse-kill-ring-quit-action "save-and-restore")
+(setq browse-kill-ring-quit-action 'save-and-restore)
 
 
 

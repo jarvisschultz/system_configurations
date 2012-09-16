@@ -57,8 +57,6 @@
 ;; Miscellaneous bindings:
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [f10] 'shell)
-;; Binding for running a bash script:
-(define-key TeX-mode-map [f11] (lambda() (interactive) (shell-command "./LatexCompile")))
 ;; add shortcuts for splitting and changing windows
 (global-set-key (kbd "M-1") 'delete-other-windows)
 (global-set-key (kbd "M-2") 'split-window-vertically)
@@ -227,6 +225,18 @@
 
 
 
+;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add autocomplete package:
+(add-to-list 'load-path "~/.emacs.d/auto-complete/")
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
+(ac-config-default)
+(define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
 (require 'tex)
@@ -270,6 +280,8 @@
 (add-hook 'LaTeX-mode-hook 'auto-complete-mode)
 (add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
 (ac-flyspell-workaround)
+;; Binding for running a bash script:
+(define-key TeX-mode-map [f11] (lambda() (interactive) (shell-command "./LatexCompile")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -292,17 +304,6 @@
 (modify-syntax-entry ?_ "." python-mode-syntax-table)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add autocomplete package:
-(add-to-list 'load-path "~/.emacs.d/auto-complete/")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
-(ac-config-default)
-(define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 

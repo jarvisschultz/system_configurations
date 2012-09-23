@@ -146,3 +146,6 @@ export GPGKEY=9BBA54C6
 
 # add lib64 for phantom omni
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
+
+# add self-built texlive 2012 to PATH
+export PATH=/usr/local/texlive/2012/bin/x86_64-linux:$PATH

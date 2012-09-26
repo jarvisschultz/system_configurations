@@ -201,7 +201,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISC ;; 
 ;; Add functionality for expand region:
-(add-to-list 'load-path "~/.emacs.d/expand-region.el")
+(add-to-list 'load-path "~/.emacs.d/expand-region/")
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-+") 'er/contract-region)

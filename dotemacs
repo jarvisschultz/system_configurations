@@ -90,6 +90,7 @@
 (toggle-scroll-bar -1)
 (column-number-mode 1)
 (setq inhibit-startup-message t)
+(setq-default fill-column 80) ;; set default fill column value
 ;; Set the default window size if we are not running in the no window option:
 (if (window-system) (set-frame-height (selected-frame) 47))
 (if (window-system) (set-frame-width (selected-frame) 102))

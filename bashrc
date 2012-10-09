@@ -98,6 +98,18 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+# make nano automatically open with sudo when necessary
+function nano() {
+    nano=`which nano`;
+    if ([ -e "$1" ] && ! [ -w "$1" ]) || ( ! [ -e "$1" ] && ! [ -w "`dirname $1`" ]);
+    then
+        read -n 1 -p "$1 is not editable by you. sudo [y/N]? " y
+        [ "$y" == "y" ] || [ "$y" == "Y" ] && echo -e "\n" && sudo $nano $@
+    else
+        $nano $@
+    fi
+}
+
 # add 256 color support for the terminal:
 # export TERM=xterm-256color 
 ## note that this causes problems with emacs when it tries to autoload

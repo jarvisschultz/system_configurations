@@ -304,6 +304,7 @@
 ;; make python mode recognize _ as a word separator
 (modify-syntax-entry ?_ "." py-mode-syntax-table)
 (modify-syntax-entry ?_ "." python-mode-syntax-table)
+(add-hook 'python-mode-hook 'highlight-indentation)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

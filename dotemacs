@@ -127,17 +127,17 @@
 'after-make-console-frame-hooks)))
 
 (defun set-my-custom-window-settings ()
-"remove scroll bar and set window size"
-(toggle-scroll-bar -1)
-(set-frame-width (selected-frame) 98)
-(set-frame-height (selected-frame) 48)
-(load-theme 'zenburn t)
+  "remove scroll bar and set window size"
+  (toggle-scroll-bar -1)
+  (set-frame-width (selected-frame) 98)
+  (set-frame-height (selected-frame) 48)
+  (load-theme 'zenburn t)
 )
 
 (defun set-my-custom-terminal-settings ()
-"remove scroll bar and set window size"
-(load-theme 'zenburn t)
-)
+  "remove scroll bar and set window size"
+  (load-theme 'zenburn t)
+  )
 
 (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
 (add-hook 'after-init-hook
@@ -363,5 +363,13 @@
 (icy-mode 1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'buffer-move)
+(global-set-key (kbd "<C-S-up>")     'buf-move-up)
+(global-set-key (kbd "<C-S-down>")   'buf-move-down)
+(global-set-key (kbd "<C-S-left>")   'buf-move-left)
+(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

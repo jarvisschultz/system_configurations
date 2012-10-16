@@ -103,7 +103,7 @@ function nano() {
     nano=`which nano`;
     if ([ -e "$1" ] && ! [ -w "$1" ]) || ( ! [ -e "$1" ] && ! [ -w "`dirname $1`" ]);
     then
-        read -n 1 -p "$1 is not editable by you. sudo [y/N]? " y
+        read -n 1 -p "$1 is not editable by you. sudo [y/n]? " y
         [ "$y" == "y" ] || [ "$y" == "Y" ] && echo -e "\n" && sudo $nano $@
     else
         $nano $@

@@ -135,7 +135,7 @@ unset LIBGL_ALWAYS_INDIRECT
 # add microchip compilers to the path
 export PATH=$PATH:/opt/microchip/xc32/v1.00/bin
 # add android tools to path:
-export PATH=$PATH:/home/jarvis/src/android/android-sdk-linux/tools
+# export PATH=$PATH:/home/jarvis/src/android/android-sdk-linux/tools
 
 # add syntax color and piping to less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

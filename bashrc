@@ -133,7 +133,7 @@ export PATH=/home/jarvis/Dropbox/Processing/nuscope/application.linux64:$PATH
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT
 # add microchip compilers to the path
-export PATH=$PATH:/opt/microchip/xc32/v1.00/bin
+export PATH=$PATH:/opt/microchip/xc32/v1.11/bin
 # add android tools to path:
 # export PATH=$PATH:/home/jarvis/src/android/android-sdk-linux/tools
 
@@ -149,9 +149,6 @@ stty -ixon
 
 # Add settings for emacs client:
 export ALTERNATE_EDITOR=""
-
-# microchip setting
-export PATH=/opt/microchip/xc32/v1.00/bin:$PATH
 
 # set default gpg key
 export GPGKEY=9BBA54C6

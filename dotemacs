@@ -34,6 +34,7 @@
  '(matlab-comment-region-s "% ")
  '(matlab-shell-ask-MATLAB-for-completions nil)
  '(preview-auto-cache-preamble t)
+ '(preview-gs-options (quote ("-q" "-dNOSAFER" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
  '(preview-scale-function 1.25)
  '(safe-local-variable-values (quote ((TeX-auto-parse-length . 999999) (TeX-auto-regexp-list . TeX-auto-full-regexp-list) (TeX-parse-self . t) (TeX-auto-save . t))))
  '(save-place t nil (saveplace))

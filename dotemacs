@@ -389,6 +389,7 @@
     (setq recentf-last-list recentf-list)
     (recentf-save-list)))
 (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
-(add-to-list 'recentf-exclude "\\.recentf\\'") ;; don't add this file
-(global-set-key (kbd "C-c C-f") 'recentf-open-files)
+(add-to-list 'recentf-exclude "\\.recentf\\'") 
+(add-to-list 'recentf-exclude "\\COMMIT_EDITMSG\\'") 
+(global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

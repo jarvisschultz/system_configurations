@@ -202,6 +202,7 @@
 ;; enable dired+ instead of dired and turn on "a" command
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
+(setq dired-omit-files "^\\...+$")
 
 
 

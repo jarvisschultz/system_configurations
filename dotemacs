@@ -42,7 +42,6 @@
  '(safe-local-variable-values (quote ((TeX-auto-parse-length . 999999) (TeX-auto-regexp-list . TeX-auto-full-regexp-list) (TeX-parse-self . t) (TeX-auto-save . t))))
  '(save-place t nil (saveplace))
  '(show-paren-mode t)
- '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
  '(warning-suppress-types (quote ((\(quote\ \(\(undo\ discard-info\)\)\)))))
  '(wdired-allow-to-change-permissions t))
 
@@ -245,6 +244,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
+(auto-complete-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

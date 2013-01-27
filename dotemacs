@@ -82,7 +82,8 @@
 (global-set-key (kbd "C-c C-y") 'browse-kill-ring)
 ;; make hippie-expand my default expansion:
 (global-set-key (kbd "M-/") 'hippie-expand)
-
+;; add key for using tag expand:
+(global-set-key (kbd "M-RET") 'complete-tag)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -209,7 +210,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MISC ;; 
+;; add miscellaneous packages dir to load path
+(add-to-list 'load-path "~/.emacs.d/misc-packages/")
 ;; Add functionality for expand region:
 (add-to-list 'load-path "~/.emacs.d/expand-region/")
 (require 'expand-region)
@@ -239,12 +241,13 @@
 
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add autocomplete package:
-(add-to-list 'load-path "~/.emacs.d/auto-complete/")
+(add-to-list 'load-path "~/.emacs.d/auto-complete-extras/")
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete//ac-dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-1.4/dict/")
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (auto-complete-mode)
+(setq ac-ignore-case nil)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -313,8 +316,8 @@
 ;; (setq py-install-directory "/home/jarvis/src/emacs_stuff/python-mode.el-6.0.10/")
 ;; (require 'ipython)
 ;; make python mode recognize _ as a word separator
-(modify-syntax-entry ?_ "." py-mode-syntax-table)
-(modify-syntax-entry ?_ "." python-mode-syntax-table)
+(modify-syntax-entry ?_ "_" py-mode-syntax-table)
+(modify-syntax-entry ?_ "_" python-mode-syntax-table)
 (add-hook 'python-mode-hook 'highlight-indentation)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -364,7 +367,7 @@
 
 ;; ICICLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Icicle functionality
-(add-to-list 'load-path "~/.emacs.d/icicles")
+;; (add-to-list 'load-path "~/.emacs.d/icicles")
 (require 'icicles)
 (setq icicle-expand-input-to-common-match-flag nil)
 (setq icicle-search-replace-common-match-flag nil)

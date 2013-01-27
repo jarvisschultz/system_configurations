@@ -139,15 +139,14 @@
 )
 
 (defun set-my-custom-terminal-settings ()
-  "remove scroll bar and set window size"
-  (load-theme 'zenburn t)
+  "run any commands specific to no-window mode"
+  ;; (load-theme 'zenburn t)
   )
 
 (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
 (add-hook 'after-init-hook
 (lambda () (run-after-make-frame-hooks (selected-frame))))
 
-(set-variable 'color-theme-is-global nil)
 (add-hook 'after-make-window-system-frame-hooks
 	  'set-my-custom-window-settings)
 (add-hook 'after-make-console-frame-hooks
@@ -243,11 +242,11 @@
 ;; Add autocomplete package:
 (add-to-list 'load-path "~/.emacs.d/auto-complete-extras/")
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-1.4/dict/")
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (auto-complete-mode)
 (setq ac-ignore-case nil)
+;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-1.4/dict/")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

@@ -397,6 +397,6 @@
     (recentf-save-list)))
 (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
 (add-to-list 'recentf-exclude "\\.recentf\\'") 
-(add-to-list 'recentf-exclude "\\COMMIT_EDITMSG\\'") 
+(add-to-list 'recentf-exclude ".*\\.git/.*\\'")
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -212,7 +212,6 @@
 ;; add miscellaneous packages dir to load path
 (add-to-list 'load-path "~/.emacs.d/misc-packages/")
 ;; Add functionality for expand region:
-(add-to-list 'load-path "~/.emacs.d/expand-region/")
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-+") 'er/contract-region)

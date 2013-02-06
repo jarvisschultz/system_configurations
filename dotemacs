@@ -270,13 +270,11 @@
 (add-hook 'LaTeX-mode-hook 'reftex-mode)
 (add-hook 'bibtex-mode-hook 'reftex-mode)
 ;; make reftex use frametitle and lecture for TOC
-;; (add-hook 'reftex-load-hook
-;; 	  (lambda ()
-;; 	    (setq reftex-section-levels
-;; 		  (cons '("frame" . 2) 
-;; 			(cons '("lecture" . 1)
-;; 			      reftex-section-levels))
-;; 		  reftex-section-levels)))
+(add-hook 'reftex-load-hook
+	  (lambda ()
+	    (setq reftex-section-levels
+		  (cons '("frametitle" . 7) 
+			reftex-section-levels))))
 ;; makes reftex use cleveref for all styles by default:
 (defun reftex-format-cref (label def-fmt)
   (format "\\cref{%s}" label))

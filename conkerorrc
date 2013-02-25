@@ -1,0 +1,43 @@
+// autocomplete settings
+url_completion_use_history = true;
+minibuffer_auto_complete_default = true;
+url_completion_use_bookmarks = true;
+
+// favicon settings
+require("favicon");
+add_hook("mode_line_hook", mode_line_adder(buffer_icon_widget), true);
+read_buffer_show_icons = true;
+
+// custom keybindings
+undefine_key(content_buffer_normal_keymap, "C-n")
+undefine_key(content_buffer_normal_keymap, "C-p")
+undefine_key(content_buffer_normal_keymap, "C-f")
+undefine_key(content_buffer_normal_keymap, "C-b")
+undefine_key(content_buffer_normal_keymap, "C-a")
+undefine_key(content_buffer_normal_keymap, "C-e")
+define_key(default_global_keymap, "M-left", "back") 
+define_key(default_global_keymap, "M-right", "forward") 
+define_key(default_global_keymap, "M-f", "forward-word") 
+define_key(default_global_keymap, "M-b", "backward-word") 
+define_key(default_global_keymap, "C-n", "forward-line") 
+define_key(default_global_keymap, "C-p", "backward-line") 
+define_key(default_global_keymap, "C-f", "forward-char") 
+define_key(default_global_keymap, "C-b", "backward-char") 
+define_key(default_global_keymap, "C-a", "beginning-of-line") 
+define_key(default_global_keymap, "C-e", "end-of-line") 
+
+
+// mouse clicking options
+require("clicks-in-new-buffer.js");
+clicks_in_new_buffer_target = OPEN_NEW_BUFFER_BACKGROUND;
+// Set to 0 = left mouse, 1 = middle mouse, 2 = right mouse
+clicks_in_new_buffer_button = 1;
+
+// external programs for handling various mime types.
+external_content_handlers.set("application/pdf", "xpdf");
+external_content_handlers.set("video/*", "urxvtc -e mplayer");
+
+// default directory for downloads and shell commands.
+cwd = get_home_directory();
+cwd.append("Downloads");
+

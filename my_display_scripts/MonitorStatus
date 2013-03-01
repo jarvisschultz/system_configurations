@@ -1,8 +1,8 @@
 #!/bin/bash
 
-line=`xrandr --current |grep -A 1 "CRT1.*\n.*\+" |grep "60.0.*"`
+line=`xrandr |grep "CRT1.*\n.*\+" |grep " connected"`
 
-if [[ "$line" == *\** ]]
+if [[ -n "$line" ]]
 then
     echo "It is connected!"
     exit 1

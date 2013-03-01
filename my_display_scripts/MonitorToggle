@@ -1,0 +1,16 @@
+#!/bin/bash
+
+## first we need to check if the monitor is on or not
+MonitorStatus
+status=$?
+
+## now if the monitor is on, we turn it off. if it is off, we turn it
+## on
+if [[ $status -eq 0 ]]
+then
+    echo "Monitor is off, we must turn it on"
+    MonitorControl on
+else
+    echo "Monitor is on, we must turn it off"
+    MonitorControl off
+fi

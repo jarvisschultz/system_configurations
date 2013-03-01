@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# get connected monitor data:
 out=$(xrandr --current | grep -i " connected")
 echo "xrandr output:"
 echo "${out}" 
@@ -8,6 +9,7 @@ moncount=$(echo "${out}" |wc -l)
 echo "Monitor Count = ${moncount}"
 echo 
 
+# get each monitor's width, height, and location in the virtual desktop:
 i=0
 while IFS= read
 do 
@@ -21,6 +23,17 @@ do
     i=$(($i+1))
 done <<<  "${out}"
 
+# sort the previous data by location (min to max)
+tmp=$(for k in {0..2}
+do
+    echo "${widths[k]} ${heights[k]} ${locations[k]}"
+done | 
+sort -n -k3)
+widths=($(printf '%s\n' "${tmp[@]}" | cut -d' ' -f1))
+heights=($(printf '%s\n' "${tmp[@]}" | cut -d' ' -f2))
+locations=($(printf '%s\n' "${tmp[@]}" | cut -d' ' -f3))
+
+# get boundaries of vertically split secors in each monitor 
 i=0
 while [ ${i} -lt $moncount ]
 do
@@ -34,78 +47,75 @@ done
 # do 
 #     echo "quad $i = ${quads[i]}"
 # done
+# echo
 
 # figure out where the window is:
-xval=$(xwininfo -id $(xdpyinfo | grep focus | \
-    grep -E -o 0x[0-9a-f]+) | grep Abs.*X: |grep -o -e "  [0-9].*")
-echo "xval = ${xval}"
-# now we need to figure out which sector the window is in
+xmin=$(xwininfo -id $(xdpyinfo | grep focus | \
+    grep -E -o 0x[0-9a-f]+) | grep Abs.*X: |grep -o -E "[0-9]{0,}")
+echo "xmin = ${xmin}"
+
+# now we need to figure out which sector the window is in, and set values for
+# moving it
 i=0
 found=0
 key=0
 while [ ${i} -lt $moncount ]
 do
-    if (( ( ${xval} >= ${quads[$(($i*3))]} ) && ( ${xval} < ${quads[$(($i*3+1))]} ) ))
+    if (( ( ${xmin} >= ${quads[$(($i*3))]} ) && \
+	( ${xmin} < ${quads[$(($i*3+1))]} ) ))
     then
  	echo "sector = $(($i*2+1))"
 	found=1
-	xloc=$((${quads[i*3]}))
-	key=$(($i*3))
-	echo $xloc
-	
+	key=$(($i*3)) 
+	xloc=$((${quads[key]}))
+	err=$((${xmin} - ${quads[$((key))]}))
+	echo "err = ${err}"
+	if (( $err < 5 ))
+	then
+	    key=$((key-2)) 
+	    if (( $key < 0 ))
+	    then
+		key=0
+	    fi
+	    xloc=$((${quads[key]}))
+	fi
+	echo "Moving to = ${xloc}"
 	break
-    elif (( ( ${xval} >= ${quads[$(($i*3+1))]} ) && ( ${xval} < ${quads[$(($i*3+2))]} ) ))
+    elif (( ( ${xmin} >= ${quads[$(($i*3+1))]} ) && \
+	( ${xmin} < ${quads[$(($i*3+2))]} ) ))
     then
     	echo "sector = $(($i*2+2))"
     	found=1
-	xloc=$((${quads[i*3+1]}))
 	key=$(($i*3+1))
-	echo $xloc
+	xloc=$((${quads[key]}))
+	err=$((${xmin} - ${quads[$((key))]}))
+	echo "err = ${err}"
+	if (( $err < 5 ))
+	then
+	    key=$((key-1)) 
+	    if (( $key < 0 ))
+	    then
+		key=0
+	    fi
+	    xloc=$((${quads[key]}))
+	fi
+	echo "Moving to = ${xloc}"
     	break
     fi	
     i=$(($i+1))
 done
 
+# quit if we didn't accurately find the sector
 if (( $found == 0 ))
 then
     echo "Not in a sector!"
     exit 1
 fi
 
+# move window
 wid=$((${quads[$key+1]}-${quads[$key]}))
 wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
 wmctrl -r :ACTIVE: -e 0,${xloc},0,${wid},-1
 wmctrl -r :ACTIVE: -b add,maximized_vert
 
 exit 0
-# # define monitor resolutions:
-# # Left 
-# resolutions=$(xrandr --current |grep -A 4 LVDS |grep \* |grep -o [0-9].*x[0-9].*\ )
-# lw=$(echo $resolutions |cut -d'x' -f1)
-# lh=$(echo $resolutions |cut -d'x' -f2)
-# # Right 
-# resolutions=$(xrandr --current |grep -A 4 CRT |grep \* |grep -o [0-9].*x[0-9].*\ )
-# rw=$(echo $resolutions |cut -d'x' -f1)
-# rh=$(echo $resolutions |cut -d'x' -f2)
-
-# # figure out where the window is:
-# xval=$(xwininfo -id $(xdpyinfo | grep focus | \
-#     grep -E -o 0x[0-9a-f]+) | grep Abs.*X: |grep -o -e "  [0-9].*")
-
-# # are we on the right monitor?
-# if [ $(($xval)) -ge $(($rw-2)) ] 
-# then
-#     # then let's push to left edge, and maximize height, and set width to be 1/2
-#     # the monitor width
-#     # echo "On Right Monitor"
-#     wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
-#     wmctrl -r :ACTIVE: -e 0,$rw,0,$(($rw/2)),-1
-#     wmctrl -r :ACTIVE: -b add,maximized_vert
-# else
-#     # then let's push to left edge, and maximize height, and set width to be 1/2
-#     # the monitor width
-#     wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
-#     wmctrl -r :ACTIVE: -e 0,0,0,$(($lw/2)),-1
-#     wmctrl -r :ACTIVE: -b add,maximized_vert
-# fi
-# exit 0

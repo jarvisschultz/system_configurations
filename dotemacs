@@ -321,6 +321,8 @@
 (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
 (add-hook 'python-mode-hook 'highlight-indentation)
+;; enable cython-mode
+(require 'cython-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

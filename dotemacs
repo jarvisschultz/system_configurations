@@ -180,7 +180,7 @@
 ;; set the value of the macro ring buffer
 (setq kmacro-ring-max 20)
 ;; enable delete-selection-mode
-(delete-selection-mode 1)
+(delete-selection-mode)
 ;; add tramp functionality:
 (require 'tramp)
 (setq tramp-default-method "scp")

@@ -202,7 +202,10 @@
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-omit-files "^\\...+$")
-
+;; add keybinding for activating wdired-mode
+(add-hook 'dired-mode-hook 
+	  (lambda () (define-key dired-mode-map 
+	    (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
 
 
 

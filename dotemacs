@@ -318,18 +318,21 @@
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; add python functionality
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/")
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/completion/")
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/extensions/")
+(setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.0.10/")
 (require 'python-mode)
+(require 'highlight-indentation)
+(require 'column-marker)
 (fset 'python-beginning-of-line
    "\C-a\223\\w\C-b")
 (add-hook 'python-mode-hook (function (lambda () (define-key
 						   python-mode-map (kbd "M-a")
 						   'python-beginning-of-line))))
-;; (add-to-list 'load-path "/home/jarvis/src/emacs_stuff/python-mode.el-6.0.10/")
-;; (add-to-list 'load-path "/home/jarvis/src/emacs_stuff/python-mode.el-6.0.10/completion/")
-;; (setq py-install-directory "/home/jarvis/src/emacs_stuff/python-mode.el-6.0.10/")
 ;; (require 'ipython)
 ;; make python mode recognize _ as a word separator
-(modify-syntax-entry ?_ "_" py-mode-syntax-table)
+;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
 (add-hook 'python-mode-hook 'highlight-indentation)
 ;; enable cython-mode

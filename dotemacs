@@ -198,9 +198,6 @@
 (put 'narrow-to-region 'disabled nil)
 ;; don't want browsing kill ring to mess up my display:
 (setq browse-kill-ring-quit-action 'save-and-restore)
-;; use recentf to store a list of recent files across sessions:
-(require 'recentf)
-(recentf-mode 1)
 ;; enable dired+ instead of dired and turn on "a" command
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
@@ -409,6 +406,9 @@
 
 
 ;; RECENTF CUSTOMIZATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; use recentf to store a list of recent files across sessions:
+(require 'recentf)
+(recentf-mode 1)
 (setq recentf-last-list '())
 (defun recentf-save-if-changes ()
   "If the file list has changed, we will re-save it."
@@ -418,5 +418,6 @@
 (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
 (add-to-list 'recentf-exclude "\\.recentf\\'") 
 (add-to-list 'recentf-exclude ".*\\.git/.*\\'")
+(add-to-list 'recentf-exclude ".*\\.gpg\\'") 
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

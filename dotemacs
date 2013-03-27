@@ -324,7 +324,7 @@
 (require 'python-mode)
 (require 'highlight-indentation)
 (require 'column-marker)
-;; (require 'ipython)
+(require 'ipython)
 ;; make python mode recognize _ as a word separator
 ;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)

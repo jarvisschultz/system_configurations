@@ -324,16 +324,14 @@
 (require 'python-mode)
 (require 'highlight-indentation)
 (require 'column-marker)
-(fset 'python-beginning-of-line
-   "\C-a\223\\w\C-b")
-(add-hook 'python-mode-hook (function (lambda () (define-key
-						   python-mode-map (kbd "M-a")
-						   'python-beginning-of-line))))
 ;; (require 'ipython)
 ;; make python mode recognize _ as a word separator
 ;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
 (add-hook 'python-mode-hook 'highlight-indentation)
+;; set docstring formatting options
+(add-hook 'python-mode-hook (function 
+			     (lambda () (setq py-docstring-style 'django))))
 ;; enable cython-mode
 (require 'cython-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

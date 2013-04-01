@@ -210,6 +210,8 @@
 (eval-after-load "dired-aux"
    '(add-to-list 'dired-compress-file-suffixes 
                  '("\\.zip\\'" ".zip" "unzip")))
+;; use ibuffer by default instead of list-buffers
+(defalias 'list-buffers 'ibuffer)
 
 
 
@@ -324,7 +326,6 @@
 (require 'python-mode)
 (require 'highlight-indentation)
 (require 'column-marker)
-(require 'ipython)
 ;; make python mode recognize _ as a word separator
 ;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)

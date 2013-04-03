@@ -385,6 +385,7 @@
 ;; Icicle functionality
 (require 'icicles)
 (setq icicle-expand-input-to-common-match-flag nil)
+(setq icicle-expand-input-to-common-match 2)
 (setq icicle-search-replace-common-match-flag nil)
 (setq icicle-incremental-completion-flag nil)
 (setq icicle-region-background "#4f4f4f")

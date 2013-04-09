@@ -25,6 +25,15 @@ function rcon(){
     fi
     export ROS_MASTER_URI=http://$core:11311/;
     echo "ROS_MASTER_URI = ${ROS_MASTER_URI}"
+    if [[ $core == *localhost* ]]
+    then
+	unset ROS_IP
+	echo "unset ROS_IP"
+    else
+	ip=$(ifconfig |sed -n '2 p' |awk '{print $2}' |cut -d \: -f 2)
+	export ROS_IP=$ip
+	echo "ROS_IP=${ip}"
+    fi
 }
   
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'

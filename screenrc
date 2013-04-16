@@ -1,6 +1,7 @@
 
 escape ``
 startup_message off
+altscreen off
 
 # # don't block command ouput:
 # # nonblock on

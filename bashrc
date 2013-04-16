@@ -139,7 +139,7 @@ export PATH=$PATH:/opt/microchip/xc32/v1.11/bin
 
 # add syntax color and piping to less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
-export LESS=' -R '
+export LESS=' -RXF ' # raw control chars, turn off screen resetting, auto exit if less than one screen
 export CLICOLOR_FORCE="true"
 alias lsc='ls --color=always'
 alias grepc='grep --color=always'

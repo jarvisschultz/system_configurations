@@ -319,10 +319,10 @@
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; add python functionality
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/")
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/completion/")
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.0.10/extensions/")
-(setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.0.10/")
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/")
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/completion/")
+(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
+(setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
 (require 'python-mode)
 (require 'highlight-indentation)
 (require 'column-marker)

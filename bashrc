@@ -129,7 +129,7 @@ PATH=$HOME/bin:$HOME/eagle-5.11.0/bin:$PATH
 # Add MATLAB_JAVA Environment Variable:
 export MATLAB_JAVA=/usr/lib/jvm/java-6-openjdk-amd64/jre/
 # Add processing apps to PATH
-export PATH=/home/jarvis/Dropbox/Processing/nuscope/application.linux64:$PATH
+export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT
 # add microchip compilers to the path

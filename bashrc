@@ -117,11 +117,16 @@ function nano() {
 
 ## python config
 export PYTHONPATH=/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
-## OpenCV
-export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib/python2.7/config:/home/jarvis/OpenCV-2.2.0/release/lib
+
 ## ROS
-source /opt/ros/fuerte/setup.bash
-export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
+# FUERTE:
+# source /opt/ros/fuerte/setup.bash
+# export ROS_PACKAGE_PATH=/home/jarvis/ros:/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
+# GROOVY:
+source ~/groovyws/devel/setup.bash
+# fix rviz flickering
+unset LIBGL_ALWAYS_INDIRECT
+
 # Set EMACS as default editor:
 export EDITOR='emacsclient -t'
 # Add Eagle, and sbin:
@@ -130,12 +135,8 @@ PATH=$HOME/bin:$HOME/eagle-5.11.0/bin:$PATH
 export MATLAB_JAVA=/usr/lib/jvm/java-6-openjdk-amd64/jre/
 # Add processing apps to PATH
 export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
-# fix rviz flickering
-unset LIBGL_ALWAYS_INDIRECT
 # add microchip compilers to the path
 export PATH=$PATH:/opt/microchip/xc32/v1.11/bin
-# add android tools to path:
-# export PATH=$PATH:/home/jarvis/src/android/android-sdk-linux/tools
 
 # add syntax color and piping to less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

@@ -212,6 +212,8 @@
                  '("\\.zip\\'" ".zip" "unzip")))
 ;; use ibuffer by default instead of list-buffers
 (defalias 'list-buffers 'ibuffer)
+;; set abbrev mode settings
+(setq save-abbrevs nil)
 
 
 
@@ -236,12 +238,6 @@
 (require 'mathematica)
 ;; add functionality for magit mode
 (require 'magit)
-;; Add functionality for rosemacs
-(add-to-list 'load-path "/home/jarvis/ros/stacks/rosemacs/")
-(require 'rosemacs)
-(invoke-rosemacs)
-;; add a keymap for using rosemacs commands
-(global-set-key "\C-x\C-r" ros-keymap)
 ;; add my function that joins a region into a single line
 (require 'join-region)
 ;; add my function that opens a file as sudo
@@ -257,10 +253,27 @@
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (auto-complete-mode)
 (setq ac-ignore-case nil)
-;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-1.4/dict/")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Add functionality for rosemacs
+(add-to-list 'load-path "/home/jarvis/ros/stacks/rosemacs/")
+(require 'rosemacs)
+(invoke-rosemacs)
+;; add a keymap for using rosemacs commands
+(global-set-key "\C-x\C-r" ros-keymap)
+;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
+;; compilation buffer... let's fix that
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+;; the way I am doing the following doesn't seem very safe!
+(defvar compile-history nil)
+(setq compile-history '("cd /home/jarvis/groovyws/ && catkin_make "))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

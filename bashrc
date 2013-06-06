@@ -120,10 +120,10 @@ export PYTHONPATH=/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python
 
 ## ROS
 # FUERTE:
-# source /opt/ros/fuerte/setup.bash
-# export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
+source /opt/ros/fuerte/setup.bash
+export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
 # GROOVY:
-source ~/groovyws/devel/setup.bash
+# source ~/groovyws/devel/setup.bash
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT
 

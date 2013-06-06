@@ -402,6 +402,7 @@
 (setq icicle-search-replace-common-match-flag nil)
 (setq icicle-incremental-completion-flag nil)
 (setq icicle-region-background "#4f4f4f")
+(setq icicle-image-files-in-Completions 'nil)
 ;; turn on icicles by default
 (icy-mode 1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

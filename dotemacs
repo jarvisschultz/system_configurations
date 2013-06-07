@@ -214,7 +214,10 @@
 (defalias 'list-buffers 'ibuffer)
 ;; set abbrev mode settings
 (setq save-abbrevs nil)
-
+;; prevent cursor from moving over prompts in minibuffer
+(setq minibuffer-prompt-properties 
+      (quote (read-only t point-entered 
+			minibuffer-avoid-prompt face minibuffer-prompt)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

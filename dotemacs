@@ -326,7 +326,7 @@
 					'indent-region-as-c)))
 ;; binding for compiling beamer frames
 (add-hook 'LaTeX-mode-hook (lambda () (define-key
-					LaTeX-mode-map (kbd "\C-\M-x") 
+					LaTeX-mode-map (kbd "C-M-x") 
 					'tex-beamer-frame)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  

@@ -71,9 +71,7 @@
 ;; commands:
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp)
-;; Modifty the command for parsing LaTeX errors to be compatible with
-;; icicles:
-(global-set-key (kbd "C-c C-`") 'TeX-next-error)
+;; define a key for totally escaping icicles commands
 (global-set-key (kbd "C-c C-g") 'top-level)
 ;; bind key for the new emacs24 function count-words
 (global-set-key (kbd "C-c C-=") 'count-words)
@@ -294,6 +292,8 @@
 (add-to-list 'TeX-output-view-style 
 	     '("^dvi$" "." 
 	       "%(o?)xdvi -watchfile 1 %dS %d"))
+;; set options for latex compilation
+(setq LaTeX-command "latex -src-specials -file-line-error")
 ;; turn on reftex by default
 (add-hook 'LaTeX-mode-hook 'reftex-mode)
 (add-hook 'bibtex-mode-hook 'reftex-mode)

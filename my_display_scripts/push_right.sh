@@ -50,8 +50,11 @@ done
 # echo
 
 # figure out where the window is:
-xmin=$(xwininfo -id $(xdpyinfo | grep focus | \
-    grep -E -o 0x[0-9a-f]+) | grep Abs.*X: |grep -o -E "[0-9]{0,}")
+# winid=$(xdpyinfo | grep focus |  grep -E -o 0x[0-9a-f]+)
+winid=$(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}')
+echo "winid = ${winid}"
+xmin=$(xwininfo -id ${winid}| grep Abs.*X: |grep -o -E "[0-9]{0,}")
+
 echo "xmin = ${xmin}"
 
 # now we need to figure out which sector the window is in, and set values for
@@ -95,7 +98,7 @@ do
 	    key=$((key+2)) 
 	    if (( $key >= $((${moncount}*3)) ))
 	    then
-		key=$((${moncount}*3-1))
+		key=$((${moncount}*3-2))
 	    fi
 	    xloc=$((${quads[key]}))
 	fi
@@ -114,8 +117,8 @@ fi
 
 # move window
 wid=$((${quads[$key+1]}-${quads[$key]}))
-wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
-wmctrl -r :ACTIVE: -e 0,${xloc},0,${wid},-1
-wmctrl -r :ACTIVE: -b add,maximized_vert
+wmctrl -i -r ${winid} -b remove,maximized_vert,maximized_horz
+wmctrl -i -r ${winid} -e 0,${xloc},0,${wid},-1
+wmctrl -i -r ${winid} -b add,maximized_vert
 
 exit 0

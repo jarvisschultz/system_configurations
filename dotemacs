@@ -67,6 +67,7 @@
 (global-set-key (kbd "M-2") 'split-window-vertically)
 (global-set-key (kbd "M-3") 'split-window-horizontally)
 (global-set-key (kbd "M-4") 'other-window)
+(global-set-key (kbd "M-5") 'switch-to-buffer)
 ;; bind regex forward and backward search to a easier keyboard
 ;; commands:
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)

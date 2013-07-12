@@ -148,6 +148,9 @@ alias grepc='grep --color=always'
 # disable XON/XOFF flow control for the connection to stty
 stty -ixon
 
+# set bash completion to be case insensitive
+bind 'set completion-ignore-case on'  # NOTE, could also put this in ~/.inputrc without the bind
+
 # Add settings for emacs client:
 export ALTERNATE_EDITOR=""
 

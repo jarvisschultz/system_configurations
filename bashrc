@@ -162,3 +162,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 
 # add self-built texlive 2012 to PATH
 export PATH=/usr/local/texlive/2012/bin/x86_64-linux:$PATH
+
+# enable bash directory history
+if [ -f ~/.acd_func ]; then
+    source ~/.acd_func
+    # add a keybinding:
+    bind -x "\"\C-\M-i\":cd_func -- ;"
+fi

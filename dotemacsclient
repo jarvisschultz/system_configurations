@@ -1,4 +1,0 @@
-;;  for setting emacs window size if we are running a server
-(toggle-scroll-bar -1)
-(if (window-system) (set-frame-height (selected-frame) 47))
-(if (window-system) (set-frame-width (selected-frame) 102))

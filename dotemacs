@@ -118,13 +118,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Turn on window saving mode for restoring window configs:
 (winner-mode 1)
-(toggle-scroll-bar -1)
+;; enable column numbering
 (column-number-mode 1)
+;; disable startup message
 (setq inhibit-startup-message t)
-(setq-default fill-column 80) ;; set default fill column value
-;; Set the default window size if we are not running in the no window option:
-(if (window-system) (set-frame-height (selected-frame) 47))
-(if (window-system) (set-frame-width (selected-frame) 102))
+;; set default fill column value
+(setq-default fill-column 80)
 ;; Turn on syntax highlighting
 (global-font-lock-mode t)
 ;; turn off menu bars:
@@ -136,16 +135,51 @@
 (setq ansi-color-for-comint-mode t)
 ;; add color functionality
 (load-theme 'zenburn t)
-;; default window size
-(if window-system (set-frame-width (selected-frame) 98))
-(if window-system (set-frame-height (selected-frame) 48))
+;; disable scroll bars
+(toggle-scroll-bar -1)
+(set-scroll-bar-mode nil) 
+
+;; Define hooks to set visibility options specific to console or window modes:
+(defvar after-make-console-frame-hooks '()
+  "Hooks to run after creating a new TTY frame")
+(defvar after-make-window-system-frame-hooks '()
+  "Hooks to run after creating a new window-system frame")
+
+(defun run-after-make-frame-hooks (frame)
+  "Selectively run either 'after-make-console-frame-hooks' or
+'after-make-window-system-frame-hooks'"
+  (select-frame frame)
+  (run-hooks (if window-system
+		 'after-make-window-system-frame-hooks
+	       'after-make-console-frame-hooks)))
+
+(defun set-my-custom-window-settings ()
+  (toggle-scroll-bar -1)
+  (set-scroll-bar-mode nil) 
+  (set-frame-width (selected-frame) 102)
+  (set-frame-height (selected-frame) 48)
+)
+
+(defun set-my-custom-terminal-settings ()
+  "run any commands specific to no-window mode"
+  )
+
+(add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
+(add-hook 'after-init-hook
+	  (lambda () (run-after-make-frame-hooks (selected-frame))))
+(add-hook 'after-make-window-system-frame-hooks
+	  'set-my-custom-window-settings)
+(add-hook 'after-make-console-frame-hooks
+	  'set-my-custom-terminal-settings)
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISCELLANEOUS BEHAVIORS OF BUILT IN PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; disable backup files
 (setq make-backup-files nil)
+;; enable scroll-left command
 (put 'scroll-left 'disabled nil)
 ;; Enter also indents in cc-mode
 (defun my-make-CR-do-indent ()

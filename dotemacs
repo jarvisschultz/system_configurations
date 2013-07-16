@@ -136,7 +136,9 @@
 (setq ansi-color-for-comint-mode t)
 ;; add color functionality
 (load-theme 'zenburn t)
-
+;; default window size
+(if window-system (set-frame-width (selected-frame) 98))
+(if window-system (set-frame-height (selected-frame) 48))
 
 
 

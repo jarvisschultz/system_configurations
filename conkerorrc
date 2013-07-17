@@ -8,6 +8,14 @@ require("favicon");
 add_hook("mode_line_hook", mode_line_adder(buffer_icon_widget), true);
 read_buffer_show_icons = true;
 
+// tab settings
+require("tab-bar.js")
+
+// add widget to indicate buffer loading
+add_hook("mode_line_hook", mode_line_adder(loading_count_widget), true);
+// add buffer count widget
+add_hook("mode_line_hook", mode_line_adder(buffer_count_widget), true);
+
 // custom keybindings
 undefine_key(content_buffer_normal_keymap, "C-n")
 undefine_key(content_buffer_normal_keymap, "C-p")
@@ -24,7 +32,9 @@ define_key(default_global_keymap, "C-p", "backward-line")
 define_key(default_global_keymap, "C-f", "forward-char") 
 define_key(default_global_keymap, "C-b", "backward-char") 
 define_key(default_global_keymap, "C-a", "beginning-of-line") 
-define_key(default_global_keymap, "C-e", "end-of-line") 
+define_key(default_global_keymap, "C-e", "end-of-line")
+define_key(default_global_keymap, "C-tab", "buffer-next")
+define_key(default_global_keymap, "C-S-tab", "buffer-previous")
 
 
 // mouse clicking options

@@ -314,6 +314,7 @@
 ;; turn on reftex by default
 (add-hook 'LaTeX-mode-hook 'reftex-mode)
 (add-hook 'bibtex-mode-hook 'reftex-mode)
+(setq reftex-plug-into-AUCTeX t)
 ;; make reftex use frametitle and lecture for TOC
 (add-hook 'reftex-load-hook
 	  (lambda ()
@@ -321,9 +322,17 @@
 		  (cons '("frametitle" . 7) 
 			reftex-section-levels))))
 ;; makes reftex use cleveref for all styles by default:
-(defun reftex-format-cref (label def-fmt)
+(defun reftex-format-cref (label def-fmt style)
   (format "\\cref{%s}" label))
 (setq reftex-format-ref-function 'reftex-format-cref)
+(defun reftex-toggle-cref ()
+  "Function to toggle whether reftex should use cref latex package or not"
+  (interactive)
+  (if (eq reftex-format-ref-function nil)
+      (setq reftex-format-ref-function 'reftex-format-cref)
+    (setq reftex-format-ref-function nil))
+  (message "Set reftex-format-ref-function to %s" reftex-format-ref-function)
+)
 ;; add LaTeX-auto-complete mode
 (require 'ac-math)
 (add-to-list 'ac-modes 'latex-mode)   ; make auto-complete aware of {{{latex-mode}}}

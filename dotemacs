@@ -26,7 +26,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(LaTeX-command "latex --src-specials")
  '(ansi-color-names-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(ansi-term-color-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(column-number-mode t)
@@ -288,11 +287,11 @@
 (setq TeX-electric-sub-and-superscript t)
 ;; Add reverse LaTeX searching:
 (setq TeX-source-specials-mode 1)
-(setq Tex-source-specials-view-start-server t)
-(add-to-list 'TeX-command-list '("View" "%V" TeX-run-discard nil t))
-(add-to-list 'TeX-output-view-style 
-	     '("^dvi$" "." 
-	       "%(o?)xdvi -watchfile 1 %dS %d"))
+;; (setq Tex-source-specials-view-start-server t)
+;; (add-to-list 'TeX-command-list '("View" "%V" TeX-run-discard nil t))
+;; (add-to-list 'TeX-output-view-style 
+;; 	     '("^dvi$" "." 
+;; 	       "%(o?)xdvi -watchfile 1 %dS %d"))
 ;; set options for latex compilation
 (setq LaTeX-command "latex -src-specials -file-line-error")
 ;; turn on reftex by default

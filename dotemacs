@@ -45,7 +45,8 @@
  '(safe-local-variable-values (quote (
 				      (TeX-auto-parse-length . 999999) 
 				      (TeX-auto-regexp-list . TeX-auto-full-regexp-list) 
-				      (TeX-parse-self . t) (TeX-auto-save . t))))
+				      (TeX-parse-self . t) (TeX-auto-save . t)
+				      (TeX-source-correlate-method . synctex))))
  '(save-place t nil (saveplace))
  '(show-paren-mode t)
  '(warning-suppress-types (quote ((\(quote\ \(\(undo\ discard-info\)\)\)))))
@@ -286,14 +287,15 @@
 (setq TeX-auto-save t)
 (setq TeX-electric-sub-and-superscript t)
 ;; Add reverse LaTeX searching:
-(setq TeX-source-specials-mode 1)
+;; (setq TeX-source-correlate-start-server t)
+;; (setq TeX-source-specials-mode 1)
 ;; (setq Tex-source-specials-view-start-server t)
 ;; (add-to-list 'TeX-command-list '("View" "%V" TeX-run-discard nil t))
 ;; (add-to-list 'TeX-output-view-style 
 ;; 	     '("^dvi$" "." 
 ;; 	       "%(o?)xdvi -watchfile 1 %dS %d"))
 ;; set options for latex compilation
-(setq LaTeX-command "latex -src-specials -file-line-error")
+(setq LaTeX-command "latex -file-line-error")
 ;; turn on reftex by default
 (add-hook 'LaTeX-mode-hook 'reftex-mode)
 (add-hook 'bibtex-mode-hook 'reftex-mode)

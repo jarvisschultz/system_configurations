@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for i in *.ipe; 
+do
+	echo "Converting: ${i%.ipe}.pdf"
+	ipetoipe -pdf "$i"
+	echo "Converting: ${i%.ipe}.eps"
+	ipetoipe -eps "$i"		
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for i in *.svg; 
+do
+	echo "Converting: ${i%.svg}.pdf"
+	inkscape -D -z --file="$i" --export-pdf=${i%.svg}.pdf \
+	    --export-latex --export-area-drawing --export-ignore-filters \
+	    -d 30
+done

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Generating tags table in the following directory:"
+echo "    " `pwd` 
+echo
+find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | etags -

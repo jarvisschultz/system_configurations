@@ -214,7 +214,10 @@
 (setq minibuffer-prompt-properties 
       (quote (read-only t point-entered 
 			minibuffer-avoid-prompt face minibuffer-prompt)))
-
+;; set emacs completions to be case-insensitive
+(setq completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
+(setq read-buffer-completion-ignore-case t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;

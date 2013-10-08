@@ -10,6 +10,9 @@
       "http://melpa.milkbox.net/packages/") 'APPEND)
 (package-initialize)
 
+;; (require 'ctable)
+;; (require 'benchmark-init)
+;; (benchmark-init/install)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS PERFORMED CUSTOMIZATIONS ;;
@@ -286,7 +289,7 @@
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
 (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.87/")
-(require 'tex)
+(require 'tex-site)
 (require 'my-auctex-plugins.el)
 (require 'auctex-latexmk)
 (auctex-latexmk-setup)

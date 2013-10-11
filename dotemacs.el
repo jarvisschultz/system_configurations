@@ -174,7 +174,7 @@
 (setq c-basic-offset 4)
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
-	  (lambda () (subowrd-mode 1)))
+	  (lambda () (subword-mode 1)))
 (add-hook 'c++-mode-common-hook
 	  (lambda () (subword-mode 1)))
 (add-hook 'python-mode-hook

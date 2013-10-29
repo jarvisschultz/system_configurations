@@ -14,6 +14,7 @@
 ;; (require 'benchmark-init)
 ;; (benchmark-init/install)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS PERFORMED CUSTOMIZATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -122,6 +123,9 @@
 ;; disable scroll bars
 (toggle-scroll-bar -1)
 (set-scroll-bar-mode nil) 
+;; use gutter to display buffer position
+(setq-default indicate-buffer-boundaries 'left)
+(setq-default indicate-empty-lines +1)
 
 ;; Define hooks to set visibility options specific to console or window modes:
 (defvar after-make-console-frame-hooks '()
@@ -156,6 +160,16 @@
 (add-hook 'after-make-console-frame-hooks
 	  'set-my-custom-terminal-settings)
 
+;;;;;;;;;;;;;;;;;;;;;
+;; MOUSE BEHAVIORS ;;
+;;;;;;;;;;;;;;;;;;;;;
+(setq redisplay-dont-pause t
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1)
+(setq mouse-wheel-follow-mouse 't)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -253,6 +267,16 @@
 ;; add my function that opens a file as sudo
 (require 'edit-as-root)
 (global-set-key (kbd "C-x F") 'my-find-file-as-root)
+
+
+;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ensure environment variables stay consistent even if launched from a gui
+;; button
+(require 'exec-path-from-shell)
+(add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
+(when window-system (exec-path-from-shell-initialize))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

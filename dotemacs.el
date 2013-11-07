@@ -175,6 +175,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISCELLANEOUS BEHAVIORS OF BUILT IN PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; most modes automatically make RET newline and indent, but for those that
+;; don't, let's set it that way
+(define-key global-map (kbd "RET") 'newline-and-indent)
+(setq-default indent-tabs-mode t)
 ;; disable backup files
 (setq make-backup-files nil)
 ;; enable scroll-left command

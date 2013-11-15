@@ -18,10 +18,14 @@
 "xdotool keyup alt"
      Release + m:0x18 + b:13
 
-# switch to emacs with zoom button:
-"xdotool search --name --class --desktop 0 emacs windowactivate %@"
+# weird button scrolls through windows
+"window_toggle.bash"
      m:0x0 + b:10
-
+     
+# switch to emacs with zoom button:
+# "xdotool search --name --class --desktop 0 emacs windowactivate %@"
+#      m:0x0 + b:10
+     
 # zoom button to left control (Doesn't work)
 # "xte 'keydown Control_L'"
 #      m:0x14 + b:13

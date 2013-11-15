@@ -1,0 +1,38 @@
+# forward and back:
+"xte 'keydown Alt_L' 'key Left' 'keyup Alt_L'"
+     m:0x0 + b:8
+"xte 'keydown Alt_L' 'key Right' 'keyup Alt_L'"
+     m:0x0 + b:9
+
+# alt+tab switching with zoom + scroll:     
+"xdotool keydown alt"
+     b:13
+"xdotool keydown alt"
+     m:0x10 + b:13
+"xdotool key Tab"
+     alt + b:5
+"xdotool keydown shift key Tab keyup shift"
+     alt + b:4     
+"xdotool keyup alt"
+     Release + b:13
+"xdotool keyup alt"
+     Release + m:0x18 + b:13
+
+# switch to emacs with zoom button:
+"xdotool search --name --class --desktop 0 emacs windowactivate %@"
+     m:0x0 + b:10
+
+# zoom button to left control (Doesn't work)
+# "xte 'keydown Control_L'"
+#      m:0x14 + b:13
+# "xte 'keyup Control_L'"
+#      Release + m:0x14 + b:13
+# "xte 'keydown Control_L'"
+#      b:13
+# "xte 'keyup Control_L'"
+#      Release + b:13
+
+# show desktop with window button:
+# "wmctrl -k on"
+#      m:0x0 + b:10
+     

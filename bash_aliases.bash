@@ -51,6 +51,43 @@ function rcon(){
 	echo "ROS_IP=${ip}"
     fi
 }
+
+function rversion(){
+    arg=$1
+    fname="/home/$USER/.rosversiondefault"
+    if [ -n "$arg" ]
+    then
+	# if we have an argument, send it to the config file
+	echo -n "$arg" > "$fname"
+    fi
+    # read default version from file
+    if [ -f $fname ]
+    then
+       ver=$(cat $fname)
+    else
+	echo "Could not determine ROS version"
+	echo "Please provide argument"
+	return 1
+    fi
+    if [[ $ver == *fuerte* ]]
+    then
+	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	source ~/.bashrc
+    elif [[ $ver == *groovy* ]]
+    then
+	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	source ~/groovyws/devel/setup.bash
+    elif [[ $ver == *hydro* ]]
+    then
+	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	source /opt/ros/hydro/setup.bash
+    else
+	echo "Unrecognized version!"
+	return 1
+    fi
+    echo "Current ROS vars:"
+    env |grep ROS
+}
   
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'
 alias go='xdg-open'

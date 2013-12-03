@@ -177,8 +177,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; most modes automatically make RET newline and indent, but for those that
 ;; don't, let's set it that way
-(define-key global-map (kbd "RET") 'newline-and-indent)
-(setq-default indent-tabs-mode t)
+;; (define-key global-map (kbd "RET") 'newline-and-indent)
+;; (setq-default indent-tabs-mode t)
 ;; disable backup files
 (setq make-backup-files nil)
 ;; enable scroll-left command
@@ -389,17 +389,39 @@
 (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
 (setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
 (require 'python-mode)
-(require 'highlight-indentation)
 (require 'column-marker)
 ;; make python mode recognize _ as a word separator
 ;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
-(add-hook 'python-mode-hook 'highlight-indentation)
+(add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; set docstring formatting options
 (add-hook 'python-mode-hook (function 
 			     (lambda () (setq py-docstring-style 'django))))
 ;; enable cython-mode
 (require 'cython-mode)
+;; elpy configurations
+(require 'elpy)
+(defun elpy-start ()
+  (elpy-enable)
+  (message "elpy enabled")
+  (setq elpy-rpc-backend "jedi")
+  (elpy-use-ipython)
+  (elpy-clean-modeline)
+  (find-alternate-file (buffer-file-name (current-buffer)))
+  )
+(defun elpy-stop ()
+  (elpy-disable)
+  (message "elpy disabled")
+  (find-alternate-file (buffer-file-name (current-buffer)))
+)
+(defun elpy-toggle ()
+  "Toggle whether elpy is enabled or not, and set some defaults"
+  (interactive)
+  (if (eq elpy-mode nil)
+      ;; then enable and set vars:
+      (elpy-start)
+    ;; otherwise disable:
+    (elpy-stop)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

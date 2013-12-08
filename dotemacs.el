@@ -294,6 +294,22 @@
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (auto-complete-mode)
 (setq ac-ignore-case nil)
+;; enable yasnippet with ac:
+(set-default 'ac-sources
+             '(ac-source-abbrev
+               ac-source-dictionary
+               ac-source-yasnippet
+               ac-source-words-in-buffer
+               ac-source-words-in-same-mode-buffers
+               ac-source-semantic))
+;; turn on yasnippet by default for all modes
+(yas-global-mode)
+;; add hook for c-sources in c mode
+(require 'ac-c-headers)
+(add-hook 'c-mode-hook
+	  (lambda ()
+	    (add-to-list 'ac-sources 'ac-source-c-headers)
+	    (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -406,7 +422,7 @@
   (message "elpy enabled")
   (setq elpy-rpc-backend "jedi")
   (elpy-use-ipython)
-  (elpy-clean-modeline)
+  ;; (elpy-clean-modeline)
   (find-alternate-file (buffer-file-name (current-buffer)))
   )
 (defun elpy-stop ()

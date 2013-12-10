@@ -526,3 +526,17 @@
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/elpa.*\\'")
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(semantic-mode 1)
+(global-ede-mode 1)
+(global-semanticdb-minor-mode 1)
+(global-semantic-highlight-func-mode 1)
+(global-semantic-decoration-mode 1)
+(global-semantic-mru-bookmark-mode 1)
+(require 'semantic/bovine/gcc)
+
+(semanticdb-enable-gnu-global-databases 'c-mode)
+(semanticdb-enable-gnu-global-databases 'c++-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

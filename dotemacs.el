@@ -265,7 +265,7 @@
 ;; add mathematica mode:
 (require 'mathematica)
 ;; add functionality for magit mode
-(require 'magit)
+;; (require 'magit)
 ;; add my function that joins a region into a single line
 (require 'join-region)
 ;; add my function that opens a file as sudo
@@ -306,7 +306,7 @@
 (yas-global-mode)
 ;; add hook for c-sources in c mode
 (require 'ac-c-headers)
-(add-hook 'c-mode-hook
+(add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (add-to-list 'ac-sources 'ac-source-c-headers)
 	    (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))

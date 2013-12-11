@@ -416,7 +416,8 @@
 ;; enable cython-mode
 (require 'cython-mode)
 ;; elpy configurations
-(require 'elpy)
+;; (require 'elpy)
+(setq elpy-mode nil)
 (defun elpy-start ()
   (elpy-enable)
   (message "elpy enabled")
@@ -529,14 +530,33 @@
 
 
 ;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'semantic/bovine/gcc)
+;; (setq semantic-default-submodes nil)
+(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+(semantic-mode 1)
+(setq my-semantic-inhibited-modes '(python-mode latex-mode))
+(defun my-inhibited-modes-check ()
+  "Check if current buffer's mode is allowed to have cedet run"
+  (member major-mode my-semantic-inhibited-modes))
+(add-to-list 'semantic-inhibit-functions 'my-inhibited-modes-check)
+;; (defun my-c-mode-cedet-hook ()
+;;   (semantic-idle-summary-mode 1)
+;;   (semantic-mru-bookmark-mode 1)
+;;   (semantic-highlight-func-mode 1)
+;;   (semantic-decoration-mode 1))
+;; ;; (add-hook 'c-mode-common-hook
+;; ;; 	  '(lambda () (add-hook 'semantic-init-hook 'my-c-mode-cedet-hook t t)))
+;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 (semantic-mode 1)
 (global-ede-mode 1)
-(global-semanticdb-minor-mode 1)
-(global-semantic-highlight-func-mode 1)
-(global-semantic-decoration-mode 1)
-(global-semantic-mru-bookmark-mode 1)
-(require 'semantic/bovine/gcc)
-
+(ede-enable-generic-projects)
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
+(setq-mode-local c-mode semanticdb-find-default-throttle
+                      '(project local unloaded system recursive))
+(setq-mode-local c++-mode semanticdb-find-default-throttle
+                      '(project local unloaded system recursive))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

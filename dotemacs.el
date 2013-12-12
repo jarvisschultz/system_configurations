@@ -310,6 +310,10 @@
 	  (lambda ()
 	    (add-to-list 'ac-sources 'ac-source-c-headers)
 	    (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+;; allow return key to also autocomplete:
+(define-key ac-completing-map "\C-m" nil)
+(setq ac-use-menu-map t)
+(define-key ac-menu-map "\C-m" 'ac-complete)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

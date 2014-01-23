@@ -159,9 +159,11 @@ export ALTERNATE_EDITOR=""
 # set default gpg key
 export GPGKEY=9BBA54C6
 # set agent info
-. "${HOME}/.gpg-agent-info"
-export GPG_AGENT_INFO=$GPG_AGENT_INFO
-export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+# GPG_TTY=$(tty)
+# export GPG_TTY
+# . "${HOME}/.gpg-agent-info"
+# export GPG_AGENT_INFO=$GPG_AGENT_INFO
+# export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
 
 
 # add lib64 for phantom omni

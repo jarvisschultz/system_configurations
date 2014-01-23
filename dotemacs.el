@@ -208,6 +208,9 @@
 ;; add tramp functionality:
 (require 'tramp)
 (setq tramp-default-method "scp")
+;; (setq tramp-persistency-file-name nil)
+;; (setq password-cache nil)
+;; (setq password-cache-expiry 16)
 ;; start server if not already running when using just 'emacs' on
 ;; command line
 (require 'server)
@@ -339,10 +342,10 @@
 
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
-(add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.87/")
-(require 'tex-site)
+;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.87.2/")
+;; (require 'tex-site)
+;; (require 'auctex-latexmk)
 (require 'my-auctex-plugins.el)
-(require 'auctex-latexmk)
 (auctex-latexmk-setup)
 (setq-default TeX-master nil)
 (setq TeX-parse-self t)
@@ -421,6 +424,10 @@
 (require 'cython-mode)
 ;; elpy configurations
 ;; (require 'elpy)
+(setq elpy-default-minor-modes '(eldoc-mode
+				 highlight-indentation-mode
+				 yas-minor-mode 
+				 auto-complete-mode))
 (setq elpy-mode nil)
 (defun elpy-start ()
   (elpy-enable)
@@ -555,8 +562,8 @@
 ;; ;; 	  '(lambda () (add-hook 'semantic-init-hook 'my-c-mode-cedet-hook t t)))
 ;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 (semantic-mode 1)
-(global-ede-mode 1)
-(ede-enable-generic-projects)
+;; (global-ede-mode 1)
+;; (ede-enable-generic-projects)
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
 (setq-mode-local c-mode semanticdb-find-default-throttle

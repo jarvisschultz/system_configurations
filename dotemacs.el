@@ -95,8 +95,8 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 ;; add key for using tag expand:
 (global-set-key (kbd "M-RET") 'complete-tag)
-
-
+;; add keybindings for windmove
+(windmove-default-keybindings 'meta)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WINDOWS, GRAPHICS AND APPEARANCE SETTINGS ;;

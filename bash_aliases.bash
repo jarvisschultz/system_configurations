@@ -80,7 +80,7 @@ function rversion(){
     elif [[ $ver == *hydro* ]]
     then
 	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
-	source /opt/ros/hydro/setup.bash
+	source ~/hydrows/devel/setup.bash
     else
 	echo "Unrecognized version!"
 	return 1

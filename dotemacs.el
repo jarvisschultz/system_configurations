@@ -432,7 +432,7 @@
 (defun elpy-start ()
   (elpy-enable)
   (message "elpy enabled")
-  (setq elpy-rpc-backend "jedi")
+  (setq elpy-rpc-backend "rope")
   (elpy-use-ipython)
   ;; (elpy-clean-modeline)
   (find-alternate-file (buffer-file-name (current-buffer)))

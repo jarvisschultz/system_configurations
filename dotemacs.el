@@ -407,12 +407,11 @@
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; add python functionality
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/")
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/completion/")
-(add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
-(setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
+;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/")
+;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/completion/")
+;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
+;; (setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
 (require 'python-mode)
-(require 'column-marker)
 ;; make python mode recognize _ as a word separator
 ;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
@@ -429,6 +428,11 @@
 				 yas-minor-mode 
 				 auto-complete-mode))
 (setq elpy-mode nil)
+;; don't use C-<dir> as elpy-nav-<dir>-definition
+(add-hook 'elpy-mode-hook
+          (lambda()
+            (define-key elpy-mode-map (kbd "<C-up>") nil)
+	    (define-key elpy-mode-map (kbd "<C-down>") nil)))
 (defun elpy-start ()
   (elpy-enable)
   (message "elpy enabled")

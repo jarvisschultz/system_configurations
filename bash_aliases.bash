@@ -71,22 +71,22 @@ function rversion(){
     fi
     if [[ $ver == *fuerte* ]]
     then
-	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/.bashrc
     elif [[ $ver == *groovy* ]]
     then
-	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/groovyws/devel/setup.bash
     elif [[ $ver == *hydro* ]]
     then
-	unset $(env |awk -F "=" '{print $1}' |grep ROS |xargs)
+	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/hydrows/devel/setup.bash
     else
 	echo "Unrecognized version!"
 	return 1
     fi
     echo "Current ROS vars:"
-    env |grep ROS
+    env |grep "ROS\|CMAKE_PREFIX_PATH"
 }
   
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'

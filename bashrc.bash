@@ -136,7 +136,7 @@ export MATLAB_JAVA=/usr/lib/jvm/java-6-openjdk-amd64/jre/
 # Add processing apps to PATH
 export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
 # add microchip compilers to the path
-export PATH=$PATH:/opt/microchip/xc32/v1.11/bin
+export PATH=$PATH:/opt/microchip/xc32/v1.31/bin
 
 # add syntax color and piping to less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

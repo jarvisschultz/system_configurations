@@ -249,7 +249,8 @@
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 (setq read-buffer-completion-ignore-case t)
-
+;; turn on global-auto-revert mode
+(global-auto-revert-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;

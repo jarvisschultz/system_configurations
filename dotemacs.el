@@ -517,6 +517,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; IDO  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (global-set-key (kbd "M-x") 'smex) ;; for M-x
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-everywhere t) 
+;; (ido-mode 1) ;; turn on ido mode
+;; (ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
+;; (projectile-mode 1) ;; searching project dirs (including git repos)
+;; (ido-vertical-mode -1)
+;; (flx-ido-mode 1) ;; flexible matching
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'buffer-move)

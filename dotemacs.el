@@ -13,6 +13,7 @@
 	       "http://jorgenschaefer.github.io/packages/") 'APPEND)
 (package-initialize)
 
+;; tools for benchmarking startup:
 ;; (require 'ctable)
 ;; (require 'benchmark-init)
 ;; (benchmark-init/install)
@@ -187,9 +188,9 @@
 ;; enable scroll-left command
 (put 'scroll-left 'disabled nil)
 ;; Enter also indents in cc-mode
-(defun my-make-CR-do-indent ()
-   (define-key c-mode-base-map "\C-m" 'c-context-line-break))
-(add-hook 'c-initialization-hook 'my-make-CR-do-indent)
+;; (defun my-make-CR-do-indent ()
+;;    (define-key c-mode-base-map "\C-m" 'c-context-line-break))
+(add-hook 'c-initialization-hook 'electric-indent-mode)
 ;; Choose default cc-mode styles
 (setq c-default-style '((other . "linux")))
 (setq c-basic-offset 4)
@@ -252,6 +253,7 @@
 ;; turn on global-auto-revert mode
 (global-auto-revert-mode 1)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -264,15 +266,13 @@
 ;; add functionality for art-bollocks mode
 ;(require 'artbollocks-mode)
 ;; add functionality for textlint mode
-(add-to-list 'load-path "~/.emacs.d/textlint/")
-(require 'textlint)
+;; (add-to-list 'load-path "~/.emacs.d/textlint/")
+;; (require 'textlint)
 ;; fix commenting problems in xml mode
 (require 'mz-comment-fix)
 (add-to-list 'comment-strip-start-length (cons 'nxml-mode 3))
 ;; add mathematica mode:
 (require 'mathematica)
-;; add functionality for magit mode
-;; (require 'magit)
 ;; add my function that joins a region into a single line
 (require 'join-region)
 ;; add my function that opens a file as sudo
@@ -504,29 +504,29 @@
 
 
 
-;; ICICLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Icicle functionality
-(require 'icicles)
-(setq icicle-expand-input-to-common-match-flag nil)
-(setq icicle-expand-input-to-common-match 2)
-(setq icicle-search-replace-common-match-flag nil)
-(setq icicle-incremental-completion-flag nil)
-(setq icicle-region-background "#4f4f4f")
-(setq icicle-image-files-in-Completions 'nil)
-;; turn on icicles by default
-(icy-mode 1)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; ICICLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; Icicle functionality
+;; (require 'icicles)
+;; (setq icicle-expand-input-to-common-match-flag nil)
+;; (setq icicle-expand-input-to-common-match 2)
+;; (setq icicle-search-replace-common-match-flag nil)
+;; (setq icicle-incremental-completion-flag nil)
+;; (setq icicle-region-background "#4f4f4f")
+;; (setq icicle-image-files-in-Completions 'nil)
+;; ;; turn on icicles by default
+;; (icy-mode 1)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; IDO  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (global-set-key (kbd "M-x") 'smex) ;; for M-x
-;; (setq ido-enable-flex-matching t)
-;; (setq ido-everywhere t) 
-;; (ido-mode 1) ;; turn on ido mode
-;; (ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
-;; (projectile-mode 1) ;; searching project dirs (including git repos)
+(global-set-key (kbd "M-x") 'smex) ;; for M-x
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1) ;; turn on ido mode
+(ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
+(projectile-mode 1) ;; searching project dirs (including git repos)
 ;; (ido-vertical-mode -1)
-;; (flx-ido-mode 1) ;; flexible matching
+(flx-ido-mode 1) ;; flexible matching
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -551,9 +551,10 @@
     (setq recentf-last-list recentf-list)
     (recentf-save-list)))
 (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
-(add-to-list 'recentf-exclude "\\.recentf\\'") 
+(add-to-list 'recentf-exclude "\\.recentf\\'")
 (add-to-list 'recentf-exclude ".*\\.git/.*\\'")
-(add-to-list 'recentf-exclude ".*\\.gpg\\'") 
+(add-to-list 'recentf-exclude ".*\\.gpg\\'")
+(add-to-list 'recentf-exclude ".*\\.ido\\.last\\'")
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/elpa.*\\'")
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

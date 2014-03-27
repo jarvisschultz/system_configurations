@@ -252,6 +252,10 @@
 (setq read-buffer-completion-ignore-case t)
 ;; turn on global-auto-revert mode
 (global-auto-revert-mode 1)
+;; turn on markdown mode for certain files
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)) ;; gfm = github-flavored
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -282,7 +282,8 @@
 ;; add my function that opens a file as sudo
 (require 'edit-as-root)
 (global-set-key (kbd "C-x F") 'my-find-file-as-root)
-
+;; enable fancy-narrow from elpa
+(fancy-narrow-mode 1)
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure environment variables stay consistent even if launched from a gui

@@ -116,7 +116,7 @@ function nano() {
 ## color themes.
 
 ## python config
-export PYTHONPATH=/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
+export PYTHONPATH=/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages:$HOME/.local/lib/python2.7/site-packages
 
 ## ROS
 # FUERTE:
@@ -145,6 +145,7 @@ export LESS=' -RXF '
 # color support for grep and less
 export CLICOLOR_FORCE="true"
 alias lsc='ls --color=always'
+alias llc='ls -lah --color=always'
 alias grepc='grep --color=always'
     
 # disable XON/XOFF flow control for the connection to stty
@@ -178,3 +179,6 @@ if [ -f ~/.acd_func ]; then
     # add a keybinding:
     bind -x "\"\C-\M-i\":cd_func -- ;"
 fi
+
+# add byobu colorprompt
+[ -r ${HOME}/.byobu/prompt ] && . ${HOME}/.byobu/prompt   #byobu-prompt#

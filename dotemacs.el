@@ -284,6 +284,8 @@
 (global-set-key (kbd "C-x F") 'my-find-file-as-root)
 ;; enable fancy-narrow from elpa
 (fancy-narrow-mode 1)
+;; customize ace-jump-mode from elpa
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure environment variables stay consistent even if launched from a gui
@@ -293,10 +295,12 @@
 (when window-system (exec-path-from-shell-initialize))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; must be installed via elpa, or (require 'smartmparens)
 (show-smartparens-global-mode +1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add autocomplete package:

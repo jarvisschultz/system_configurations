@@ -467,6 +467,7 @@
       (elpy-start)
     ;; otherwise disable:
     (elpy-stop)))
+(elpy-enable)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -559,7 +560,8 @@
   (unless (equalp recentf-last-list recentf-list)
     (setq recentf-last-list recentf-list)
     (recentf-save-list)))
-(run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
+;; (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
+(add-hook 'server-visit-hook 'recentf-save-if-changes)
 (add-to-list 'recentf-exclude "\\.recentf\\'")
 (add-to-list 'recentf-exclude ".*\\.git/.*\\'")
 (add-to-list 'recentf-exclude ".*\\.gpg\\'")

@@ -424,18 +424,10 @@
 ;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/completion/")
 ;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
 ;; (setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
-(require 'python-mode)
-;; make python mode recognize _ as a word separator
-;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
-(modify-syntax-entry ?_ "_" python-mode-syntax-table)
-(add-hook 'python-mode-hook 'highlight-indentation-mode)
-;; set docstring formatting options
-(add-hook 'python-mode-hook (function 
-			     (lambda () (setq py-docstring-style 'django))))
+;; (require 'python-mode)
 ;; enable cython-mode
 (require 'cython-mode)
 ;; elpy configurations
-;; (require 'elpy)
 (setq elpy-default-minor-modes '(eldoc-mode
 				 highlight-indentation-mode
 				 yas-minor-mode 
@@ -468,6 +460,14 @@
     ;; otherwise disable:
     (elpy-stop)))
 (elpy-enable)
+;; miscellaneous configs:
+;; make python mode recognize _ as a word separator
+;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
+(modify-syntax-entry ?_ "_" python-mode-syntax-table)
+(add-hook 'python-mode-hook 'highlight-indentation-mode)
+;; set docstring formatting options
+(add-hook 'python-mode-hook (function 
+			     (lambda () (setq py-docstring-style 'django))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

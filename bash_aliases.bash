@@ -86,7 +86,7 @@ function rversion(){
 	return 1
     fi
     echo "Current ROS vars:"
-    env |grep "ROS\|CMAKE_PREFIX_PATH"
+    env |grepc "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
 }
   
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'

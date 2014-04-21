@@ -310,6 +310,7 @@
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (auto-complete-mode)
 (setq ac-ignore-case nil)
+(ac-flyspell-workaround)
 ;; enable yasnippet with ac:
 (set-default 'ac-sources
              '(ac-source-abbrev
@@ -397,12 +398,13 @@
 (add-to-list 'ac-modes 'latex-mode)   ; make auto-complete aware of {{{latex-mode}}}
 (defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
   (setq ac-sources
-     (append '(ac-source-math-unicode ac-source-math-latex ac-source-latex-commands)
+     (append '(;;ac-source-math-unicode
+	       ;;ac-source-math-latex
+	       ac-source-latex-commands)
                ac-sources))
 )
 (add-hook 'LaTeX-mode-hook 'auto-complete-mode)
 (add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
-(ac-flyspell-workaround)
 ;; Binding for running a bash script:
 (define-key TeX-mode-map [f11] (lambda() (interactive) (shell-command "./LatexCompile")))
 ;; binding for my indent function
@@ -470,6 +472,8 @@
 			     (lambda () (setq py-docstring-style 'django))))
 (add-hook 'python-mode-hook (function
 			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
+(add-hook 'python-mode-hook (function
+			     (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

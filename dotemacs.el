@@ -426,7 +426,7 @@
 ;; (setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
 ;; (require 'python-mode)
 ;; enable cython-mode
-(require 'cython-mode)
+;; (require 'cython-mode)
 ;; elpy configurations
 (setq elpy-default-minor-modes '(eldoc-mode
 				 highlight-indentation-mode
@@ -468,6 +468,8 @@
 ;; set docstring formatting options
 (add-hook 'python-mode-hook (function 
 			     (lambda () (setq py-docstring-style 'django))))
+(add-hook 'python-mode-hook (function
+			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

@@ -164,6 +164,7 @@
 (add-hook 'after-make-console-frame-hooks
 	  'set-my-custom-terminal-settings)
 
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; MOUSE BEHAVIORS ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -287,6 +288,8 @@
 ;; customize ace-jump-mode from elpa
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
+
+
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure environment variables stay consistent even if launched from a gui
 ;; button
@@ -296,15 +299,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
+
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; must be installed via elpa, or (require 'smartmparens)
 (show-smartparens-global-mode +1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
+
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add autocomplete package:
-(add-to-list 'load-path "~/.emacs.d/auto-complete-extras/")
 (require 'auto-complete-config)
 (ac-config-default)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
@@ -334,6 +340,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
 (add-to-list 'load-path "/home/jarvis/ros/stacks/rosemacs/")
@@ -354,11 +361,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
-;; (add-to-list 'load-path "~/.emacs.d/elpa/auctex-11.87.2/")
-;; (require 'tex-site)
-;; (require 'auctex-latexmk)
 (require 'my-auctex-plugins.el)
 (auctex-latexmk-setup)
 (setq-default TeX-master nil)
@@ -394,17 +399,7 @@
   (message "Set reftex-format-ref-function to %s" reftex-format-ref-function)
 )
 ;; add LaTeX-auto-complete mode
-(require 'ac-math)
-(add-to-list 'ac-modes 'latex-mode)   ; make auto-complete aware of {{{latex-mode}}}
-(defun ac-latex-mode-setup ()         ; add ac-sources to default ac-sources
-  (setq ac-sources
-     (append '(;;ac-source-math-unicode
-	       ;;ac-source-math-latex
-	       ac-source-latex-commands)
-               ac-sources))
-)
-(add-hook 'LaTeX-mode-hook 'auto-complete-mode)
-(add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
+(require 'auto-complete-auctex)
 ;; Binding for running a bash script:
 (define-key TeX-mode-map [f11] (lambda() (interactive) (shell-command "./LatexCompile")))
 ;; binding for my indent function
@@ -421,14 +416,6 @@
 
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; add python functionality
-;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/")
-;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/completion/")
-;; (add-to-list 'load-path "~/.emacs.d/misc-packages/python-mode-6.1.1/extensions/")
-;; (setq py-install-directory "~/.emacs.d/misc-packages/python-mode-6.1.1/")
-;; (require 'python-mode)
-;; enable cython-mode
-;; (require 'cython-mode)
 ;; elpy configurations
 (setq elpy-default-minor-modes '(eldoc-mode
 				 highlight-indentation-mode
@@ -461,10 +448,10 @@
       (elpy-start)
     ;; otherwise disable:
     (elpy-stop)))
+;; enable elpy by default
 (elpy-enable)
 ;; miscellaneous configs:
 ;; make python mode recognize _ as a word separator
-;; (modify-syntax-entry ?_ "_" py-mode-syntax-table)
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)
 (add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; set docstring formatting options
@@ -534,6 +521,7 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
 ;; IDO  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode 1) ;; turn on ido mode
 (setq ido-everywhere t)
@@ -544,6 +532,7 @@
 (projectile-mode 1) ;; searching project dirs (including git repos)
 ;; (ido-vertical-mode -1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 ;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -577,6 +566,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
 ;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'semantic/bovine/gcc)
 ;; (setq semantic-default-submodes nil)
@@ -598,7 +588,6 @@
 ;; ;; (add-hook 'c-mode-common-hook
 ;; ;; 	  '(lambda () (add-hook 'semantic-init-hook 'my-c-mode-cedet-hook t t)))
 ;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
-(semantic-mode 1)
 ;; (global-ede-mode 1)
 ;; (ede-enable-generic-projects)
 (semanticdb-enable-gnu-global-databases 'c-mode)

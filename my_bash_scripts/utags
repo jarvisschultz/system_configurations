@@ -1,6 +1,19 @@
 #!/bin/bash
 
-echo "Generating tags table in the following directory:"
-echo "    " `pwd` 
-echo
-find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | etags -
+CMD="ctags-exuberant -e -R --extra=q"
+
+input=$1
+if [ -n "$input" ]
+then
+    echo "Generating tags table using exuberant ctags with given directories/files"
+    ${CMD} $@
+else
+    echo "Generating tags table by searching in the following directory:"
+    echo "    " `pwd` 
+    echo
+    find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | ${CMD}
+fi
+dir=$(pwd)
+localcontent="((nil . ((tags-file-name . \"${dir}/TAGS\"))))"
+# dump file to set emacs to use local tags:
+echo ${localcontent} > .dir-locals.el

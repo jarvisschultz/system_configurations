@@ -473,8 +473,8 @@
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 (add-hook 'change-log-mode-hook 'turn-on-flyspell)
-(add-hook 'tex-mode-hook 'turn-on-flyspell)
-(add-hook 'tex-mode-hook (function (lambda () (setq ispell-parser 'tex))))
+(add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
+(add-hook 'LaTeX-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode
 	  '(lambda () (setq flyspell-generic-check-word-p
 			    'texinfo-mode-flyspell-verify)))
@@ -529,7 +529,24 @@
 (setq ido-enable-flex-matching t)
 (flx-ido-mode 1) ;; flexible matching
 (global-set-key (kbd "M-x") 'smex) ;; for M-x
-(projectile-mode 1) ;; searching project dirs (including git repos)
+(projectile-global-mode t) ;; searching project dirs (including git repos)
+;; change projectile to use my utags script instead of ctags
+(setq projectile-tags-command "utags %s")
+;; set the value of tags-table-list to be safe as long as it is a string
+(defun list-of-stringsp (val)
+  "test whether each element in list is a string"
+  (setq foo t)
+  (if (listp val)
+      (let (x)
+	(setq x val)
+	(while x
+	  (if (stringp (pop x))
+	      ()
+	    (setq foo nil))))
+    (setq foo nil))
+  foo)
+(put 'tags-table-list 'safe-local-variable #'list-of-stringsp)
+(put 'tags-file-name 'safe-local-variable #'stringp)
 ;; (ido-vertical-mode -1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

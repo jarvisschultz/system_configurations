@@ -547,6 +547,9 @@
   foo)
 (put 'tags-table-list 'safe-local-variable #'list-of-stringsp)
 (put 'tags-file-name 'safe-local-variable #'stringp)
+(defun clear-tag-completion-table ()
+  (setq tags-completion-table nil))
+(add-hook 'find-tag-hook 'clear-tag-completion-table)
 ;; (ido-vertical-mode -1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

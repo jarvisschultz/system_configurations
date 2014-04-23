@@ -14,6 +14,6 @@ else
     find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | ${CMD}
 fi
 dir=$(pwd)
-localcontent="((nil . ((tags-file-name . \"${dir}/TAGS\"))))"
-# dump file to set emacs to use local tags:
+localcontent="((nil . ((tags-file-name . \"${dir}/TAGS\")
+(tags-table-list . (\"${dir}/TAGS\")))))"
 echo ${localcontent} > .dir-locals.el

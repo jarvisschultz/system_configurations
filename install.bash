@@ -35,8 +35,6 @@ done
 
 
 ##################################################
-# ssh
-ln -svbi $PWD/sshpublickey $HOME/.ssh/id_rsa.pub
 # screen and tmux
 ln -svbi $PWD/screenrc.conf $HOME/.screenrc
 ln -svbi $PWD/tmux.conf $HOME/.tmux.conf
@@ -51,4 +49,6 @@ for f in $PWD/byobu-config/*
 do
     ln -svbi ${f} $HOME/.byobu/
 done
+# global .gitignore
+ln -svbi $PWD/globalgitignore.conf $HOME/.gitignore
 ##################################################

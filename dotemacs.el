@@ -102,6 +102,7 @@
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WINDOWS, GRAPHICS AND APPEARANCE SETTINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -547,6 +548,9 @@
   foo)
 (put 'tags-table-list 'safe-local-variable #'list-of-stringsp)
 (put 'tags-file-name 'safe-local-variable #'stringp)
+;; going to simply run helm default configuration here (don't think I want helm
+;; on, but some functions are nice):
+(require 'helm-config)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

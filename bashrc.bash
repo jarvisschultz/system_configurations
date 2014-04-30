@@ -116,7 +116,7 @@ function nano() {
 ## color themes.
 
 ## python config
-export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
 export PATH=$HOME/.local/bin:$PATH
 
 ## ROS

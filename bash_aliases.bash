@@ -71,20 +71,42 @@ function rversion(){
     fi
     if [[ $ver == *fuerte* ]]
     then
+	des1="hydro"
+	des2="groovy"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/.bashrc
     elif [[ $ver == *groovy* ]]
     then
+	des1="fuerte"
+	des2="hydro"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/groovyws/devel/setup.bash
     elif [[ $ver == *hydro* ]]
     then
+	des1="fuerte"
+	des2="groovy"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/hydrows/devel/setup.bash
     else
 	echo "Unrecognized version!"
 	return 1
     fi
+    # check that PYTHONPATH isn't containing any old stuff:
+    arrIN=(${PYTHONPATH//:/ })
+    strOut=""
+    for dir in "${arrIN[@]}"
+    do
+	if [[ $dir != *$des1* && $dir != *$des2* ]]
+	then
+	    if [ -z "${strOut}" ]
+	    then
+		strOut="${dir}"
+	    else
+		strOut="${strOut}:${dir}"
+	    fi
+	fi
+    done
+    export PYTHONPATH="${strOut}"
     echo "Current ROS vars:"
     env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
 }

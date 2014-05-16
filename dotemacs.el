@@ -2,12 +2,12 @@
 
 ;; add marmalade functionality:
 (require 'package)
+;; (add-to-list 'package-archives
+;; 	     '("marmalade" .
+;; 	       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
-	     '("marmalade" .
-	       "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-	     '("melpa" .
-	       "http://melpa.milkbox.net/packages/") 'APPEND)
+	     '("melpa-stable" .
+	       "http://melpa-stable.milkbox.net/packages/") 'APPEND)
 (add-to-list 'package-archives
              '("elpy" .
 	       "http://jorgenschaefer.github.io/packages/") 'APPEND)
@@ -451,6 +451,7 @@
     (elpy-stop)))
 ;; enable elpy by default
 (elpy-enable)
+(elpy-use-ipython)
 ;; miscellaneous configs:
 ;; make python mode recognize _ as a word separator
 (modify-syntax-entry ?_ "_" python-mode-syntax-table)

@@ -417,6 +417,10 @@
 
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; jedi configurations:
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'jedi-mode-hook 'jedi-direx:setup)
+(setq jedi:complete-on-dot t)
 ;; elpy configurations
 (setq elpy-default-minor-modes '(eldoc-mode
 				 highlight-indentation-mode
@@ -431,7 +435,7 @@
 (defun elpy-start ()
   (elpy-enable)
   (message "elpy enabled")
-  (setq elpy-rpc-backend "rope")
+  (setq elpy-rpc-backend "jedi")
   (elpy-use-ipython)
   ;; (elpy-clean-modeline)
   (find-alternate-file (buffer-file-name (current-buffer)))
@@ -450,11 +454,12 @@
     ;; otherwise disable:
     (elpy-stop)))
 ;; enable elpy by default
-(elpy-enable)
-(elpy-use-ipython)
+;; (elpy-enable)
+;; (elpy-use-ipython)
 ;; miscellaneous configs:
 ;; make python mode recognize _ as a word separator
-(modify-syntax-entry ?_ "_" python-mode-syntax-table)
+(add-hook 'python-mode-hook (function 
+			     (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))
 (add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; set docstring formatting options
 (add-hook 'python-mode-hook (function 

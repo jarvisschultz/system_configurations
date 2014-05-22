@@ -395,8 +395,13 @@
   "Function to toggle whether reftex should use cref latex package or not"
   (interactive)
   (if (eq reftex-format-ref-function nil)
-      (setq reftex-format-ref-function 'reftex-format-cref)
-    (setq reftex-format-ref-function nil))
+      (progn
+	(setq reftex-format-ref-function 'reftex-format-cref)
+	;; disable reftex asking if I want to use things like \autoref, or \vref.
+	(setq reftex-ref-macro-prompt nil))
+    (progn
+      (setq reftex-format-ref-function nil)
+      (setq reftex-ref-macro-prompt t)))
   (message "Set reftex-format-ref-function to %s" reftex-format-ref-function)
 )
 ;; add LaTeX-auto-complete mode

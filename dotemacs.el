@@ -77,10 +77,11 @@
 (global-set-key "\M-g" 'goto-line)
 (global-set-key [f10] 'shell)
 ;; add shortcuts for splitting and changing windows
+(require 'switch-window)
 (global-set-key (kbd "M-1") 'delete-other-windows)
 (global-set-key (kbd "M-2") 'split-window-vertically)
 (global-set-key (kbd "M-3") 'split-window-horizontally)
-(global-set-key (kbd "M-4") 'other-window)
+(global-set-key (kbd "M-4") 'switch-window)
 (global-set-key (kbd "M-5") 'switch-to-buffer)
 ;; bind regex forward and backward search to a easier keyboard
 ;; commands:
@@ -287,7 +288,7 @@
 ;; enable fancy-narrow from elpa
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+(define-key global-map (kbd "s-a") 'ace-jump-mode)
 
 
 
@@ -390,7 +391,7 @@
 ;; makes reftex use cleveref for all styles by default:
 (defun reftex-format-cref (label def-fmt style)
   (format "\\cref{%s}" label))
-(setq reftex-format-ref-function 'reftex-format-cref)
+(setq reftex-format-ref-function nil)
 (defun reftex-toggle-cref ()
   "Function to toggle whether reftex should use cref latex package or not"
   (interactive)
@@ -404,6 +405,8 @@
       (setq reftex-ref-macro-prompt t)))
   (message "Set reftex-format-ref-function to %s" reftex-format-ref-function)
 )
+;; turn on cref by default:
+(reftex-toggle-cref)
 ;; add LaTeX-auto-complete mode
 (require 'auto-complete-auctex)
 ;; Binding for running a bash script:

@@ -24,4 +24,24 @@ Frame must be declared as an environment."
       )
     ))
 
-(provide 'my-auctex-plugins.el)
+
+;; Functions for skipping around by blank lines. Useful for modes where
+;; paragraph definitions are annoying.
+(defun skip-to-next-blank-line ()
+  "Skip to next blank line"
+  (interactive)
+  (let ((inhibit-changing-match-data t))
+    (skip-syntax-forward " >")
+    (unless (search-forward-regexp "^\\s *$" nil t)
+      (goto-char (point-max)))))
+(defun skip-to-previous-blank-line ()
+  "Skip to previous blank line"
+  (interactive)
+  (let ((inhibit-changing-match-data t))
+    (skip-syntax-backward " >")
+    (unless (search-backward-regexp "^\\s *$" nil t)
+      (goto-char (point-min)))))
+
+
+
+(provide 'my-auctex-plugins)

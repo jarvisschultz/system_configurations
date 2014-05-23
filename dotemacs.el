@@ -1,5 +1,8 @@
 (push "~/.emacs.d/" load-path)
 
+;; add miscellaneous packages dir to load path
+(add-to-list 'load-path "~/.emacs.d/misc-packages/")
+
 ;; add marmalade functionality:
 (require 'package)
 ;; (add-to-list 'package-archives
@@ -264,8 +267,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; add miscellaneous packages dir to load path
-(add-to-list 'load-path "~/.emacs.d/misc-packages/")
 ;; Add functionality for expand region:
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -366,7 +367,7 @@
 
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
-(require 'my-auctex-plugins.el)
+(require 'my-auctex-plugins)
 (auctex-latexmk-setup)
 (setq-default TeX-master nil)
 (setq TeX-parse-self t)
@@ -419,6 +420,13 @@
 (add-hook 'LaTeX-mode-hook (lambda () (define-key
 					LaTeX-mode-map (kbd "C-M-x") 
 					'tex-beamer-frame)))
+;; 
+(add-hook 'LaTeX-mode-hook (lambda ()
+			     (progn
+			       (define-key LaTeX-mode-map
+				 (kbd "<C-down>") 'skip-to-next-blank-line)
+				 (define-key LaTeX-mode-map
+				   (kbd "<C-up>") 'skip-to-previous-blank-line))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 

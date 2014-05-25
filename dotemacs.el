@@ -74,11 +74,17 @@
 (define-key global-map [f6] 'visual-line-mode)
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows nil) ;; for vertically-split windows
-;; Bind a key for compiling code:
-(global-set-key [f12] 'compile)
-;; Miscellaneous bindings:
+;; shorten goto-line (breaks things like goto-column):
 (global-set-key "\M-g" 'goto-line)
-(global-set-key [f10] 'shell)
+;; ergonomics bindings:
+(require 'god-mode)
+(global-set-key [f2] 'god-local-mode)
+(global-set-key [f7] 'kill-ring-save)
+(global-set-key [f8] 'yank)
+(global-set-key [f9] 'yank-pop)
+(global-set-key [f10] 'find-file)
+(global-set-key [f11] 'repeat)
+(global-set-key [f12] 'compile)
 ;; add shortcuts for splitting and changing windows
 (require 'switch-window)
 (global-set-key (kbd "M-1") 'delete-other-windows)
@@ -410,17 +416,11 @@
 (reftex-toggle-cref)
 ;; add LaTeX-auto-complete mode
 (require 'auto-complete-auctex)
-;; Binding for running a bash script:
-(define-key TeX-mode-map [f11] (lambda() (interactive) (shell-command "./LatexCompile")))
-;; binding for my indent function
-(add-hook 'LaTeX-mode-hook (lambda () (define-key
-					LaTeX-mode-map (kbd "<f9>") 
-					'indent-region-as-c)))
 ;; binding for compiling beamer frames
 (add-hook 'LaTeX-mode-hook (lambda () (define-key
 					LaTeX-mode-map (kbd "C-M-x") 
 					'tex-beamer-frame)))
-;; 
+;; move by blank lines in LaTeX-mode:
 (add-hook 'LaTeX-mode-hook (lambda ()
 			     (progn
 			       (define-key LaTeX-mode-map

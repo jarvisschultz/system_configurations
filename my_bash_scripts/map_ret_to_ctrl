@@ -1,0 +1,19 @@
+#!/bin/bash
+
+XMODMAP=/usr/bin/xmodmap
+XCAPE=/usr/bin/xcape
+killall xcape 2> /dev/null
+${XMODMAP} -e "clear mod4"
+${XMODMAP} -e "clear mod5"
+${XMODMAP} -e "add mod3 = Mode_switch"
+${XMODMAP} -e "add mod4 = Super_L Super_R"
+${XMODMAP} -e "add mod5 = ISO_Level3_Shift"
+${XMODMAP} -e 'keycode 36 = Hyper_L'
+${XMODMAP} -e 'add Control = Hyper_L'
+${XMODMAP} -e 'keycode any = Return'
+${XCAPE} -e 'Hyper_L=Return'
+
+
+
+
+

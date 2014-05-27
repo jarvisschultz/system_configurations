@@ -395,6 +395,8 @@
 	    (setq reftex-section-levels
 		  (cons '("frametitle" . 7) 
 			reftex-section-levels))))
+;; allow reftex-view-crossref (C-c &) to follow cref macros:
+(setq reftex-view-crossref-extra '(("\\[c|C]ref" "\\label{%s}" 0)))
 ;; makes reftex use cleveref for all styles by default:
 (defun reftex-format-cref (label def-fmt style)
   (format "\\cref{%s}" label))

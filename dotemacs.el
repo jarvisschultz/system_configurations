@@ -607,6 +607,7 @@
 (add-to-list 'recentf-exclude ".*\\.ido\\.last\\'")
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/elpa.*\\'")
 (add-to-list 'recentf-exclude ".*TAGS.*\\'")
+(add-to-list 'recentf-exclude ".*\\.pgf\\'")
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

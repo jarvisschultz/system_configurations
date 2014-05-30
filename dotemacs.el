@@ -412,15 +412,18 @@
     (progn
       (setq reftex-format-ref-function nil)
       (setq reftex-ref-macro-prompt t)))
-  (message "Set reftex-format-ref-function to %s" reftex-format-ref-function)
-)
+  (message "Set reftex-format-ref-function to %s" reftex-format-ref-function))
 ;; turn on cref by default:
 (reftex-toggle-cref)
+;; prevent reftex from scanning pgf files (.pstex_t) was there by default:
+(eval-after-load "reftex-vars"
+  '(progn
+     (add-to-list 'reftex-no-include-regexps "\\.pgf\\'")))
 ;; add LaTeX-auto-complete mode
 (require 'auto-complete-auctex)
 ;; binding for compiling beamer frames
 (add-hook 'LaTeX-mode-hook (lambda () (define-key
-					LaTeX-mode-map (kbd "C-M-x") 
+					LaTeX-mode-map (kbd "C-M-x")
 					'tex-beamer-frame)))
 ;; move by blank lines in LaTeX-mode:
 (add-hook 'LaTeX-mode-hook (lambda ()

@@ -432,6 +432,8 @@
 				 (kbd "<C-down>") 'skip-to-next-blank-line)
 				 (define-key LaTeX-mode-map
 				   (kbd "<C-up>") 'skip-to-previous-blank-line))))
+;; turn on auto-fill for LaTeX mode:
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
 
@@ -442,42 +444,6 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (setq jedi:complete-on-dot t)
-;; elpy configurations
-(setq elpy-default-minor-modes '(eldoc-mode
-				 highlight-indentation-mode
-				 yas-minor-mode 
-				 auto-complete-mode))
-(setq elpy-mode nil)
-;; don't use C-<dir> as elpy-nav-<dir>-definition
-(add-hook 'elpy-mode-hook
-          (lambda()
-            (define-key elpy-mode-map (kbd "<C-up>") nil)
-	    (define-key elpy-mode-map (kbd "<C-down>") nil)))
-(defun elpy-start ()
-  (elpy-enable)
-  (message "elpy enabled")
-  (setq elpy-rpc-backend "jedi")
-  (elpy-use-ipython)
-  ;; (elpy-clean-modeline)
-  (find-alternate-file (buffer-file-name (current-buffer)))
-  )
-(defun elpy-stop ()
-  (elpy-disable)
-  (message "elpy disabled")
-  (find-alternate-file (buffer-file-name (current-buffer)))
-)
-(defun elpy-toggle ()
-  "Toggle whether elpy is enabled or not, and set some defaults"
-  (interactive)
-  (if (eq elpy-mode nil)
-      ;; then enable and set vars:
-      (elpy-start)
-    ;; otherwise disable:
-    (elpy-stop)))
-;; enable elpy by default
-;; (elpy-enable)
-;; (elpy-use-ipython)
-;; miscellaneous configs:
 ;; make python mode recognize _ as a word separator
 (add-hook 'python-mode-hook (function 
 			     (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))

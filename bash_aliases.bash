@@ -122,5 +122,6 @@ alias kagent='kill -9 $SSH_AGENT_PID'
 alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
 alias emacsclient="emacsclient -c "
 alias ga='gitk --all &'
+alias battstate='upower -i $(upower -e |grep batt) |grep --color=never -E "state|to\ full|percentage|to\ empty"'
 
 # ssh-add -l >/dev/null || alias ssh='ssh-add -l >/dev/null || ssh-add && unalias ssh; ssh'

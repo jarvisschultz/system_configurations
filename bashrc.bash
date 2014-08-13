@@ -175,8 +175,9 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 export PATH=/usr/local/texlive/2013/bin/x86_64-linux:$PATH
 
 # enable bash directory history
-if [ -f ~/.acd_func ]; then
-    source ~/.acd_func
+acdpath=$(command -v acd_func.sh)
+if [ -f "$acdpath" ]; then
+    source $acdpath
     # add a keybinding:
     bind -x "\"\C-\M-i\":cd_func -- ;"
 fi

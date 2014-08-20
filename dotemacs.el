@@ -582,7 +582,26 @@
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/elpa.*\\'")
 (add-to-list 'recentf-exclude ".*TAGS.*\\'")
 (add-to-list 'recentf-exclude ".*\\.pgf\\'")
+(add-to-list 'recentf-exclude "/tmp.*\\'")
+(add-to-list 'recentf-exclude ".*\\.gmm\\'") ;; gmail messages
 (global-set-key (kbd "C-c f") 'recentf-open-files)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; edit-server ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; allows emacs to edit html entries from chrome using the "Edit with Emacs"
+;; chrome extension.
+(when (locate-library "edit-server")
+  (require 'edit-server)
+  (setq edit-server-new-frame nil)
+  (edit-server-start))
+;; read on http://www.emacswiki.org/emacs/Edit_with_Emacs that the following was
+;; required to work with gmail. Actually it seems that the gmail-message-mode
+;; was sufficient https://github.com/Bruce-Connor/gmail-mode/
+;; (autoload 'edit-server-maybe-dehtmlize-buffer "edit-server-htmlize" "edit-server-htmlize" t)
+;; (autoload 'edit-server-maybe-htmlize-buffer   "edit-server-htmlize" "edit-server-htmlize" t)
+;; (add-hook 'edit-server-start-hook 'edit-server-maybe-dehtmlize-buffer)
+;; (add-hook 'edit-server-done-hook  'edit-server-maybe-htmlize-buffer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -617,3 +636,6 @@
 (setq-mode-local c++-mode semanticdb-find-default-throttle
                       '(project local unloaded system recursive))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+

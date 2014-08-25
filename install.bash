@@ -25,7 +25,7 @@ done
 ln -svbi $PWD/dotemacs.el $HOME/.emacs
 if [ ! -d $HOME/.emacs.d/misc-packages ]
 then
-    mkdir $HOME/.emacs.d/misc-packages
+    mkdir -p $HOME/.emacs.d/misc-packages
 fi
 for f in $PWD/my_emacs_scripts/*
 do

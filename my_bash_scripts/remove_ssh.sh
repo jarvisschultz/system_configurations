@@ -6,10 +6,19 @@ dbus-monitor --session "type='signal',interface='org.gnome.ScreenSaver'" | (
 	if echo $X | grep "boolean true" &> /dev/null; 
 	then 
 	    echo "SCREEN_LOCKED";
-	    for sshenv in /tmp/keyring*;
-	    do 
-		SSH_AUTH_SOCK=${sshenv}/ssh
-		ssh-add -D
+	    for dir in /run/user/*;
+	    do
+		echo "Testing dir = $dir"
+		if [ -O $dir ]
+		then
+		    echo "$dir Owned by me"
+		    for sshenv in $dir/keyring*;
+		    do 
+			echo "Running remove for $sshenv"
+			SSH_AUTH_SOCK=${sshenv}/ssh
+			ssh-add -D
+		    done
+		fi 
 	    done
 	elif echo $X | grep "boolean false" &> /dev/null; 
 	then 

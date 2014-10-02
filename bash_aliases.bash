@@ -73,20 +73,30 @@ function rversion(){
     then
 	des1="hydro"
 	des2="groovy"
+	des3="indigo"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/.bashrc
     elif [[ $ver == *groovy* ]]
     then
 	des1="fuerte"
 	des2="hydro"
+	des3="indigo"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/groovyws/devel/setup.bash
     elif [[ $ver == *hydro* ]]
     then
 	des1="fuerte"
 	des2="groovy"
+	des3="indigo"
 	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
 	source ~/hydrows/devel/setup.bash
+    elif [[ $ver == *indigo* ]]
+    then
+	des1="fuerte"
+	des2="hydro"
+	des3="groovy"
+	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
+	source ~/indigows/devel/setup.bash
     else
 	echo "Unrecognized version!"
 	return 1
@@ -96,7 +106,7 @@ function rversion(){
     strOut=""
     for dir in "${arrIN[@]}"
     do
-	if [[ $dir != *$des1* && $dir != *$des2* ]]
+	if [[ $dir != *$des1* && $dir != *$des2*  && $dir != *$des3* ]]
 	then
 	    if [ -z "${strOut}" ]
 	    then

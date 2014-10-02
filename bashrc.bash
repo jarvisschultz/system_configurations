@@ -117,7 +117,7 @@ function nano() {
 
 ## python config
 export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
-export PATH=$HOME/.local/bin:$PATH
+export PATH=$PATH:$HOME/.local/bin
 
 ## ROS
 # FUERTE:
@@ -125,17 +125,22 @@ source /opt/ros/fuerte/setup.bash
 export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
 # GROOVY:
 # source ~/groovyws/devel/setup.bash
+# HYDRO:
+# source ~/hydrows/devel/setup.bash
+# INDIGO:
+# source ~/indigows/devel/setup.bash
+
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT
 
 # Set EMACS as default editor:
 export EDITOR='emacsclient -t'
 # Add Eagle, and sbin:
-PATH=$HOME/bin:$HOME/eagle-5.11.0/bin:$PATH
+PATH=$PATH:$HOME/bin:$HOME/eagle-5.11.0/bin
 # Add MATLAB_JAVA Environment Variable:
 export MATLAB_JAVA=/usr/lib/jvm/java-6-openjdk-amd64/jre/
 # Add processing apps to PATH
-export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
+# export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
 # add microchip compilers to the path
 export PATH=$PATH:/opt/microchip/xc32/v1.31/bin
 
@@ -172,7 +177,7 @@ export GPGKEY=9BBA54C6
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 
 # add self-built texlive 2013 to PATH
-export PATH=/usr/local/texlive/2013/bin/x86_64-linux:$PATH
+export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
 
 # enable bash directory history
 acdpath=$(command -v acd_func.sh)
@@ -184,3 +189,25 @@ fi
 
 # add byobu colorprompt
 [ -r ${HOME}/.byobu/prompt ] && . ${HOME}/.byobu/prompt   #byobu-prompt#
+
+# setup Ruby Version Manager:
+if [ -f ~/.rvm/scripts/rvm ]; then
+    export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+    source ~/.rvm/scripts/rvm
+fi
+
+# clear any duplicates in PATH
+if [ -n "$PATH" ]; then
+  old_PATH=$PATH:; PATH=
+  while [ -n "$old_PATH" ]; do
+    x=${old_PATH%%:*}       # the first remaining entry
+    case $PATH: in
+      *:"$x":*) ;;         # already there
+      *) PATH=$PATH:$x;;    # not there yet
+    esac
+    old_PATH=${old_PATH#*:}
+  done
+  PATH=${PATH#:}
+  unset old_PATH x
+fi
+

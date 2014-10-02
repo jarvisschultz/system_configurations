@@ -191,10 +191,10 @@ fi
 [ -r ${HOME}/.byobu/prompt ] && . ${HOME}/.byobu/prompt   #byobu-prompt#
 
 # setup Ruby Version Manager:
-if [ -f ~/.rvm/scripts/rvm ]; then
-    export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-    source ~/.rvm/scripts/rvm
-fi
+# if [ -f ~/.rvm/scripts/rvm ]; then
+#     export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+#     source ~/.rvm/scripts/rvm
+# fi
 
 # clear any duplicates in PATH
 if [ -n "$PATH" ]; then

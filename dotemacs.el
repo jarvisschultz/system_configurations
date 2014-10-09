@@ -175,6 +175,8 @@
 (add-hook 'after-make-console-frame-hooks
 	  'set-my-custom-terminal-settings)
 
+;; activate my zoom commands:
+(require 'zoom-fonts)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; MOUSE BEHAVIORS ;;

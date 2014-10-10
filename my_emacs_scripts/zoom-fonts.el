@@ -1,4 +1,3 @@
-
 (defun zoom-on ()
   (interactive)
   (set-face-attribute 'default nil :height 140))

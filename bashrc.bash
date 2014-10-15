@@ -118,6 +118,7 @@ function nano() {
 ## python config
 export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
 export PATH=$PATH:$HOME/.local/bin
+export DEFAULT_PYTHON=$PYTHONPATH
 
 ## ROS
 # FUERTE:
@@ -128,7 +129,11 @@ export PATH=$PATH:$HOME/.local/bin
 # HYDRO:
 # source ~/hydrows/devel/setup.bash
 # INDIGO:
-source ~/indigows/devel/setup.bash
+# source ~/indigows/devel/setup.bash
+
+
+# load ROS environment:
+rosenv_load > /dev/null
 
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT

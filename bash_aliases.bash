@@ -52,6 +52,56 @@ function rcon(){
     fi
 }
 
+
+function rosenv_clear(){
+    # clear all ROS environment variables:
+    unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |xargs)
+    if [ -z ${DEFAULT_PYTHON+x} ]; then
+	echo "[WARN] Unable to set PYTHONPATH"
+    else
+	export PYTHONPATH=$DEFAULT_PYTHON
+    fi
+}
+
+
+function rosenv_set(){
+    # write all ROS environment variables into a file
+    arg=$1
+    if [ -n "$arg" ]; then
+	FILE=$1
+    else
+	FILE="${HOME}/.ros_environment"
+    fi
+    if [ -f $FILE ]; then
+    	rm $FILE
+    fi
+    # get the current ros environment variables:
+    VARS=$(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |xargs)
+    arrIN=(${VARS// / })
+    for var in "${arrIN[@]}"
+    do
+    	val=$(env |grep ${var} |awk -F "=" '{print $2}')
+    	echo "export $var=$val" 2>&1 |tee -a ${FILE}
+    done
+}
+
+
+function rosenv_load(){
+    # load all ROS environment variables from a file
+    arg=$1
+    if [ -n "$arg" ]; then
+	FILE=$1
+    else
+	FILE="${HOME}/.ros_environment"
+    fi
+    if [ -f "$FILE" ]; then
+	source $FILE
+    fi
+    echo "Current ROS vars:"
+    env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
+}
+
+
 function rversion(){
     arg=$1
     fname="/home/$USER/.rosversiondefault"
@@ -124,7 +174,6 @@ function rversion(){
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'
 alias go='xdg-open'
 alias ur='sudo service udev reload'
-##alias utags='find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | etags -'
 alias tt='nautilus . &'
 alias E='$EDITOR'
 alias reload_serial='sudo rmmod ftdi_sio && sudo modprobe ftdi_sio'
@@ -133,5 +182,10 @@ alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
 alias emacsclient="emacsclient -c "
 alias ga='gitk --all &'
 alias battstate='upower -i $(upower -e |grep batt) |grep --color=never -E "state|to\ full|percentage|to\ empty"'
+alias rget='env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort'
 
+##########################
+# old functions/ aliases #
+##########################
+# alias utags='find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | etags -'
 # ssh-add -l >/dev/null || alias ssh='ssh-add -l >/dev/null || ssh-add && unalias ssh; ssh'

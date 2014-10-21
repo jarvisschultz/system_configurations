@@ -456,8 +456,8 @@
 ;; set docstring formatting options
 (add-hook 'python-mode-hook (function 
 			     (lambda () (setq py-docstring-style 'django))))
-(add-hook 'python-mode-hook (function
-			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
+;; (add-hook 'python-mode-hook (function
+;; 			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
 (add-hook 'python-mode-hook (function
 			     (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

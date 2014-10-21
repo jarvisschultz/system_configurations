@@ -130,9 +130,8 @@ export DEFAULT_PYTHON=$PYTHONPATH
 # source ~/hydrows/devel/setup.bash
 # INDIGO:
 # source ~/indigows/devel/setup.bash
-
-
 # load ROS environment:
+source /opt/ros/indigo/setup.bash
 rosenv_load > /dev/null
 
 # fix rviz flickering

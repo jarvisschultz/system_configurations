@@ -1,4 +1,4 @@
-(push "~/.emacs.d/" load-path)
+;; (push "~/.emacs.d/" load-path)
 
 ;; add miscellaneous packages dir to load path
 (add-to-list 'load-path "~/.emacs.d/misc-packages/")
@@ -239,6 +239,7 @@
 ;; don't want browsing kill ring to mess up my display:
 (setq browse-kill-ring-quit-action 'save-and-restore)
 ;; enable dired+ instead of dired and turn on "a" command
+(setq diredp-hide-details-initially-flag nil)
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-omit-files "^\\...+$")

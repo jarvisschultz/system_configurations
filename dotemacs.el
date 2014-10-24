@@ -289,8 +289,8 @@
 ;; (add-to-list 'load-path "~/.emacs.d/textlint/")
 ;; (require 'textlint)
 ;; fix commenting problems in xml mode
-(require 'mz-comment-fix)
-(add-to-list 'comment-strip-start-length (cons 'nxml-mode 3))
+;; (require 'mz-comment-fix)
+;; (add-to-list 'comment-strip-start-length (cons 'nxml-mode 3))
 ;; add mathematica mode:
 (require 'mathematica)
 ;; add my function that joins a region into a single line
@@ -473,6 +473,7 @@
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 (add-hook 'change-log-mode-hook 'turn-on-flyspell)
+(add-hook 'nxml-mode-hook 'turn-off-flyspell)
 (add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
 (add-hook 'LaTeX-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode

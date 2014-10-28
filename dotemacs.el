@@ -10,7 +10,7 @@
 ;; 	       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
 	     '("melpa-stable" .
-	       "http://melpa-stable.milkbox.net/packages/") 'APPEND)
+	       "http://stable.melpa.org/packages/") 'APPEND)
 (add-to-list 'package-archives
              '("elpy" .
 	       "http://jorgenschaefer.github.io/packages/") 'APPEND)

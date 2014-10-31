@@ -289,8 +289,8 @@
 ;; (add-to-list 'load-path "~/.emacs.d/textlint/")
 ;; (require 'textlint)
 ;; fix commenting problems in xml mode
-;; (require 'mz-comment-fix)
-;; (add-to-list 'comment-strip-start-length (cons 'nxml-mode 3))
+(require 'mz-comment-fix)
+(add-to-list 'comment-strip-start-length (cons 'nxml-mode 3))
 ;; add mathematica mode:
 (require 'mathematica)
 ;; add my function that joins a region into a single line

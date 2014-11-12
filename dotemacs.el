@@ -206,17 +206,21 @@
 ;; Choose default cc-mode styles
 (setq c-default-style '((other . "linux")))
 (setq c-basic-offset 4)
+;; set default tab width:
+(setq-default tab-width 4)
+;; set tabbing in lisp mode:
+(setq-default lisp-indent-offset 2)
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'c++-mode-common-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'python-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'prog-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'text-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 ;; set the value of the macro ring buffer
 (setq kmacro-ring-max 20)
 ;; enable delete-selection-mode
@@ -231,7 +235,7 @@
 ;; command line
 (require 'server)
 (or (server-running-p)
-    (server-start))
+  (server-start))
 ;; something keeps resetting the XML indentation settings
 (setq nxml-child-indent 2)
 ;; for narrowing editing to a single region:
@@ -245,20 +249,20 @@
 (setq dired-omit-files "^\\...+$")
 ;; add keybinding for activating wdired-mode
 (add-hook 'dired-mode-hook 
-	  (lambda () (define-key dired-mode-map 
-	    (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
+  (lambda ()
+	(define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
 ;; enable unzipping within Dired
 (eval-after-load "dired-aux"
-   '(add-to-list 'dired-compress-file-suffixes 
-                 '("\\.zip\\'" ".zip" "unzip")))
+  '(add-to-list 'dired-compress-file-suffixes 
+	 '("\\.zip\\'" ".zip" "unzip")))
 ;; use ibuffer by default instead of list-buffers
 (defalias 'list-buffers 'ibuffer)
 ;; set abbrev mode settings
 (setq save-abbrevs nil)
 ;; prevent cursor from moving over prompts in minibuffer
 (setq minibuffer-prompt-properties 
-      (quote (read-only t point-entered 
-			minibuffer-avoid-prompt face minibuffer-prompt)))
+  (quote
+	(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 ;; set emacs completions to be case-insensitive
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
@@ -334,20 +338,20 @@
 (ac-flyspell-workaround)
 ;; enable yasnippet with ac:
 (set-default 'ac-sources
-             '(ac-source-abbrev
-               ac-source-dictionary
-               ac-source-yasnippet
-               ac-source-words-in-buffer
-               ac-source-words-in-same-mode-buffers
-               ac-source-semantic))
+  '(ac-source-abbrev
+	 ac-source-dictionary
+	 ac-source-yasnippet
+	 ac-source-words-in-buffer
+	 ac-source-words-in-same-mode-buffers
+	 ac-source-semantic))
 ;; turn on yasnippet by default for all modes
 (yas-global-mode)
 ;; add hook for c-sources in c mode
 (require 'ac-c-headers)
 (add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (add-to-list 'ac-sources 'ac-source-c-headers)
-	    (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+  (lambda ()
+	(add-to-list 'ac-sources 'ac-source-c-headers)
+	(add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
 ;; allow return key to also autocomplete:
 (define-key ac-completing-map "\C-m" nil)
 (setq ac-use-menu-map t)
@@ -397,10 +401,10 @@
 (setq reftex-plug-into-AUCTeX t)
 ;; make reftex use frametitle and lecture for TOC
 (add-hook 'reftex-load-hook
-	  (lambda ()
-	    (setq reftex-section-levels
-		  (cons '("frametitle" . 7) 
-			reftex-section-levels))))
+  (lambda ()
+	(setq reftex-section-levels
+	  (cons '("frametitle" . 7) 
+		reftex-section-levels))))
 ;; allow reftex-view-crossref (C-c &) to follow cref macros:
 (setq reftex-view-crossref-extra '(("\\[c|C]ref" "\\label{%s}" 0)))
 ;; makes reftex use cleveref for all styles by default:
@@ -411,10 +415,10 @@
   "Function to toggle whether reftex should use cref latex package or not"
   (interactive)
   (if (eq reftex-format-ref-function nil)
-      (progn
-	(setq reftex-format-ref-function 'reftex-format-cref)
-	;; disable reftex asking if I want to use things like \autoref, or \vref.
-	(setq reftex-ref-macro-prompt nil))
+	(progn
+	  (setq reftex-format-ref-function 'reftex-format-cref)
+	  ;; disable reftex asking if I want to use things like \autoref, or \vref.
+	  (setq reftex-ref-macro-prompt nil))
     (progn
       (setq reftex-format-ref-function nil)
       (setq reftex-ref-macro-prompt t)))
@@ -428,20 +432,19 @@
 ;; add LaTeX-auto-complete mode
 (require 'auto-complete-auctex)
 ;; binding for compiling beamer frames
-(add-hook 'LaTeX-mode-hook (lambda () (define-key
-					LaTeX-mode-map (kbd "C-M-x")
-					'tex-beamer-frame)))
+(add-hook 'LaTeX-mode-hook
+  (lambda () (define-key LaTeX-mode-map (kbd "C-M-x") 'tex-beamer-frame)))
 ;; move by blank lines in LaTeX-mode:
-(add-hook 'LaTeX-mode-hook (lambda ()
-			     (progn
-			       (define-key LaTeX-mode-map
+(add-hook 'LaTeX-mode-hook
+  (lambda () (progn
+			   (define-key LaTeX-mode-map
 				 (kbd "<C-down>") 'skip-to-next-blank-line)
-				 (define-key LaTeX-mode-map
-				   (kbd "<C-up>") 'skip-to-previous-blank-line))))
+			   (define-key LaTeX-mode-map
+				 (kbd "<C-up>") 'skip-to-previous-blank-line))))
 ;; turn on auto-fill for LaTeX mode:
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
+
 
 
 
@@ -451,16 +454,16 @@
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (setq jedi:complete-on-dot t)
 ;; make python mode recognize _ as a word separator
-(add-hook 'python-mode-hook (function 
-			     (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))
+(add-hook 'python-mode-hook
+  (function (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))
 (add-hook 'python-mode-hook 'highlight-indentation-mode)
 ;; set docstring formatting options
-(add-hook 'python-mode-hook (function 
-			     (lambda () (setq py-docstring-style 'django))))
-;; (add-hook 'python-mode-hook (function
-;; 			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
-(add-hook 'python-mode-hook (function
-			     (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
+(add-hook 'python-mode-hook
+  (function (lambda () (setq py-docstring-style 'django))))
+;; (add-hook 'python-mode-hook
+;;   (function (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
+(add-hook 'python-mode-hook
+  (function (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -477,8 +480,8 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
 (add-hook 'LaTeX-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode
-	  '(lambda () (setq flyspell-generic-check-word-p
-			    'texinfo-mode-flyspell-verify)))
+  '(lambda ()
+	 (setq flyspell-generic-check-word-p 'texinfo-mode-flyspell-verify)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -538,12 +541,12 @@
   "test whether each element in list is a string"
   (setq foo t)
   (if (listp val)
-      (let (x)
-	(setq x val)
-	(while x
-	  (if (stringp (pop x))
+	(let (x)
+	  (setq x val)
+	  (while x
+		(if (stringp (pop x))
 	      ()
-	    (setq foo nil))))
+		  (setq foo nil))))
     (setq foo nil))
   foo)
 (put 'tags-table-list 'safe-local-variable #'list-of-stringsp)
@@ -557,10 +560,10 @@
 
 ;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+(global-set-key (kbd "<C-S-up>") 'buf-move-up)
+(global-set-key (kbd "<C-S-down>") 'buf-move-down)
+(global-set-key (kbd "<C-S-left>") 'buf-move-left)
+(global-set-key (kbd "<C-S-right>") 'buf-move-right)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -634,10 +637,7 @@
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
 (setq-mode-local c-mode semanticdb-find-default-throttle
-                      '(project local unloaded system recursive))
+  '(project local unloaded system recursive))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
-                      '(project local unloaded system recursive))
+  '(project local unloaded system recursive))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-

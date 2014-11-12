@@ -453,17 +453,18 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (setq jedi:complete-on-dot t)
-;; make python mode recognize _ as a word separator
 (add-hook 'python-mode-hook
-  (function (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))
-(add-hook 'python-mode-hook 'highlight-indentation-mode)
-;; set docstring formatting options
-(add-hook 'python-mode-hook
-  (function (lambda () (setq py-docstring-style 'django))))
-;; (add-hook 'python-mode-hook
-;;   (function (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
-(add-hook 'python-mode-hook
-  (function (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
+  (lambda ()
+	;; make python mode recognize _ as a word separator
+	(modify-syntax-entry ?_ "_" python-mode-syntax-table)
+	;; set docstring formatting options
+	(setq py-docstring-style 'django)
+	;; comment region function
+	(local-set-key (kbd "C-c #") 'comment-region)
+	;; python tab-width
+	(setq python-indent-offset 4)
+	(setq tab-width 4)
+	(highlight-indentation-mode)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

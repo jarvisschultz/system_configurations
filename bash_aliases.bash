@@ -170,7 +170,14 @@ function rversion(){
     echo "Current ROS vars:"
     env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
 }
-  
+
+function girelease() {
+	name=$(basename $(git rev-parse --show-toplevel))
+	echo "Building release for ${name} at HEAD"
+	git archive master --prefix="${name}/" | bzip2 >${name}-$(git rev-parse HEAD | cut -c -8).tar.bz2
+}
+
+
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'
 alias go='xdg-open'
 alias ur='sudo service udev reload'
@@ -184,7 +191,6 @@ alias ga='gitk --all &'
 alias battstate='upower -i $(upower -e |grep batt) |grep --color=never -E "state|to\ full|percentage|to\ empty"'
 alias rget='env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort'
 alias xssh='ssh -c arcfour,blowfish-cbc -XC'
-alias grelease="git archive master --prefix=$(basename `git rev-parse --show-toplevel`)/ | bzip2 >$(basename `git rev-parse --show-toplevel`)-$(git rev-parse HEAD | cut -c -8).tar.bz2"
 
 
 ##########################

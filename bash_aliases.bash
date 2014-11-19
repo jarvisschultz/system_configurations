@@ -184,6 +184,8 @@ alias ga='gitk --all &'
 alias battstate='upower -i $(upower -e |grep batt) |grep --color=never -E "state|to\ full|percentage|to\ empty"'
 alias rget='env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort'
 alias xssh='ssh -c arcfour,blowfish-cbc -XC'
+alias grelease="git archive master --prefix=$(basename `git rev-parse --show-toplevel`)/ | bzip2 >$(basename `git rev-parse --show-toplevel`)-$(git rev-parse HEAD | cut -c -8).tar.bz2"
+
 
 ##########################
 # old functions/ aliases #

@@ -89,7 +89,6 @@ rsource(){
 
 
 
-
 function rosenv_clear(){
     # clear all ROS environment variables:
     unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |xargs)
@@ -134,76 +133,6 @@ function rosenv_load(){
     if [ -f "$FILE" ]; then
 		source $FILE
     fi
-    echo "Current ROS vars:"
-    env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
-}
-
-
-function rversion(){
-    arg=$1
-    fname="/home/$USER/.rosversiondefault"
-    if [ -n "$arg" ]
-    then
-		# if we have an argument, send it to the config file
-		echo -n "$arg" > "$fname"
-    fi
-    # read default version from file
-    if [ -f $fname ]
-    then
-		ver=$(cat $fname)
-    else
-		echo "Could not determine ROS version"
-		echo "Please provide argument"
-		return 1
-    fi
-    if [[ $ver == *fuerte* ]]
-    then
-		des1="hydro"
-		des2="groovy"
-		des3="indigo"
-		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-		source ~/.bashrc
-    elif [[ $ver == *groovy* ]]
-    then
-		des1="fuerte"
-		des2="hydro"
-		des3="indigo"
-		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-		source ~/groovyws/devel/setup.bash
-    elif [[ $ver == *hydro* ]]
-    then
-		des1="fuerte"
-		des2="groovy"
-		des3="indigo"
-		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-		source ~/hydrows/devel/setup.bash
-    elif [[ $ver == *indigo* ]]
-    then
-		des1="fuerte"
-		des2="hydro"
-		des3="groovy"
-		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-		source ~/indigows/devel/setup.bash
-    else
-		echo "Unrecognized version!"
-		return 1
-    fi
-    # check that PYTHONPATH isn't containing any old stuff:
-    arrIN=(${PYTHONPATH//:/ })
-    strOut=""
-    for dir in "${arrIN[@]}"
-    do
-		if [[ $dir != *$des1* && $dir != *$des2*  && $dir != *$des3* ]]
-		then
-			if [ -z "${strOut}" ]
-			then
-				strOut="${dir}"
-			else
-				strOut="${strOut}:${dir}"
-			fi
-		fi
-    done
-    export PYTHONPATH="${strOut}"
     echo "Current ROS vars:"
     env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
 }

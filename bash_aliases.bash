@@ -31,14 +31,16 @@ function rcon(){
     if [ -n "$arg" ] 
     then
     	## if we have an argument, let's send it to the config file
-	echo -n "$arg" > "$fname"
+		echo -n "$arg" > "$fname"
     fi
     ## let's read from the config file
     if [ -f $fname ]
     then
         core=`cat ~/.rosdefault_core`
     else
-		core="localhost"
+		# core="localhost"
+		echo "No args and ${fname} not found"
+		return 1
     fi
     export ROS_MASTER_URI=http://$core:11311/;
     if [[ $core == *localhost* ]]
@@ -70,7 +72,7 @@ rsource(){
 			source $fname
 		else
 			echo "${fname} not found!"
-			exit 1
+			return 1
 		fi
 	else
 		if [ -f ${fname} ]

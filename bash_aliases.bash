@@ -3,9 +3,9 @@ function rmhist() {
     end=$2
     if [[ -z "$start" || -z "$end" ]];
     then
-	echo "Bad args!"
-	echo "Usage: rmhist start stop"
-	return
+		echo "Bad args!"
+		echo "Usage: rmhist start stop"
+		return
     fi
     count=$(( end - start ))
     while [ $count -ge 0 ] ; do
@@ -26,7 +26,8 @@ function roscs(){
 
 function rcon(){
     arg=$1
-    fname="/home/$USER/.rosdefault_core"
+    fname="${HOME}/.rosdefault_core"
+	: ${ROS_HOSTNAME:=""}
     if [ -n "$arg" ] 
     then
     	## if we have an argument, let's send it to the config file
@@ -37,29 +38,65 @@ function rcon(){
     then
         core=`cat ~/.rosdefault_core`
     else
-	core="localhost"
+		core="localhost"
     fi
     export ROS_MASTER_URI=http://$core:11311/;
-    echo "ROS_MASTER_URI = ${ROS_MASTER_URI}"
     if [[ $core == *localhost* ]]
     then
-	unset ROS_IP
-	echo "unset ROS_IP"
-    else
-	ip=$(ifconfig |sed -n '2 p' |awk '{print $2}' |cut -d \: -f 2)
-	export ROS_IP=$ip
-	echo "ROS_IP=${ip}"
-    fi
+		unset ROS_IP
+		echo "unset ROS_IP"
+	elif [[ -z $ROS_HOSTNAME ]]
+	then
+		echo "ROS_HOSTNAME not set, trying to set ROS_IP"
+		ip=$(ifconfig |sed -n '2 p' |awk '{print $2}' |cut -d \: -f 2)
+		export ROS_IP=$ip
+	fi
+	echo "ROS_MASTER_URI = ${ROS_MASTER_URI}"
+	echo "ROS_IP = ${ROS_IP}"
+	echo "ROS_HOSTNAME = ${ROS_HOSTNAME}"
 }
+
+
+rsource(){
+	# If you pass args to this function it adds them to a list of files to be
+	# sourced in the home dir. If you pass no args, it simply sources that file.
+	fname="${HOME}/.ros_source"
+	if [ $# -eq 0 ]
+	then
+		# we have no args!
+		if [ -f ${fname} ]
+		then
+			echo "sourcing file ${fname}"
+			source $fname
+		else
+			echo "${fname} not found!"
+			exit 1
+		fi
+	else
+		if [ -f ${fname} ]
+		then
+			rm ${fname}
+		fi
+		for var in "$@"
+		do
+			line=$(readlink -m ${var})
+			echo "source ${line}" >> ${fname}
+			echo "sourcing ${line}"
+			source ${line}
+		done
+	fi
+}
+
+
 
 
 function rosenv_clear(){
     # clear all ROS environment variables:
     unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |xargs)
     if [ -z ${DEFAULT_PYTHON+x} ]; then
-	echo "[WARN] Unable to set PYTHONPATH"
+		echo "[WARN] Unable to set PYTHONPATH"
     else
-	export PYTHONPATH=$DEFAULT_PYTHON
+		export PYTHONPATH=$DEFAULT_PYTHON
     fi
 }
 
@@ -68,9 +105,9 @@ function rosenv_set(){
     # write all ROS environment variables into a file
     arg=$1
     if [ -n "$arg" ]; then
-	FILE=$1
+		FILE=$1
     else
-	FILE="${HOME}/.ros_environment"
+		FILE="${HOME}/.ros_environment"
     fi
     if [ -f $FILE ]; then
     	rm $FILE
@@ -90,12 +127,12 @@ function rosenv_load(){
     # load all ROS environment variables from a file
     arg=$1
     if [ -n "$arg" ]; then
-	FILE=$1
+		FILE=$1
     else
-	FILE="${HOME}/.ros_environment"
+		FILE="${HOME}/.ros_environment"
     fi
     if [ -f "$FILE" ]; then
-	source $FILE
+		source $FILE
     fi
     echo "Current ROS vars:"
     env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort
@@ -107,64 +144,64 @@ function rversion(){
     fname="/home/$USER/.rosversiondefault"
     if [ -n "$arg" ]
     then
-	# if we have an argument, send it to the config file
-	echo -n "$arg" > "$fname"
+		# if we have an argument, send it to the config file
+		echo -n "$arg" > "$fname"
     fi
     # read default version from file
     if [ -f $fname ]
     then
-       ver=$(cat $fname)
+		ver=$(cat $fname)
     else
-	echo "Could not determine ROS version"
-	echo "Please provide argument"
-	return 1
+		echo "Could not determine ROS version"
+		echo "Please provide argument"
+		return 1
     fi
     if [[ $ver == *fuerte* ]]
     then
-	des1="hydro"
-	des2="groovy"
-	des3="indigo"
-	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-	source ~/.bashrc
+		des1="hydro"
+		des2="groovy"
+		des3="indigo"
+		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
+		source ~/.bashrc
     elif [[ $ver == *groovy* ]]
     then
-	des1="fuerte"
-	des2="hydro"
-	des3="indigo"
-	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-	source ~/groovyws/devel/setup.bash
+		des1="fuerte"
+		des2="hydro"
+		des3="indigo"
+		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
+		source ~/groovyws/devel/setup.bash
     elif [[ $ver == *hydro* ]]
     then
-	des1="fuerte"
-	des2="groovy"
-	des3="indigo"
-	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-	source ~/hydrows/devel/setup.bash
+		des1="fuerte"
+		des2="groovy"
+		des3="indigo"
+		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
+		source ~/hydrows/devel/setup.bash
     elif [[ $ver == *indigo* ]]
     then
-	des1="fuerte"
-	des2="hydro"
-	des3="groovy"
-	unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
-	source ~/indigows/devel/setup.bash
+		des1="fuerte"
+		des2="hydro"
+		des3="groovy"
+		unset $(env |awk -F "=" '{print $1}' |grep "ROS\|CMAKE_PREFIX_PATH" |xargs)
+		source ~/indigows/devel/setup.bash
     else
-	echo "Unrecognized version!"
-	return 1
+		echo "Unrecognized version!"
+		return 1
     fi
     # check that PYTHONPATH isn't containing any old stuff:
     arrIN=(${PYTHONPATH//:/ })
     strOut=""
     for dir in "${arrIN[@]}"
     do
-	if [[ $dir != *$des1* && $dir != *$des2*  && $dir != *$des3* ]]
-	then
-	    if [ -z "${strOut}" ]
-	    then
-		strOut="${dir}"
-	    else
-		strOut="${strOut}:${dir}"
-	    fi
-	fi
+		if [[ $dir != *$des1* && $dir != *$des2*  && $dir != *$des3* ]]
+		then
+			if [ -z "${strOut}" ]
+			then
+				strOut="${dir}"
+			else
+				strOut="${strOut}:${dir}"
+			fi
+		fi
     done
     export PYTHONPATH="${strOut}"
     echo "Current ROS vars:"

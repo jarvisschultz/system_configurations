@@ -131,8 +131,15 @@ export DEFAULT_PYTHON=$PYTHONPATH
 # INDIGO:
 # source ~/indigows/devel/setup.bash
 # load ROS environment:
-source /opt/ros/indigo/setup.bash
-rosenv_load > /dev/null
+# source /opt/ros/indigo/setup.bash
+# rosenv_load > /dev/null
+
+# let's set ROS_HOSTNAME by default
+export ROS_HOSTNAME=vedauwoo.local
+rcon > /dev/null
+rsource > /dev/null
+
+
 
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT

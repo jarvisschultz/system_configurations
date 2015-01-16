@@ -272,7 +272,9 @@
 ;; turn on markdown mode for certain files
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)) ;; gfm = github-flavored
-
+;; automatically make hash-bang files executable
+(add-hook 'after-save-hook
+  'executable-make-buffer-file-executable-if-script-p)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -389,6 +391,7 @@
 (setq TeX-parse-self t)
 (setq TeX-auto-save t)
 (setq TeX-electric-sub-and-superscript t)
+(setq TeX-save-query nil) 
 ;; Add reverse LaTeX searching:
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-method "synctex")

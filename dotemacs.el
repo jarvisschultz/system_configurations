@@ -107,6 +107,9 @@
 (global-set-key (kbd "M-RET") 'complete-tag)
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
+;; occur dwim:
+(require 'occur-dwim)
+(global-set-key (kbd "M-s o") 'occur-dwim)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -645,4 +648,4 @@
   '(project local unloaded system recursive))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
   '(project local unloaded system recursive))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

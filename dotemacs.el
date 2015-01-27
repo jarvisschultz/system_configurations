@@ -108,8 +108,10 @@
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
 ;; occur dwim:
-(require 'occur-dwim)
-(global-set-key (kbd "M-s o") 'occur-dwim)
+(require 'my-dwim-functions)
+(global-set-key (kbd "M-s o") 'my-occur-dwim)
+(global-set-key (kbd "M-;") 'my-comment-dwim)
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

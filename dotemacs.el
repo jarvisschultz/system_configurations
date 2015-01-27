@@ -1,4 +1,4 @@
-(push "~/.emacs.d/" load-path)
+;; (push "~/.emacs.d/" load-path)
 
 ;; add miscellaneous packages dir to load path
 (add-to-list 'load-path "~/.emacs.d/misc-packages/")
@@ -10,7 +10,7 @@
 ;; 	       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
 	     '("melpa-stable" .
-	       "http://melpa-stable.milkbox.net/packages/") 'APPEND)
+	       "http://stable.melpa.org/packages/") 'APPEND)
 (add-to-list 'package-archives
              '("elpy" .
 	       "http://jorgenschaefer.github.io/packages/") 'APPEND)
@@ -40,10 +40,6 @@
  '(ansi-color-names-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(ansi-term-color-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(column-number-mode t)
- '(custom-safe-themes (quote ("3d6b08cd1b1def3cc0bc6a3909f67475e5612dba9fa98f8b842433d827af5d30"
-			      "36a309985a0f9ed1a0c3a69625802f87dee940767c9e200b89cdebdb737e5b29" 
-			      "71b172ea4aad108801421cc5251edb6c792f3adbaecfa1c52e94e3d99634dee7" 
-			      "bf9d5728e674bde6a112979bd830cc90327850aaaf2e6f3cc4654f077146b406" default)))
  '(fci-rule-color "#383838")
  '(highlight-nonselected-windows t)
  '(matlab-comment-line-s "% ")
@@ -111,6 +107,11 @@
 (global-set-key (kbd "M-RET") 'complete-tag)
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
+;; occur dwim:
+(require 'my-dwim-functions)
+(global-set-key (kbd "M-s o") 'my-occur-dwim)
+(global-set-key (kbd "M-;") 'my-comment-dwim)
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -133,6 +134,8 @@
 (setq x-select-enable-clipboard t)
 ;; turn on shell auto-coloring by default
 (setq ansi-color-for-comint-mode t)
+;; set all themes to safe
+(setq custom-safe-themes t)
 ;; add color functionality
 (load-theme 'zenburn t)
 ;; disable scroll bars
@@ -175,6 +178,8 @@
 (add-hook 'after-make-console-frame-hooks
 	  'set-my-custom-terminal-settings)
 
+;; activate my zoom commands:
+(require 'zoom-fonts)
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; MOUSE BEHAVIORS ;;
@@ -206,17 +211,21 @@
 ;; Choose default cc-mode styles
 (setq c-default-style '((other . "linux")))
 (setq c-basic-offset 4)
+;; set default tab width:
+(setq-default tab-width 4)
+;; set tabbing in lisp mode:
+(setq-default lisp-indent-offset 2)
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'c++-mode-common-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'python-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'prog-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 (add-hook 'text-mode-hook
-	  (lambda () (subword-mode 1)))
+  (lambda () (subword-mode 1)))
 ;; set the value of the macro ring buffer
 (setq kmacro-ring-max 20)
 ;; enable delete-selection-mode
@@ -231,7 +240,7 @@
 ;; command line
 (require 'server)
 (or (server-running-p)
-    (server-start))
+  (server-start))
 ;; something keeps resetting the XML indentation settings
 (setq nxml-child-indent 2)
 ;; for narrowing editing to a single region:
@@ -239,25 +248,26 @@
 ;; don't want browsing kill ring to mess up my display:
 (setq browse-kill-ring-quit-action 'save-and-restore)
 ;; enable dired+ instead of dired and turn on "a" command
+(setq diredp-hide-details-initially-flag nil)
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-omit-files "^\\...+$")
 ;; add keybinding for activating wdired-mode
 (add-hook 'dired-mode-hook 
-	  (lambda () (define-key dired-mode-map 
-	    (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
+  (lambda ()
+	(define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
 ;; enable unzipping within Dired
 (eval-after-load "dired-aux"
-   '(add-to-list 'dired-compress-file-suffixes 
-                 '("\\.zip\\'" ".zip" "unzip")))
+  '(add-to-list 'dired-compress-file-suffixes 
+	 '("\\.zip\\'" ".zip" "unzip")))
 ;; use ibuffer by default instead of list-buffers
 (defalias 'list-buffers 'ibuffer)
 ;; set abbrev mode settings
 (setq save-abbrevs nil)
 ;; prevent cursor from moving over prompts in minibuffer
 (setq minibuffer-prompt-properties 
-      (quote (read-only t point-entered 
-			minibuffer-avoid-prompt face minibuffer-prompt)))
+  (quote
+	(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
 ;; set emacs completions to be case-insensitive
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
@@ -267,7 +277,9 @@
 ;; turn on markdown mode for certain files
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)) ;; gfm = github-flavored
-
+;; automatically make hash-bang files executable
+(add-hook 'after-save-hook
+  'executable-make-buffer-file-executable-if-script-p)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -333,20 +345,20 @@
 (ac-flyspell-workaround)
 ;; enable yasnippet with ac:
 (set-default 'ac-sources
-             '(ac-source-abbrev
-               ac-source-dictionary
-               ac-source-yasnippet
-               ac-source-words-in-buffer
-               ac-source-words-in-same-mode-buffers
-               ac-source-semantic))
+  '(ac-source-abbrev
+	 ac-source-dictionary
+	 ac-source-yasnippet
+	 ac-source-words-in-buffer
+	 ac-source-words-in-same-mode-buffers
+	 ac-source-semantic))
 ;; turn on yasnippet by default for all modes
 (yas-global-mode)
 ;; add hook for c-sources in c mode
 (require 'ac-c-headers)
 (add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (add-to-list 'ac-sources 'ac-source-c-headers)
-	    (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+  (lambda ()
+	(add-to-list 'ac-sources 'ac-source-c-headers)
+	(add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
 ;; allow return key to also autocomplete:
 (define-key ac-completing-map "\C-m" nil)
 (setq ac-use-menu-map t)
@@ -384,6 +396,7 @@
 (setq TeX-parse-self t)
 (setq TeX-auto-save t)
 (setq TeX-electric-sub-and-superscript t)
+(setq TeX-save-query nil) 
 ;; Add reverse LaTeX searching:
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-method "synctex")
@@ -396,10 +409,10 @@
 (setq reftex-plug-into-AUCTeX t)
 ;; make reftex use frametitle and lecture for TOC
 (add-hook 'reftex-load-hook
-	  (lambda ()
-	    (setq reftex-section-levels
-		  (cons '("frametitle" . 7) 
-			reftex-section-levels))))
+  (lambda ()
+	(setq reftex-section-levels
+	  (cons '("frametitle" . 7) 
+		reftex-section-levels))))
 ;; allow reftex-view-crossref (C-c &) to follow cref macros:
 (setq reftex-view-crossref-extra '(("\\[c|C]ref" "\\label{%s}" 0)))
 ;; makes reftex use cleveref for all styles by default:
@@ -410,10 +423,10 @@
   "Function to toggle whether reftex should use cref latex package or not"
   (interactive)
   (if (eq reftex-format-ref-function nil)
-      (progn
-	(setq reftex-format-ref-function 'reftex-format-cref)
-	;; disable reftex asking if I want to use things like \autoref, or \vref.
-	(setq reftex-ref-macro-prompt nil))
+	(progn
+	  (setq reftex-format-ref-function 'reftex-format-cref)
+	  ;; disable reftex asking if I want to use things like \autoref, or \vref.
+	  (setq reftex-ref-macro-prompt nil))
     (progn
       (setq reftex-format-ref-function nil)
       (setq reftex-ref-macro-prompt t)))
@@ -427,20 +440,19 @@
 ;; add LaTeX-auto-complete mode
 (require 'auto-complete-auctex)
 ;; binding for compiling beamer frames
-(add-hook 'LaTeX-mode-hook (lambda () (define-key
-					LaTeX-mode-map (kbd "C-M-x")
-					'tex-beamer-frame)))
+(add-hook 'LaTeX-mode-hook
+  (lambda () (define-key LaTeX-mode-map (kbd "C-M-x") 'tex-beamer-frame)))
 ;; move by blank lines in LaTeX-mode:
-(add-hook 'LaTeX-mode-hook (lambda ()
-			     (progn
-			       (define-key LaTeX-mode-map
+(add-hook 'LaTeX-mode-hook
+  (lambda () (progn
+			   (define-key LaTeX-mode-map
 				 (kbd "<C-down>") 'skip-to-next-blank-line)
-				 (define-key LaTeX-mode-map
-				   (kbd "<C-up>") 'skip-to-previous-blank-line))))
+			   (define-key LaTeX-mode-map
+				 (kbd "<C-up>") 'skip-to-previous-blank-line))))
 ;; turn on auto-fill for LaTeX mode:
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
+
 
 
 
@@ -449,17 +461,18 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (setq jedi:complete-on-dot t)
-;; make python mode recognize _ as a word separator
-(add-hook 'python-mode-hook (function 
-			     (lambda () (modify-syntax-entry ?_ "_" python-mode-syntax-table))))
-(add-hook 'python-mode-hook 'highlight-indentation-mode)
-;; set docstring formatting options
-(add-hook 'python-mode-hook (function 
-			     (lambda () (setq py-docstring-style 'django))))
-(add-hook 'python-mode-hook (function
-			     (lambda () (local-set-key (kbd "RET") 'newline-and-indent))))
-(add-hook 'python-mode-hook (function
-			     (lambda () (local-set-key (kbd "C-c #") 'comment-region))))
+(add-hook 'python-mode-hook
+  (lambda ()
+	;; make python mode recognize _ as a word separator
+	(modify-syntax-entry ?_ "_" python-mode-syntax-table)
+	;; set docstring formatting options
+	(setq py-docstring-style 'django)
+	;; comment region function
+	(local-set-key (kbd "C-c #") 'comment-region)
+	;; python tab-width
+	(setq python-indent-offset 4)
+	(setq tab-width 4)
+	(highlight-indentation-mode)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -472,11 +485,12 @@
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 (add-hook 'change-log-mode-hook 'turn-on-flyspell)
+(add-hook 'nxml-mode-hook 'turn-off-flyspell)
 (add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
 (add-hook 'LaTeX-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode
-	  '(lambda () (setq flyspell-generic-check-word-p
-			    'texinfo-mode-flyspell-verify)))
+  '(lambda ()
+	 (setq flyspell-generic-check-word-p 'texinfo-mode-flyspell-verify)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -536,12 +550,12 @@
   "test whether each element in list is a string"
   (setq foo t)
   (if (listp val)
-      (let (x)
-	(setq x val)
-	(while x
-	  (if (stringp (pop x))
+	(let (x)
+	  (setq x val)
+	  (while x
+		(if (stringp (pop x))
 	      ()
-	    (setq foo nil))))
+		  (setq foo nil))))
     (setq foo nil))
   foo)
 (put 'tags-table-list 'safe-local-variable #'list-of-stringsp)
@@ -555,10 +569,10 @@
 
 ;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+(global-set-key (kbd "<C-S-up>") 'buf-move-up)
+(global-set-key (kbd "<C-S-down>") 'buf-move-down)
+(global-set-key (kbd "<C-S-left>") 'buf-move-left)
+(global-set-key (kbd "<C-S-right>") 'buf-move-right)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -580,6 +594,7 @@
 (add-to-list 'recentf-exclude ".*\\.gpg\\'")
 (add-to-list 'recentf-exclude ".*\\.ido\\.last\\'")
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/elpa.*\\'")
+(add-to-list 'recentf-exclude ".*\\.emacs\\.d/session.*\\'")
 (add-to-list 'recentf-exclude ".*TAGS.*\\'")
 (add-to-list 'recentf-exclude ".*\\.pgf\\'")
 (add-to-list 'recentf-exclude "/tmp.*\\'")
@@ -632,10 +647,7 @@
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
 (setq-mode-local c-mode semanticdb-find-default-throttle
-                      '(project local unloaded system recursive))
+  '(project local unloaded system recursive))
 (setq-mode-local c++-mode semanticdb-find-default-throttle
-                      '(project local unloaded system recursive))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
+  '(project local unloaded system recursive))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

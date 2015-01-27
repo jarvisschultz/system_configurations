@@ -118,17 +118,28 @@ function nano() {
 ## python config
 export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
 export PATH=$PATH:$HOME/.local/bin
+export DEFAULT_PYTHON=$PYTHONPATH
 
 ## ROS
 # FUERTE:
-source /opt/ros/fuerte/setup.bash
-export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
+# source /opt/ros/fuerte/setup.bash
+# export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
 # GROOVY:
 # source ~/groovyws/devel/setup.bash
 # HYDRO:
 # source ~/hydrows/devel/setup.bash
 # INDIGO:
 # source ~/indigows/devel/setup.bash
+# load ROS environment:
+# source /opt/ros/indigo/setup.bash
+# rosenv_load > /dev/null
+
+# let's set ROS_HOSTNAME by default
+export ROS_HOSTNAME=vedauwoo.local
+rcon > /dev/null
+rsource > /dev/null
+
+
 
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT

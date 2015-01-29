@@ -107,7 +107,7 @@
 (global-set-key (kbd "M-RET") 'complete-tag)
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
-;; occur dwim:
+;; my dwim keybindings:
 (require 'my-dwim-functions)
 (global-set-key (kbd "M-s o") 'my-occur-dwim)
 (global-set-key (kbd "M-;") 'my-comment-dwim)
@@ -196,17 +196,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISCELLANEOUS BEHAVIORS OF BUILT IN PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; most modes automatically make RET newline and indent, but for those that
-;; don't, let's set it that way
-;; (define-key global-map (kbd "RET") 'newline-and-indent)
-;; (setq-default indent-tabs-mode t)
 ;; disable backup files
 (setq make-backup-files nil)
 ;; enable scroll-left command
 (put 'scroll-left 'disabled nil)
 ;; Enter also indents in cc-mode
-;; (defun my-make-CR-do-indent ()
-;;    (define-key c-mode-base-map "\C-m" 'c-context-line-break))
 (add-hook 'c-initialization-hook 'electric-indent-mode)
 ;; Choose default cc-mode styles
 (setq c-default-style '((other . "linux")))
@@ -230,6 +224,8 @@
 (setq kmacro-ring-max 20)
 ;; enable delete-selection-mode
 (delete-selection-mode)
+;; modify mark pop to allow C-SPC to repeatedly pop after one C-u C-SPC
+(setq set-mark-command-repeat-pop t)
 ;; add tramp functionality:
 (require 'tramp)
 (setq tramp-default-method "scp")

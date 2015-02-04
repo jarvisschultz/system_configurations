@@ -2,12 +2,15 @@
   "Call `occur' with a sane default. If region active, choose it; otherwise, use
 symbol at point"
   (interactive)
-  (push (if (region-active-p)
-            (buffer-substring-no-properties
-             (region-beginning)
-             (region-end))
-          (thing-at-point 'symbol))
-        regexp-history)
+  (let ((occur-dwim-candidate
+  	(if (region-active-p)
+  	  (buffer-substring-no-properties
+  		(region-beginning)
+  		(region-end))
+  	  (thing-at-point 'symbol))))
+  	(if (stringp occur-dwim-candidate)
+  	  (push occur-dwim-candidate regexp-history)
+	  nil))
   (call-interactively 'occur))
 
 

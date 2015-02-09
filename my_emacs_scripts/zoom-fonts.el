@@ -37,6 +37,6 @@
   "Decrease face height by `zoom-increment-size' for all faces in all frames"
   (interactive)
   (set-face-attribute 'default nil :height
-	(- zoom-increment-size (face-attribute 'default :height nil 'default))))
+	(- (face-attribute 'default :height nil 'default) zoom-increment-size)))
 
 (provide 'zoom-fonts)

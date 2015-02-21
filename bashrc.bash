@@ -135,7 +135,7 @@ export DEFAULT_PYTHON=$PYTHONPATH
 # rosenv_load > /dev/null
 
 # let's set ROS_HOSTNAME by default
-export ROS_HOSTNAME=vedauwoo.local
+export ROS_HOSTNAME=$(hostname)".local"
 rcon > /dev/null
 rsource > /dev/null
 

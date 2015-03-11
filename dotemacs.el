@@ -25,40 +25,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS PERFORMED CUSTOMIZATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-10"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(ansi-term-color-vector ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(column-number-mode t)
- '(fci-rule-color "#383838")
- '(highlight-nonselected-windows t)
- '(matlab-comment-line-s "% ")
- '(matlab-comment-on-line-s "% ")
- '(matlab-comment-region-s "% ")
- '(matlab-shell-ask-MATLAB-for-completions nil)
- '(preview-auto-cache-preamble t)
- '(preview-gs-options (quote ("-q" "-dNOSAFER" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
- '(preview-scale-function 1.25)
- '(safe-local-variable-values (quote (
-				      (TeX-auto-parse-length . 999999) 
-				      (TeX-auto-regexp-list . TeX-auto-full-regexp-list) 
-				      (TeX-parse-self . t) (TeX-auto-save . t)
-				      (TeX-source-correlate-method . synctex))))
- '(save-place t nil (saveplace))
- '(show-paren-mode t)
- '(warning-suppress-types (quote ((\(quote\ \(\(undo\ discard-info\)\)\)))))
- '(wdired-allow-to-change-permissions t))
-
+;; put all of emacs' customizations in a separate file
+(setq custom-file "~/.emacs.d/custom.el")
+;; load custom file... if it doesn't exist, don't throw an error
+(load custom-file 'noerror)
 
 
 
@@ -248,6 +218,8 @@
 (require 'dired+)
 (put 'dired-find-alternate-file 'disabled nil)
 (setq dired-omit-files "^\\...+$")
+;; allow wdired to change file permissions
+(setq wdired-allow-to-change-permissions t)
 ;; add keybinding for activating wdired-mode
 (add-hook 'dired-mode-hook 
   (lambda ()
@@ -276,6 +248,11 @@
 ;; automatically make hash-bang files executable
 (add-hook 'after-save-hook
   'executable-make-buffer-file-executable-if-script-p)
+;; always remember where I was:
+(setq-default save-place t)
+(require 'saveplace)
+;; turn on show-paren mode
+(show-paren-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -403,6 +380,17 @@
 (add-hook 'LaTeX-mode-hook 'reftex-mode)
 (add-hook 'bibtex-mode-hook 'reftex-mode)
 (setq reftex-plug-into-AUCTeX t)
+;; add common TeX variables as safe for local vars at end of doc
+(add-to-list 'safe-local-variable-values '(TeX-auto-parse-length . 999999))
+(add-to-list 'safe-local-variable-values '(TeX-auto-regexp-list . TeX-auto-full-regexp-list))
+(add-to-list 'safe-local-variable-values '(TeX-parse-self . t))
+(add-to-list 'safe-local-variable-values '(TeX-auto-save . t))
+(add-to-list 'safe-local-variable-values '(TeX-source-correlate-method . synctex))
+;; customize previewing:
+(setq
+  preview-auto-cache-preamble t
+  preview-gs-options (quote ("-q" "-dNOSAFER" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4"))
+  preview-scale-function 1.25)
 ;; make reftex use frametitle and lecture for TOC
 (add-hook 'reftex-load-hook
   (lambda ()
@@ -502,6 +490,11 @@
 (setq matlab-indent-function t)
 (setq matlab-shell-command "matlab")
 (setq matlab-shell-command-switches '("-nodesktop"))
+(setq
+  matlab-comment-line-s "% "
+  matlab-comment-on-line-s "% "
+  matlab-comment-region-s "% "
+  matlab-shell-ask-MATLAB-for-completions nil)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

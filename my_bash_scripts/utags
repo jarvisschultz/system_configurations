@@ -1,9 +1,15 @@
 #!/bin/bash
 
-CMD="ctags-exuberant -e -R --extra=q"
-
+CMD="ctags-exuberant -e -R --extra=q "
 input=$1
-if [ -n "$input" ]
+
+if [ -a $(pwd)/.utagcmd ]
+then
+	echo "Reading new CMD from .utagcmd"
+	CMD=$(cat $(pwd)/.utagcmd)
+	echo "  CMD = ${CMD}"
+	eval $CMD
+elif [ -n "$input" ]
 then
     echo "Generating tags table using exuberant ctags with given directories/files"
     ${CMD} $@

@@ -253,6 +253,11 @@
 (require 'saveplace)
 ;; turn on show-paren mode
 (show-paren-mode)
+;; add function for running multi-occur on dired marked files:
+(defun dired-do-multi-occur (regexp)
+  "Run `multi-occur' with REGEXP on all marked files."
+  (interactive (list (read-regexp "Regexp: ")))
+  (multi-occur (mapcar 'find-file-noselect (dired-get-marked-files)) regexp))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

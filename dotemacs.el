@@ -11,9 +11,6 @@
 (add-to-list 'package-archives
 	     '("melpa-stable" .
 	       "http://stable.melpa.org/packages/") 'APPEND)
-(add-to-list 'package-archives
-             '("elpy" .
-	       "http://jorgenschaefer.github.io/packages/") 'APPEND)
 (package-initialize)
 
 ;; tools for benchmarking startup:
@@ -529,7 +526,7 @@
 
 
 
-;; IDO  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IDO, Projectile, Helm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode 1) ;; turn on ido mode
 (setq ido-everywhere t)
 (ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
@@ -537,6 +534,7 @@
 (flx-ido-mode 1) ;; flexible matching
 (global-set-key (kbd "M-x") 'smex) ;; for M-x
 (projectile-global-mode t) ;; searching project dirs (including git repos)
+(setq org-completion-use-ido t)
 ;; change projectile to use my utags script instead of ctags
 (setq projectile-tags-command "utags %s")
 ;; set the value of tags-table-list to be safe as long as it is a string

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-CMD="ctags-exuberant -e -R --extra=q "
 input=$1
 
 if [ -a $(pwd)/.utagcmd ]
@@ -11,10 +10,13 @@ then
 	eval $CMD
 elif [ -n "$input" ]
 then
-    echo "Generating tags table using exuberant ctags with given directories/files"
-    ${CMD} $@
+	CMD="ctags-exuberant -e -R --extra=q "
+    echo "Generating tags table using exuberant ctags plus args"
+	echo "CMD = ${CMD} $@"
+    eval "${CMD} $@"
 else
-    echo "Generating tags table by searching in the following directory:"
+	CMD="ctags-exuberant -e -R --extra=q -L -"
+    echo "Generating tags table by searching for Python, C, C++ files in the following directory:"
     echo "    " `pwd` 
     echo
     find . -regex ".*\.[cChH]\(pp\)?\|.*\.py" -print | cut -c3- | ${CMD}

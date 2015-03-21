@@ -40,8 +40,8 @@
 ;; shorten goto-line (breaks things like goto-column):
 (global-set-key "\M-g" 'goto-line)
 ;; ergonomics bindings:
-(require 'god-mode)
-(global-set-key [f2] 'god-local-mode)
+;; (require 'god-mode)
+;; (global-set-key [f2] 'god-local-mode)
 (global-set-key [f7] 'kill-ring-save)
 (global-set-key [f8] 'yank)
 (global-set-key [f9] 'yank-pop)
@@ -555,6 +555,17 @@
 ;; going to simply run helm default configuration here (don't think I want helm
 ;; on, but some functions are nice):
 (require 'helm-config)
+(setq
+  helm-buffers-fuzzy-matching t
+  helm-recentf-fuzzy-match t
+  helm-locate-fuzzy-matching t
+  helm-semantic-fuzzy-match t
+  helm-M-x-fuzzy-match t
+  helm-apropos-fuzzy-match t
+  )
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key [f2] 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

@@ -554,18 +554,47 @@
 (put 'tags-file-name 'safe-local-variable #'stringp)
 ;; going to simply run helm default configuration here (don't think I want helm
 ;; on, but some functions are nice):
+(require 'helm)
 (require 'helm-config)
+(require 'helm-swoop)
+(setq helm-swoop-split-direction 'split-window-horizontally)
 (setq
-  helm-buffers-fuzzy-matching t
-  helm-recentf-fuzzy-match t
-  helm-locate-fuzzy-matching t
-  helm-semantic-fuzzy-match t
-  helm-M-x-fuzzy-match t
   helm-apropos-fuzzy-match t
+  helm-buffers-fuzzy-matching t
+  helm-imenu-fuzzy-match t
+  helm-lisp-fuzzy-completion t
+  helm-locate-fuzzy-matching t
+  helm-M-x-fuzzy-match t
+  helm-recentf-fuzzy-match t
+  helm-semantic-fuzzy-match t
   )
+;; rebind tab to run persistent action and C-z to select action
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")  'helm-select-action)
+;; change helm prefix
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-set-key [f2] 'helm-command-prefix)
 (global-unset-key (kbd "C-x c"))
+;; helm swoop keybindings:
+(global-set-key (kbd "C-c h s") 'helm-swoop)
+(global-set-key (kbd "C-c h S") 'helm-surfraw)
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+;; ignore boring files:
+(setq helm-ff-skip-boring-files t)
+(setq helm-boring-file-regexp-list
+  '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "~$"
+    "\\.so$" "\\.a$" "\\.elc$" "\\.fas$" "\\.fasl$" "\\.pyc$" "\\.pyo$"))
+(setq helm-boring-buffer-regexp-list
+  '("\\` " "\\*helm" "\\*helm-mode" "\\*Echo Area" "\\*tramp" "\\*Minibuf"
+	 "\\*epc" "\\*ros" "\\*CEDET"))
+;; other helm keybindings:
+(global-set-key (kbd "C-c h C-x b") 'helm-mini)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -632,7 +661,7 @@
 (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
 (semantic-mode 1)
-(setq my-semantic-inhibited-modes '(python-mode latex-mode))
+(setq my-semantic-inhibited-modes '(latex-mode))
 (defun my-inhibited-modes-check ()
   "Check if current buffer's mode is allowed to have cedet run"
   (member major-mode my-semantic-inhibited-modes))

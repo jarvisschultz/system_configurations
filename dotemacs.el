@@ -78,6 +78,7 @@
 (require 'my-dwim-functions)
 (global-set-key (kbd "M-s o") 'my-occur-dwim)
 (global-set-key (kbd "M-;") 'my-comment-dwim)
+(define-key isearch-mode-map (kbd "<backspace>") 'my-delete-nonmatch-isearch)
 
 
 

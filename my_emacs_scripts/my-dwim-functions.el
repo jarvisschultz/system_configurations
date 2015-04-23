@@ -22,11 +22,24 @@ region"
 	;; else
 	(funcall function (point-at-bol) (point-at-eol))))
 
+
 (defun my-comment-dwim ()
   "call `comment-dwim' using utility function
 `my-dwim-entire-line-function'... automatically choose region if
 not active"
   (interactive)
   (my-dwim-entire-line-function 'comment-or-uncomment-region))
+
+
+(defun my-delete-nonmatch-isearch ()
+  "Delete the failed portion of the search string, or the last char if successful."
+  (interactive)
+  (with-isearch-suspended
+      (setq isearch-new-string
+            (substring
+             isearch-string 0 (or (isearch-fail-pos) (1- (length isearch-string))))
+            isearch-new-message
+            (mapconcat 'isearch-text-char-description isearch-new-string ""))))
+
 
 (provide 'my-dwim-functions)

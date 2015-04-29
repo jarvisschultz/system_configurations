@@ -226,6 +226,11 @@
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes 
 	 '("\\.zip\\'" ".zip" "unzip")))
+;; change dired file associations:
+(setq dired-guess-shell-alist-user
+  '(("\\.pdf\\'" "evince")
+	 ("\\.tex\\'" "pdflatex")
+	 ("\\.ods\\'\\|\\.xlsx?\\'\\|\\.docx?\\'\\|\\.csv\\'\\|\\.pptx?\\'" "libreoffice")))
 ;; use ibuffer by default instead of list-buffers
 (defalias 'list-buffers 'ibuffer)
 ;; set abbrev mode settings
@@ -537,7 +542,8 @@
 (projectile-global-mode t) ;; searching project dirs (including git repos)
 (setq org-completion-use-ido t)
 ;; change projectile to use my utags script instead of ctags
-(setq projectile-tags-command "utags %s")
+;; (setq projectile-tags-command "utags %s")
+(setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
 ;; set the value of tags-table-list to be safe as long as it is a string
 (defun list-of-stringsp (val)
   "test whether each element in list is a string"

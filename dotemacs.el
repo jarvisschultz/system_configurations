@@ -293,7 +293,15 @@
 ;; enable fancy-narrow from elpa
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa
-(define-key global-map (kbd "s-a") 'ace-jump-mode)
+;; (define-key global-map (kbd "s-a") 'ace-jump-mode)
+(setq avi-keys 
+      '(?a ?s ?d ?e ?f ?h ?j ?k ?l ?n ?m ?v ?r ?u))
+(setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
+(global-set-key (kbd "s-a") 'avi-goto-word-1)
+(global-set-key (kbd "s-c") 'avi-goto-char)
+(global-set-key (kbd "s-w") 'ace-window)
+(global-set-key (kbd "s-l") 'avi-goto-line)
+(setq aw-background nil)
 
 
 

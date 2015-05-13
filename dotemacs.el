@@ -481,11 +481,15 @@
 
 ;; FLYSPELL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Turn on FlySpell for some things by default
-;(add-hook 'c-mode-hook 'flyspell-prog-mode) ;; for individual modes
+(add-hook 'c-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'c++-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'python-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'nxml-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'sh-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (flyspell-prog-mode)))
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook 'turn-on-flyspell)
 (add-hook 'change-log-mode-hook 'turn-on-flyspell)
-(add-hook 'nxml-mode-hook 'turn-off-flyspell)
 (add-hook 'LaTeX-mode-hook 'turn-on-flyspell)
 (add-hook 'LaTeX-mode-hook (function (lambda () (setq ispell-parser 'tex))))
 (add-hook 'texinfo-mode

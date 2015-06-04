@@ -159,6 +159,8 @@
       scroll-preserve-screen-position 1)
 (setq mouse-wheel-follow-mouse 't)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
+(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -294,13 +296,15 @@
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa
 ;; (define-key global-map (kbd "s-a") 'ace-jump-mode)
-(setq avi-keys 
+(setq avy-keys 
       '(?a ?s ?d ?e ?f ?h ?j ?k ?l ?n ?m ?v ?r ?u))
 (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
-(global-set-key (kbd "s-a") 'avi-goto-word-1)
-(global-set-key (kbd "s-c") 'avi-goto-char)
+(global-set-key (kbd "s-a") 'avy-goto-word-1)
+(global-set-key (kbd "s-c") 'avy-goto-char)
 (global-set-key (kbd "s-w") 'ace-window)
-(global-set-key (kbd "s-l") 'avi-goto-line)
+(global-set-key (kbd "s-l") 'avy-goto-line)
+(ace-window-display-mode t)
+(set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
 (setq aw-background nil)
 
 

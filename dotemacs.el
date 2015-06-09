@@ -618,6 +618,9 @@
 	 "\\*epc" "\\*ros" "\\*CEDET"))
 ;; other helm keybindings:
 (global-set-key (kbd "C-c h C-x b") 'helm-mini)
+;; use org bullets if installed:
+(when (require 'org-bullets nil 'noerror)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

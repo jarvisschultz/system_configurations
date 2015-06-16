@@ -79,7 +79,8 @@
 (global-set-key (kbd "M-s o") 'my-occur-dwim)
 (global-set-key (kbd "M-;") 'my-comment-dwim)
 (define-key isearch-mode-map (kbd "<backspace>") 'my-delete-nonmatch-isearch)
-
+;; add a function for re-setting variables that come from the environment:
+(require 'my-update-environment)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -263,6 +264,10 @@
   "Run `multi-occur' with REGEXP on all marked files."
   (interactive (list (read-regexp "Regexp: ")))
   (multi-occur (mapcar 'find-file-noselect (dired-get-marked-files)) regexp))
+;; settings for the compile command:
+(setq compilation-ask-about-save nil)
+;; (setq compilation-scroll-output 'next-error)
+;; (setq compilation-skip-threshold 2)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

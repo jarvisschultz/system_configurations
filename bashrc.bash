@@ -115,45 +115,40 @@ function nano() {
 ## note that this causes problems with emacs when it tries to autoload
 ## color themes.
 
+
 ## python config
 export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
 export PATH=$PATH:$HOME/.local/bin
 export DEFAULT_PYTHON=$PYTHONPATH
 
-## ROS
-# FUERTE:
-# source /opt/ros/fuerte/setup.bash
-# export ROS_PACKAGE_PATH=/home/jarvis/ros/stacks:/home/jarvis/ros/packages:/opt/ros/fuerte
-# GROOVY:
-# source ~/groovyws/devel/setup.bash
-# HYDRO:
-# source ~/hydrows/devel/setup.bash
-# INDIGO:
-# source ~/indigows/devel/setup.bash
-# load ROS environment:
-# source /opt/ros/indigo/setup.bash
-# rosenv_load > /dev/null
 
+## ROS ENVIRONMENT SETUP:
 # let's set ROS_HOSTNAME by default
 export ROS_HOSTNAME=$(hostname)".local"
 rcon > /dev/null
 rsource > /dev/null
 
 
-
 # fix rviz flickering
 unset LIBGL_ALWAYS_INDIRECT
 
+
 # Set EMACS as default editor:
 export EDITOR='emacsclient -t'
-# Add Eagle, and sbin:
-PATH=$PATH:$HOME/bin:$HOME/eagle-5.11.0/bin
+# add home bin always:
+PATH=$PATH:$HOME/bin
 # Add MATLAB_JAVA Environment Variable:
 export MATLAB_JAVA=/usr/lib/jvm/java-6-openjdk-amd64/jre/
-# Add processing apps to PATH
-# export PATH=/home/jarvis/Dropbox/electronics/Processing/nuscope/application.linux64:$PATH
 # add microchip compilers to the path
-export PATH=$PATH:/opt/microchip/xc32/v1.34/bin
+bdir=/opt/microchip/xc32
+if [ -d $bdir ]
+then
+	# echo "MICROCHIP COMPILER DETECTED"
+	ver=$(ls $bdir |sort -r |head -n 1)
+	# echo "MAX VERSION = ${ver}"
+	export PATH=$PATH:/opt/microchip/xc32/${ver}/bin
+fi
+
 
 # add syntax color and piping to less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
@@ -175,7 +170,6 @@ bind 'set completion-ignore-case on'  # NOTE, could also put this in ~/.inputrc 
 export ALTERNATE_EDITOR=""
 
 # set default gpg key
-export GPGKEY=9BBA54C6
 # set agent info
 # GPG_TTY=$(tty)
 # export GPG_TTY

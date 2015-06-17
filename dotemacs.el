@@ -74,6 +74,12 @@
 (global-set-key (kbd "M-RET") 'complete-tag)
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;; MY CUSTOM SETTINGS ;;
+;;;;;;;;;;;;;;;;;;;;;;;;
 ;; my dwim keybindings:
 (require 'my-dwim-functions)
 (global-set-key (kbd "M-s o") 'my-occur-dwim)
@@ -81,6 +87,14 @@
 (define-key isearch-mode-map (kbd "<backspace>") 'my-delete-nonmatch-isearch)
 ;; add a function for re-setting variables that come from the environment:
 (require 'my-update-environment)
+;; add functions for shifting individual cells in org tables:
+(require 'my-org-table-cell-shift)
+(add-hook 'org-mode-hook
+ '(lambda ()
+    (local-set-key (kbd "M-s-<up>") 'org-table-move-single-cell-up)
+    (local-set-key (kbd "M-s-<down>") 'org-table-move-single-cell-down)
+    (local-set-key (kbd "M-s-<left>") 'org-table-move-single-cell-left)
+    (local-set-key (kbd "M-s-<right>") 'org-table-move-single-cell-right)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

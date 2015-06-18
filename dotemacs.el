@@ -174,8 +174,8 @@
       scroll-preserve-screen-position 1)
 (setq mouse-wheel-follow-mouse 't)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(global-set-key (kbd "<C-mouse-4>") 'text-scale-increase)
-(global-set-key (kbd "<C-mouse-5>") 'text-scale-decrease)
+(global-set-key (kbd "<C-mouse-4>") 'zoom-in)
+(global-set-key (kbd "<C-mouse-5>") 'zoom-out)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

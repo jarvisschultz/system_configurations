@@ -12,7 +12,7 @@
   "Default face height for the `zoom-off' function."
   :type 'integer
   :group 'zoom)
-(defcustom zoom-increment-size 20
+(defcustom zoom-increment-size 5
   "Default face height change the `zoom-in' and `zoom-out' functions."
   :type 'integer
   :group 'zoom)

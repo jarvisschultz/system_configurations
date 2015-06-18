@@ -482,7 +482,7 @@
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; jedi configurations:
 (add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'jedi-mode-hook 'jedi-direx:setup)
+;; (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 (setq jedi:complete-on-dot t)
 (add-hook 'python-mode-hook
   (lambda ()

@@ -325,6 +325,13 @@
 (ace-window-display-mode t)
 (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
 (setq aw-background nil)
+(when (require 'anzu nil 'noerror)
+  (global-anzu-mode)
+  (global-set-key (kbd "M-%") 'anzu-query-replace)
+  (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
+(when (require 'diminish nil 'noerror)
+  (diminish 'anzu-mode)
+  (diminish 'fancy-narrow-mode))
 
 
 
@@ -579,6 +586,7 @@
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
+(setq projectile-mode-line '(:eval (format " P[%s]" (projectile-project-name))))
 ;; set the value of tags-table-list to be safe as long as it is a string
 (defun list-of-stringsp (val)
   "test whether each element in list is a string"

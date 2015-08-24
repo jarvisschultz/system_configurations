@@ -574,7 +574,7 @@
 
 
 
-;; IDO, Projectile, Helm ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; IDO, Projectile, Helm, Org ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode 1) ;; turn on ido mode
 (setq ido-everywhere t)
 (ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
@@ -586,7 +586,7 @@
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
-(setq projectile-mode-line '(:eval (format " P[%s]" (projectile-project-name))))
+(setq projectile-mode-line '(:eval (format " P[ %s ]" (projectile-project-name))))
 ;; set the value of tags-table-list to be safe as long as it is a string
 (defun list-of-stringsp (val)
   "test whether each element in list is a string"
@@ -648,6 +648,15 @@
 ;; use org bullets if installed:
 (when (require 'org-bullets nil 'noerror)
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; setup languages to use with org-babel:
+(org-babel-do-load-languages
+  'org-babel-load-languages
+  '((python . t)
+	 (emacs-lisp . t)
+	 (sh . t)
+	 (C . t)))
+;; set org to fontify languages:
+(setq org-src-fontify-natively t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

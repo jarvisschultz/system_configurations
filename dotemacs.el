@@ -282,6 +282,8 @@
 (setq compilation-ask-about-save nil)
 ;; (setq compilation-scroll-output 'next-error)
 ;; (setq compilation-skip-threshold 2)
+;; always use y/n instead of yes/no
+(fset 'yes-or-no-p 'y-or-n-p)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -390,7 +390,7 @@
 
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
-(add-to-list 'load-path "/home/jarvis/ros/stacks/rosemacs/")
+(add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp/")
 (require 'rosemacs)
 (invoke-rosemacs)
 ;; add a keymap for using rosemacs commands

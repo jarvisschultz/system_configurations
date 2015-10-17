@@ -334,7 +334,14 @@
 (when (require 'diminish nil 'noerror)
   (diminish 'anzu-mode)
   (diminish 'fancy-narrow-mode))
-
+;; if swiper is installed, let's use it:
+(when (require 'swipet nil 'noerror)
+  (global-set-key (kbd "C-s") 'swiper)
+  (setq ivy-display-style 'fancy)
+  (defun bjm-swiper-recenter (&rest args)
+	"recenter display after swiper"
+	(recenter))
+  (advice-add 'swiper :after #'bjm-swiper-recenter))
 
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

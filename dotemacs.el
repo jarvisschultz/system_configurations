@@ -42,9 +42,9 @@
 ;; ergonomics bindings:
 ;; (require 'god-mode)
 ;; (global-set-key [f2] 'god-local-mode)
-(global-set-key [f7] 'kill-ring-save)
-(global-set-key [f8] 'yank)
-(global-set-key [f9] 'yank-pop)
+;; (global-set-key [f7] 'kill-ring-save)
+;; (global-set-key [f8] 'yank)
+;; (global-set-key [f9] 'yank-pop)
 (global-set-key [f10] 'find-file)
 (global-set-key [f11] 'repeat)
 (global-set-key [f12] 'compile)
@@ -297,7 +297,10 @@
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-M->") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-M-<") 'mc/unmark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C->") 'mc/mark-all-dwim)
 ;; add functionality for art-bollocks mode
 ;(require 'artbollocks-mode)
 ;; add functionality for textlint mode
@@ -334,6 +337,9 @@
 (when (require 'diminish nil 'noerror)
   (diminish 'anzu-mode)
   (diminish 'fancy-narrow-mode))
+(when (require 'hydra nil 'noerror)
+  (require 'my-hydras))
+
 
 
 
@@ -483,6 +489,18 @@
 				 (kbd "<C-up>") 'skip-to-previous-blank-line))))
 ;; turn on auto-fill for LaTeX mode:
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+;; setup fonts for math mode:
+(defface my/unimportant-latex-face
+  '((t :height 0.6
+       :inherit font-lock-comment-face))
+  "Face used on less relevant math commands.")
+(font-lock-add-keywords
+ 'latex-mode
+ `((,(rx "\\" (or (any ",.!;")
+                  (and (or "left" "right")
+                       symbol-end)))
+    0 'my/unimportant-latex-face prepend))
+ 'end)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

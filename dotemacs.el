@@ -341,13 +341,19 @@
 (when (require 'hydra nil 'noerror)
   (require 'my-hydras))
 ;; if swiper is installed, let's use it:
-(when (require 'swipet nil 'noerror)
+(when (require 'swiper nil 'noerror)
   (global-set-key (kbd "C-s") 'swiper)
   (setq ivy-display-style 'fancy)
   (defun bjm-swiper-recenter (&rest args)
 	"recenter display after swiper"
 	(recenter))
   (advice-add 'swiper :after #'bjm-swiper-recenter))
+;; if beacon is installed use it:
+(when (require 'beacon nil 'noerror)
+  (beacon-mode 1)
+  (setq beacon-color "yellow green")
+  (setq beacon-blink-when-point-moves 10))
+
 
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

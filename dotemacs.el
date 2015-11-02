@@ -529,7 +529,7 @@
 	;; make python mode recognize _ as a word separator
 	(modify-syntax-entry ?_ "_" python-mode-syntax-table)
 	;; set docstring formatting options
-	(setq py-docstring-style 'django)
+	(setq python-fill-docstring-style 'django)
 	;; comment region function
 	(local-set-key (kbd "C-c #") 'comment-region)
 	;; python tab-width
@@ -546,8 +546,8 @@
 ;; Turn on FlySpell for some things by default
 (add-hook 'c-mode-hook (lambda () (flyspell-prog-mode)))
 (add-hook 'c++-mode-hook (lambda () (flyspell-prog-mode)))
+(add-hook 'nxml-mode-hook (lambda () (flyspell-mode-off)))
 (add-hook 'python-mode-hook (lambda () (flyspell-prog-mode)))
-(add-hook 'nxml-mode-hook (lambda () (flyspell-prog-mode)))
 (add-hook 'sh-mode-hook (lambda () (flyspell-prog-mode)))
 (add-hook 'emacs-lisp-mode-hook (lambda () (flyspell-prog-mode)))
 (setq flyspell-use-meta-tab nil)

@@ -342,7 +342,7 @@
   (require 'my-hydras))
 ;; if swiper is installed, let's use it:
 (when (require 'swiper nil 'noerror)
-  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "C-s-s") 'swiper)
   (setq ivy-display-style 'fancy)
   (defun bjm-swiper-recenter (&rest args)
 	"recenter display after swiper"

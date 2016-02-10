@@ -1,3 +1,4 @@
+
 ;; (push "~/.emacs.d/" load-path)
 
 ;; add miscellaneous packages dir to load path
@@ -19,6 +20,7 @@
 ;; (benchmark-init/install)
 
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EMACS PERFORMED CUSTOMIZATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,7 +78,7 @@
 (windmove-default-keybindings 'meta)
 
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MY CUSTOM SETTINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,7 +98,7 @@
     (local-set-key (kbd "M-s-<left>") 'org-table-move-single-cell-left)
     (local-set-key (kbd "M-s-<right>") 'org-table-move-single-cell-right)))
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WINDOWS, GRAPHICS AND APPEARANCE SETTINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -177,7 +179,7 @@
 (global-set-key (kbd "<C-mouse-4>") 'zoom-in)
 (global-set-key (kbd "<C-mouse-5>") 'zoom-out)
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MISCELLANEOUS BEHAVIORS OF BUILT IN PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -190,6 +192,7 @@
 ;; Choose default cc-mode styles
 (setq c-default-style '((other . "linux")))
 (setq c-basic-offset 4)
+(c-set-offset 'comment-intro 0)
 ;; set default tab width:
 (setq-default tab-width 4)
 ;; set tabbing in lisp mode:
@@ -284,8 +287,10 @@
 ;; (setq compilation-skip-threshold 2)
 ;; always use y/n instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
+;; set isearch to use "flexible" matching (space in search is treated like any character)
+(setq search-whitespace-regexp ".*?")
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; OTHER PACKAGE LOADING AND CONFIGURATIONS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -355,7 +360,7 @@
   (setq beacon-blink-when-point-moves 10))
 
 
-
+
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ensure environment variables stay consistent even if launched from a gui
 ;; button
@@ -397,8 +402,8 @@
 (require 'ac-c-headers)
 (add-hook 'c-mode-common-hook
   (lambda ()
-	(add-to-list 'ac-sources 'ac-source-c-headers)
-	(add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+	(add-to-list 'ac-sources 'ac-source-c-headers)))
+	;; (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
 ;; allow return key to also autocomplete:
 (define-key ac-completing-map "\C-m" nil)
 (setq ac-use-menu-map t)
@@ -407,6 +412,7 @@
 
 
 
+
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
 (add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp/")
@@ -423,11 +429,11 @@
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 ;; the way I am doing the following doesn't seem very safe!
 (defvar compile-history nil)
-(setq compile-history '("cd /home/jarvis/groovyws/ && catkin_make "))
+(setq compile-history '("cd /home/jarvis/indigows/ && catkin_make "))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
 (require 'my-auctex-plugins)
@@ -518,7 +524,7 @@
 
 
 
-
+
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; jedi configurations:
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -561,7 +567,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; MATLAB ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add matlab-emacs mode
 (add-to-list 'load-path "~/src/emacs_stuff/matlab-emacs/")
@@ -581,7 +587,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; PROCESSING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add processing-emacs mode
 (add-to-list 'load-path "~/src/emacs_stuff/processing-emacs/")
@@ -606,7 +612,7 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; IDO, Projectile, Helm, Org ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode 1) ;; turn on ido mode
 (setq ido-everywhere t)
@@ -693,7 +699,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; BUFFER MOVE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'buffer-move)
 (global-set-key (kbd "<C-S-up>") 'buf-move-up)
@@ -729,7 +735,7 @@
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+
 ;; edit-server ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; allows emacs to edit html entries from chrome using the "Edit with Emacs"
 ;; chrome extension.
@@ -748,33 +754,34 @@
 
 
 
-;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'semantic/bovine/gcc)
-;; (setq semantic-default-submodes nil)
-(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
-(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
-(semantic-mode 1)
-(setq my-semantic-inhibited-modes '(latex-mode))
-(defun my-inhibited-modes-check ()
-  "Check if current buffer's mode is allowed to have cedet run"
-  (member major-mode my-semantic-inhibited-modes))
-(add-to-list 'semantic-inhibit-functions 'my-inhibited-modes-check)
-;; (defun my-c-mode-cedet-hook ()
-;;   (semantic-idle-summary-mode 1)
-;;   (semantic-mru-bookmark-mode 1)
-;;   (semantic-highlight-func-mode 1)
-;;   (semantic-decoration-mode 1))
-;; ;; (add-hook 'c-mode-common-hook
-;; ;; 	  '(lambda () (add-hook 'semantic-init-hook 'my-c-mode-cedet-hook t t)))
-;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
-;; (global-ede-mode 1)
-;; (ede-enable-generic-projects)
-(semanticdb-enable-gnu-global-databases 'c-mode)
-(semanticdb-enable-gnu-global-databases 'c++-mode)
-(setq-mode-local c-mode semanticdb-find-default-throttle
-  '(project local unloaded system recursive))
-(setq-mode-local c++-mode semanticdb-find-default-throttle
-  '(project local unloaded system recursive))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (require 'semantic/bovine/gcc)
+;; ;; (setq semantic-default-submodes nil)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+;; (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+;; (semantic-mode 1)
+;; (setq my-semantic-inhibited-modes '(latex-mode))
+;; (defun my-inhibited-modes-check ()
+;;   "Check if current buffer's mode is allowed to have cedet run"
+;;   (member major-mode my-semantic-inhibited-modes))
+;; (add-to-list 'semantic-inhibit-functions 'my-inhibited-modes-check)
+;; ;; (defun my-c-mode-cedet-hook ()
+;; ;;   (semantic-idle-summary-mode 1)
+;; ;;   (semantic-mru-bookmark-mode 1)
+;; ;;   (semantic-highlight-func-mode 1)
+;; ;;   (semantic-decoration-mode 1))
+;; ;; ;; (add-hook 'c-mode-common-hook
+;; ;; ;; 	  '(lambda () (add-hook 'semantic-init-hook 'my-c-mode-cedet-hook t t)))
+;; ;; (add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
+;; ;; (global-ede-mode 1)
+;; ;; (ede-enable-generic-projects)
+;; (semanticdb-enable-gnu-global-databases 'c-mode)
+;; (semanticdb-enable-gnu-global-databases 'c++-mode)
+;; (setq-mode-local c-mode semanticdb-find-default-throttle
+;;   '(project local unloaded system recursive))
+;; (setq-mode-local c++-mode semanticdb-find-default-throttle
+;;   '(project local unloaded system recursive))
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+

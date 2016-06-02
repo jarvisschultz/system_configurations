@@ -42,4 +42,15 @@ not active"
             (mapconcat 'isearch-text-char-description isearch-new-string ""))))
 
 
+(defun my-fill-paragraph-dwim ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-paragraph-dwim)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively #'fill-paragraph)))
+
+
 (provide 'my-dwim-functions)

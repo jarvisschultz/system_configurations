@@ -401,11 +401,16 @@
 	 ))
 ;; turn on yasnippet by default for all modes
 (yas-global-mode)
+(defun my:ac-c-headers-init ()
+  ;; (require 'auto-complete-c-headers)
+  (add-to-list 'ac-sources 'ac-source-c-headers))
+(add-hook 'c++-mode-hook 'my:ac-c-headers-init)
+(add-hook 'c-mode-hook 'my:ac-c-headers-init)
 ;; add hook for c-sources in c mode
-(require 'ac-c-headers)
-(add-hook 'c-mode-common-hook
-  (lambda ()
-	(add-to-list 'ac-sources 'ac-source-c-headers)))
+;; (require 'ac-c-headers)
+;; (add-hook 'c-mode-common-hook
+;;   (lambda ()
+;; 	(add-to-list 'ac-sources 'ac-source-c-headers)))
 	;; (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
 ;; allow return key to also autocomplete:
 (define-key ac-completing-map "\C-m" nil)

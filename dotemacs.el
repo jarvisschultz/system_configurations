@@ -380,14 +380,72 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'after-init-hook 'global-company-mode)
+(company-quickhelp-mode 1)
+(add-to-list 'company-backends 'company-etags)
+(add-to-list 'company-backends 'company-gtags)
+(add-to-list 'company-backends 'company-dabbrev)
+(add-to-list 'company-backends 'company-keywords)
+;; company and jedi:
+(defun my/company-python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
+(add-hook 'python-mode-hook 'my/company-python-mode-hook)
+;; company and C/C++
+(defun my/company-c-mode-hook ()
+  (irony-mode)
+  (add-to-list 'company-backends 'company-c-headers)
+  (add-to-list 'company-backends 'company-irony))
+(add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
+(add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
+;; company and LaTeX:
+(defun my/company-latex-mode-hook ()
+  (company-auctex-init)
+  (add-to-list 'company-backends 'company-ispell))
+(add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
+;; xml and html:
+(defun my/company-tml-mode-hook ()
+  (add-to-list 'company-backends 'company-web)
+  (add-to-list 'company-backends 'company-nxml)
+  (add-to-list 'company-backends 'company-css))
+(add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
+(add-hook 'html-mode-hook 'my/company-tml-mode-hook)
+(add-hook 'web-mode-hook 'my/company-tml-mode-hook)
+;; CMake
+(defun my/company-cmake-mode-hook ()
+  (add-to-list 'company-backends 'company-cmake))
+(add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
+;; elisp:
+(defun my/company-elisp-mode-hook ()
+  (add-to-list 'company-backends 'company-elisp))
+(add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
+;; text mode
+(defun my/company-text-mode-hook ()
+  (add-to-list 'company-backends 'company-ispell))
+(add-hook 'text-mode-hook 'my/company-text-mode-hook)
+;; YCMD
+;; (company-ycmd-setup)
+;; (add-hook 'after-init-hook #'global-ycmd-mode)
+;; company customizations: 
+(eval-after-load 'company
+  '(progn
+     (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+     (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+	 (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
+(define-key company-active-map (kbd "C-n") (lambda () (interactive) (company-complete-common-or-cycle 1)))
+(define-key company-active-map (kbd "C-p") (lambda () (interactive) (company-complete-common-or-cycle -1)))
+(setq company-idle-delay 0.2)
+(setq company-minimum-prefix-length 2)
+(yas-global-mode)
 
 
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add autocomplete package:
 (require 'auto-complete-config)
-(ac-config-default)
+;; (ac-config-default)
+;; (auto-complete-mode)
 (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
-(auto-complete-mode)
 (setq ac-ignore-case nil)
 (ac-flyspell-workaround)
 ;; enable yasnippet with ac:
@@ -401,11 +459,11 @@
 	 ))
 ;; turn on yasnippet by default for all modes
 (yas-global-mode)
-(defun my:ac-c-headers-init ()
-  ;; (require 'auto-complete-c-headers)
-  (add-to-list 'ac-sources 'ac-source-c-headers))
-(add-hook 'c++-mode-hook 'my:ac-c-headers-init)
-(add-hook 'c-mode-hook 'my:ac-c-headers-init)
+;; (defun my:ac-c-headers-init ()
+;;   ;; (require 'auto-complete-c-headers)
+;;   (add-to-list 'ac-sources 'ac-source-c-headers))
+;; (add-hook 'c++-mode-hook 'my:ac-c-headers-init)
+;; (add-hook 'c-mode-hook 'my:ac-c-headers-init)
 ;; add hook for c-sources in c mode
 ;; (require 'ac-c-headers)
 ;; (add-hook 'c-mode-common-hook
@@ -416,6 +474,7 @@
 (define-key ac-completing-map "\C-m" nil)
 (setq ac-use-menu-map t)
 (define-key ac-menu-map "\C-m" 'ac-complete)
+(auto-complete-mode 0)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -503,7 +562,7 @@
   '(progn
      (add-to-list 'reftex-no-include-regexps "\\.pgf\\'")))
 ;; add LaTeX-auto-complete mode
-(require 'auto-complete-auctex)
+;; (require 'auto-complete-auctex)
 ;; binding for compiling beamer frames
 (add-hook 'LaTeX-mode-hook
   (lambda () (define-key LaTeX-mode-map (kbd "C-M-x") 'tex-beamer-frame)))
@@ -537,7 +596,7 @@
 ;; jedi configurations:
 (add-hook 'python-mode-hook 'jedi:setup)
 ;; (add-hook 'jedi-mode-hook 'jedi-direx:setup)
-(setq jedi:complete-on-dot t)
+;; (setq jedi:complete-on-dot t)
 (add-hook 'python-mode-hook
   (lambda ()
 	;; make python mode recognize _ as a word separator

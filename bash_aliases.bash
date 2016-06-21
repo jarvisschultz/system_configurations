@@ -58,6 +58,7 @@ function rcon(){
 	echo "ROS_HOSTNAME = ${ROS_HOSTNAME}"
 }
 
+function abspath () { case "$1" in /*)printf "%s\n" "$1";; *)printf "%s\n" "$PWD/$1";; esac; }
 
 rsource(){
 	# If you pass args to this function it adds them to a list of files to be
@@ -81,7 +82,7 @@ rsource(){
 		fi
 		for var in "$@"
 		do
-			line=$(readlink -m ${var})
+			line=$(abspath ${var})
 			echo "source ${line}" >> ${fname}
 			echo "sourcing ${line}"
 			source ${line}

@@ -91,13 +91,13 @@
 ;; add a function for re-setting variables that come from the environment:
 (require 'my-update-environment)
 ;; add functions for shifting individual cells in org tables:
-(require 'my-org-table-cell-shift)
+(require 'my-org-custom-functions)
 (add-hook 'org-mode-hook
  '(lambda ()
-    (local-set-key (kbd "M-s-<up>") 'org-table-move-single-cell-up)
-    (local-set-key (kbd "M-s-<down>") 'org-table-move-single-cell-down)
-    (local-set-key (kbd "M-s-<left>") 'org-table-move-single-cell-left)
-    (local-set-key (kbd "M-s-<right>") 'org-table-move-single-cell-right)))
+    (local-set-key (kbd "M-s-<up>") 'my/org-table-move-single-cell-up)
+    (local-set-key (kbd "M-s-<down>") 'my/org-table-move-single-cell-down)
+    (local-set-key (kbd "M-s-<left>") 'my/org-table-move-single-cell-left)
+    (local-set-key (kbd "M-s-<right>") 'my/org-table-move-single-cell-right)))
 
 
 
@@ -260,7 +260,7 @@
 ;; prevent cursor from moving over prompts in minibuffer
 (setq minibuffer-prompt-properties 
   (quote
-	(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+	(read-only t point-entered minibuffer-avoid-prompt cursor-intangible t face minibuffer-prompt)))
 ;; set emacs completions to be case-insensitive
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
@@ -291,6 +291,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; set isearch to use "flexible" matching (space in search is treated like any character)
 (setq search-whitespace-regexp ".*?")
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -360,7 +361,9 @@
   (beacon-mode 1)
   (setq beacon-color "yellow green")
   (setq beacon-blink-when-point-moves 10))
-
+;; page break lines mode:
+(when (require 'page-break-lines nil 'noerror)
+  (global-page-break-lines-mode))
 
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

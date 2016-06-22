@@ -385,61 +385,90 @@
 
 ;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'after-init-hook 'global-company-mode)
-(company-quickhelp-mode 1)
-(add-to-list 'company-backends 'company-etags)
-(add-to-list 'company-backends 'company-gtags)
-(add-to-list 'company-backends 'company-dabbrev)
-(add-to-list 'company-backends 'company-keywords)
-;; company and jedi:
-(defun my/company-python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
-(add-hook 'python-mode-hook 'my/company-python-mode-hook)
-;; company and C/C++
-(defun my/company-c-mode-hook ()
-  (irony-mode)
-  (add-to-list 'company-backends 'company-c-headers)
-  (add-to-list 'company-backends 'company-irony))
-(add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
-(add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
-;; company and LaTeX:
-(defun my/company-latex-mode-hook ()
-  (company-auctex-init)
-  (add-to-list 'company-backends 'company-ispell))
-(add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
-;; xml and html:
-(defun my/company-tml-mode-hook ()
-  (add-to-list 'company-backends 'company-web)
-  (add-to-list 'company-backends 'company-nxml)
-  (add-to-list 'company-backends 'company-css))
-(add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
-(add-hook 'html-mode-hook 'my/company-tml-mode-hook)
-(add-hook 'web-mode-hook 'my/company-tml-mode-hook)
-;; CMake
-(defun my/company-cmake-mode-hook ()
-  (add-to-list 'company-backends 'company-cmake))
-(add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
-;; elisp:
-(defun my/company-elisp-mode-hook ()
-  (add-to-list 'company-backends 'company-elisp))
-(add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
-;; text mode
-(defun my/company-text-mode-hook ()
-  (add-to-list 'company-backends 'company-ispell))
-(add-hook 'text-mode-hook 'my/company-text-mode-hook)
-;; YCMD
-;; (company-ycmd-setup)
-;; (add-hook 'after-init-hook #'global-ycmd-mode)
+(company-quickhelp-mode t)
+;; Do not show pop-up automatically
+(customize-set-variable 'company-quickhelp-delay nil)
+;; Remove default binding for showing pop-up manually
+(define-key company-quickhelp-mode-map (kbd "M-h") nil)
+;; Define binding for showing pop-up manually in company-active-map instead of
+;; company-quickhelp-mode-map; this activates it only when we want completion.
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "C-j") #'company-quickhelp-manual-begin))
+(eval-after-load 'company
+  '(progn
+	 ;; company and jedi:
+	 (defun my/company-python-mode-hook ()
+	   (set (make-local-variable 'company-backends) '(company-jedi))
+	   (add-to-list 'company-backends 'company-dabbrev-code t))
+	 (add-hook 'python-mode-hook 'my/company-python-mode-hook)
+	 ;; company and C/C++
+	 (defun my/company-c-mode-hook ()
+	   (irony-mode)
+	   (set (make-local-variable 'company-backends)
+		 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code))))
+	   ;; (add-to-list 'company-backends 'company-irony)
+	   ;; (add-to-list 'company-backends 'company-c-headers))
+	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
+	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
+	 ;; company and LaTeX:
+	 (defun my/company-latex-mode-hook ()
+	   (company-auctex-init)
+	   (add-to-list 'company-backends 'company-ispell))
+	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
+	 ;; xml and html:
+	 (defun my/company-tml-mode-hook ()
+	   (add-to-list 'company-backends 'company-web)
+	   (add-to-list 'company-backends 'company-nxml)
+	   (add-to-list 'company-backends 'company-css))
+	 (add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
+	 (add-hook 'html-mode-hook 'my/company-tml-mode-hook)
+	 (add-hook 'web-mode-hook 'my/company-tml-mode-hook)
+	 ;; CMake
+	 (defun my/company-cmake-mode-hook ()
+	   (add-to-list 'company-backends 'company-cmake))
+	 (add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
+	 ;; elisp:
+	 (defun my/company-elisp-mode-hook ()
+	   (add-to-list 'company-backends 'company-elisp))
+	 (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
+	 ;; text mode
+	 (defun my/company-text-mode-hook ()
+	   (add-to-list 'company-backends 'company-ispell))
+	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)))
+(defvar my/cmake-ide-enable-flag nil
+  "Set to true once we have properly enabled `cmake-ide' in a
+  single Emacs session.")
+(defun my/cmake-ide-enable ()
+  (interactive)
+  (when (and (require 'rtags nil 'noerror)
+		  (require 'company-rtags nil 'noerror))
+	(cmake-ide-setup)
+	(setq rtags-completions-enabled t)
+	(setq rtags-autostart-diagnostics t)
+	(rtags-diagnostics)
+	(rtags-start-process-unless-running)
+	(define-key c-mode-base-map (kbd "<backtab>") (function company-rtags))
+	(setq my/cmake-ide-enable-flag t)))
+(defun my/cmake-ide-disable ()
+  (interactive)
+  (if (eq my/cmake-ide-enable-flag t)
+	(progn
+	  (setq rtags-completions-enabled nil)
+	  (setq rtags-autostart-diagnostics nil)
+	  (rtags-stop-diagnostics)
+	  (rtags-quit-rdm)
+	  (define-key c-mode-base-map (kbd "<backtab>") nil))))
 ;; company customizations: 
 (eval-after-load 'company
   '(progn
      (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
      (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
 	 (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
-     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
-(define-key company-active-map (kbd "C-n") (lambda () (interactive) (company-complete-common-or-cycle 1)))
-(define-key company-active-map (kbd "C-p") (lambda () (interactive) (company-complete-common-or-cycle -1)))
-(setq company-idle-delay 0.2)
-(setq company-minimum-prefix-length 2)
+     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+	 (define-key company-active-map (kbd "C-n") (lambda () (interactive) (company-complete-common-or-cycle 1)))
+	 (define-key company-active-map (kbd "C-p") (lambda () (interactive) (company-complete-common-or-cycle -1)))
+	 (setq company-idle-delay 0.2)
+	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
 
 
@@ -597,6 +626,7 @@
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; jedi configurations:
+(setq jedi:setup-function nil)
 (add-hook 'python-mode-hook 'jedi:setup)
 ;; (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 ;; (setq jedi:complete-on-dot t)

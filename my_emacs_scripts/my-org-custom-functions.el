@@ -22,29 +22,29 @@
 	   (j1 (org-table-current-column))
 	   (i2 (+ i1 di))
 	   (j2 (+ j1 dj)))
-      (org-table-swap-cells i1 j1 i2 j2)
+      (my/org-table-swap-cells i1 j1 i2 j2)
       (org-table-goto-line i2)
       (org-table-goto-column j2))))
 
 (defun my/org-table-move-single-cell-up ()
   "Move a single cell up in a table; swap with anything in target cell"
   (interactive)
-  (org-table-move-single-cell 'up))
+  (my/org-table-move-single-cell 'up))
 
 (defun my/org-table-move-single-cell-down ()
   "Move a single cell down in a table; swap with anything in target cell"
   (interactive)
-  (org-table-move-single-cell 'down))
+  (my/org-table-move-single-cell 'down))
 
 (defun my/org-table-move-single-cell-left ()
   "Move a single cell left in a table; swap with anything in target cell"
   (interactive)
-  (org-table-move-single-cell 'left))
+  (my/org-table-move-single-cell 'left))
 
 (defun my/org-table-move-single-cell-right ()
   "Move a single cell right in a table; swap with anything in target cell"
   (interactive)
-  (org-table-move-single-cell 'right))
+  (my/org-table-move-single-cell 'right))
 
 (defun my/org-to-html-to-clipboard ()
   "Export region to HTML, and copy it to the clipboard."

@@ -343,8 +343,11 @@
   (global-set-key (kbd "M-%") 'anzu-query-replace)
   (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
 (when (require 'diminish nil 'noerror)
-  (diminish 'anzu-mode)
-  (diminish 'fancy-narrow-mode))
+  (eval-after-load "anzu" '(diminish 'anzu-mode))
+  (eval-after-load "fancy-narrow" '(diminish 'fancy-narrow-mode))
+  (eval-after-load "page-break-lines" '(diminish 'page-break-lines-mode))
+  (eval-after-load "auto-revert" '(diminish 'auto-revert-mode))
+  (eval-after-load "beacon" '(diminish 'beacon-mode)))
 ;; load hydras
 (when (require 'hydra nil 'noerror)
   (require 'my-hydras))
@@ -406,14 +409,12 @@
 	   (irony-mode)
 	   (set (make-local-variable 'company-backends)
 		 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code))))
-	   ;; (add-to-list 'company-backends 'company-irony)
-	   ;; (add-to-list 'company-backends 'company-c-headers))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
 	 ;; company and LaTeX:
 	 (defun my/company-latex-mode-hook ()
-	   (company-auctex-init)
-	   (add-to-list 'company-backends 'company-ispell))
+	   (set (make-local-variable 'company-backends) '(completion-capf company-dabbrev company-ispell company-files))
+	   (company-auctex-init))
 	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
 	 ;; xml and html:
 	 (defun my/company-tml-mode-hook ()
@@ -424,16 +425,16 @@
 	 (add-hook 'html-mode-hook 'my/company-tml-mode-hook)
 	 (add-hook 'web-mode-hook 'my/company-tml-mode-hook)
 	 ;; CMake
-	 (defun my/company-cmake-mode-hook ()
-	   (add-to-list 'company-backends 'company-cmake))
-	 (add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
+	 ;; (defun my/company-cmake-mode-hook ()
+	 ;;   (add-to-list 'company-backends 'company-cmake))
+	 ;; (add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
 	 ;; elisp:
-	 (defun my/company-elisp-mode-hook ()
-	   (add-to-list 'company-backends 'company-elisp))
-	 (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
+	 ;; (defun my/company-elisp-mode-hook ()
+	 ;;   (add-to-list 'company-backends 'company-elisp))
+	 ;; (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
 	 ;; text mode
 	 (defun my/company-text-mode-hook ()
-	   (add-to-list 'company-backends 'company-ispell))
+	   (set (make-local-variable 'company-backends) '(company-dabbrev company-ispell company-files)))
 	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)))
 (defvar my/cmake-ide-enable-flag nil
   "Set to true once we have properly enabled `cmake-ide' in a

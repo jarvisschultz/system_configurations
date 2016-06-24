@@ -379,16 +379,20 @@
 
 
 
-
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; must be installed via elpa, or (require 'smartmparens)
-(show-smartparens-global-mode +1)
+(when (require 'smartparens nil
+		'noerror) (show-smartparens-global-mode +1))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode t)
+(when (require 'company-statistics nil 'noerror)
+		(add-hook 'after-init-hook 'company-statistics-mode))
+(when (require 'company-try-hard nil 'noerror)
+		(define-key company-active-map (kbd "C-z") #'company-try-hard))
 ;; Do not show pop-up automatically
 (customize-set-variable 'company-quickhelp-delay nil)
 ;; Remove default binding for showing pop-up manually

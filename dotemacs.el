@@ -392,7 +392,7 @@
 (when (require 'company-statistics nil 'noerror)
 		(add-hook 'after-init-hook 'company-statistics-mode))
 (when (require 'company-try-hard nil 'noerror)
-		(define-key company-active-map (kbd "C-z") #'company-try-hard))
+		(define-key company-active-map (kbd "C-j") #'company-try-hard))
 ;; Do not show pop-up automatically
 (customize-set-variable 'company-quickhelp-delay nil)
 ;; Remove default binding for showing pop-up manually
@@ -400,31 +400,35 @@
 ;; Define binding for showing pop-up manually in company-active-map instead of
 ;; company-quickhelp-mode-map; this activates it only when we want completion.
 (with-eval-after-load 'company
-  (define-key company-active-map (kbd "C-j") #'company-quickhelp-manual-begin))
+  (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
 (eval-after-load 'company
   '(progn
 	 ;; company and jedi:
 	 (defun my/company-python-mode-hook ()
 	   (set (make-local-variable 'company-backends) '(company-jedi))
-	   (add-to-list 'company-backends 'company-dabbrev-code t))
+	   (add-to-list 'company-backends 'company-dabbrev-code t)
+	   (add-to-list 'company-backends 'company-yasnippet t))
 	 (add-hook 'python-mode-hook 'my/company-python-mode-hook)
 	 ;; company and C/C++
 	 (defun my/company-c-mode-hook ()
 	   (irony-mode)
 	   (set (make-local-variable 'company-backends)
-		 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code))))
+		 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code)))
+	   (add-to-list 'company-backends 'company-yasnippet t))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
 	 ;; company and LaTeX:
 	 (defun my/company-latex-mode-hook ()
-	   (set (make-local-variable 'company-backends) '(completion-capf company-dabbrev company-ispell company-files))
+	   (set (make-local-variable 'company-backends)
+		 '(completion-capf company-dabbrev company-ispell company-files company-yasnippet))
 	   (company-auctex-init))
 	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
 	 ;; xml and html:
 	 (defun my/company-tml-mode-hook ()
 	   (add-to-list 'company-backends 'company-web)
 	   (add-to-list 'company-backends 'company-nxml)
-	   (add-to-list 'company-backends 'company-css))
+	   (add-to-list 'company-backends 'company-css)
+	   (add-to-list 'company-backends 'company-yasnippet))
 	 (add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
 	 (add-hook 'html-mode-hook 'my/company-tml-mode-hook)
 	 (add-hook 'web-mode-hook 'my/company-tml-mode-hook)

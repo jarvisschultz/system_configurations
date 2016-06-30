@@ -347,7 +347,8 @@
   (eval-after-load "fancy-narrow" '(diminish 'fancy-narrow-mode))
   (eval-after-load "page-break-lines" '(diminish 'page-break-lines-mode))
   (eval-after-load "auto-revert" '(diminish 'auto-revert-mode))
-  (eval-after-load "beacon" '(diminish 'beacon-mode)))
+  (eval-after-load "beacon" '(diminish 'beacon-mode))
+  (eval-after-load "which-key" '(diminish 'which-key-mode)))
 ;; load hydras
 (when (require 'hydra nil 'noerror)
   (require 'my-hydras))
@@ -367,6 +368,10 @@
 ;; page break lines mode:
 (when (require 'page-break-lines nil 'noerror)
   (global-page-break-lines-mode))
+;; which-key mode
+(when (require 'which-key nil 'noerror)
+  (which-key-mode))
+
 
 
 ;; EXEC-PATH-FROM-SHELL PACKAGE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -376,7 +381,6 @@
 (add-to-list 'exec-path-from-shell-variables "PYTHONPATH")
 (when window-system (exec-path-from-shell-initialize))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -390,9 +394,10 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode t)
 (when (require 'company-statistics nil 'noerror)
-		(add-hook 'after-init-hook 'company-statistics-mode))
+  (add-hook 'after-init-hook 'company-statistics-mode))
 (when (require 'company-try-hard nil 'noerror)
-		(define-key company-active-map (kbd "C-j") #'company-try-hard))
+  (define-key company-active-map (kbd "C-j") #'company-try-hard)
+  (define-key global-map (kbd "C-S-j") #'company-try-hard))
 ;; Do not show pop-up automatically
 (customize-set-variable 'company-quickhelp-delay nil)
 ;; Remove default binding for showing pop-up manually
@@ -401,6 +406,8 @@
 ;; company-quickhelp-mode-map; this activates it only when we want completion.
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
+;; bind extra key to force starting company-completion
+(define-key global-map (kbd "<C-tab>") 'company-complete)
 (eval-after-load 'company
   '(progn
 	 ;; company and jedi:
@@ -425,10 +432,10 @@
 	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
 	 ;; xml and html:
 	 (defun my/company-tml-mode-hook ()
-	   (add-to-list 'company-backends 'company-web)
-	   (add-to-list 'company-backends 'company-nxml)
-	   (add-to-list 'company-backends 'company-css)
-	   (add-to-list 'company-backends 'company-yasnippet))
+	   (set (make-local-variable 'company-backends)
+		 '(completion-capf
+			(company-web-html company-nxml company-css)
+			company-dabbrev-code company-files company-ispell company-yasnippet)))
 	 (add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
 	 (add-hook 'html-mode-hook 'my/company-tml-mode-hook)
 	 (add-hook 'web-mode-hook 'my/company-tml-mode-hook)
@@ -437,9 +444,11 @@
 	 ;;   (add-to-list 'company-backends 'company-cmake))
 	 ;; (add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
 	 ;; elisp:
-	 ;; (defun my/company-elisp-mode-hook ()
-	 ;;   (add-to-list 'company-backends 'company-elisp))
-	 ;; (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
+	 (defun my/company-elisp-mode-hook ()
+	   (set (make-local-variable 'company-backends)
+			'((company-capf company-keywords company-dabbrev-code company-yasnippet)))
+	   (add-to-list 'company-backends 'company-files t))
+	 (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
 	 ;; text mode
 	 (defun my/company-text-mode-hook ()
 	   (set (make-local-variable 'company-backends) '(company-dabbrev company-ispell company-files)))
@@ -486,7 +495,7 @@
 (require 'auto-complete-config)
 ;; (ac-config-default)
 ;; (auto-complete-mode)
-(define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
+;; (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
 (setq ac-ignore-case nil)
 (ac-flyspell-workaround)
 ;; enable yasnippet with ac:

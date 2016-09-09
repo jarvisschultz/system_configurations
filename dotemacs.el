@@ -433,7 +433,7 @@
 	 ;; xml and html:
 	 (defun my/company-tml-mode-hook ()
 	   (set (make-local-variable 'company-backends)
-		 '(completion-capf
+		 '(company-capf
 			(company-web-html company-nxml company-css)
 			company-dabbrev-code company-files company-ispell company-yasnippet)))
 	 (add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
@@ -451,8 +451,12 @@
 	 (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
 	 ;; text mode
 	 (defun my/company-text-mode-hook ()
-	   (set (make-local-variable 'company-backends) '(company-dabbrev company-ispell company-files)))
-	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)))
+	   (set (make-local-variable 'company-backends) '((company-dabbrev company-ispell company-files))))
+	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)
+	 ;; org mode
+	 (defun my/company-org-mode-hook ()
+	   (set (make-local-variable 'company-backends) '((company-web-html company-css company-dabbrev company-ispell company-files) company-yasnippet)))
+	 (add-hook 'org-mode-hook 'my/company-org-mode-hook)))
 (defvar my/cmake-ide-enable-flag nil
   "Set to true once we have properly enabled `cmake-ide' in a
   single Emacs session.")
@@ -740,6 +744,8 @@
 (global-set-key (kbd "M-x") 'smex) ;; for M-x
 (projectile-global-mode t) ;; searching project dirs (including git repos)
 (setq org-completion-use-ido t)
+;; have ido use current window when switching buffers
+(setq ido-default-buffer-method 'selected-window)
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")

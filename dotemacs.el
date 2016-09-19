@@ -663,7 +663,8 @@
 	;; python tab-width
 	(setq python-indent-offset 4)
 	(setq tab-width 4)
-	(highlight-indentation-mode)))
+	(highlight-indentation-mode)
+	(setq electric-indent-chars (delq ?: electric-indent-chars))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

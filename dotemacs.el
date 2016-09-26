@@ -335,6 +335,12 @@
 (global-set-key (kbd "s-c") 'avy-goto-char)
 (global-set-key (kbd "s-w") 'ace-window)
 (global-set-key (kbd "s-l") 'avy-goto-line)
+;; add bindings for ace link
+(when (require 'ace-link nil 'noerror)
+  (ace-link-setup-default)
+  (add-hook 'org-mode-hook
+	(lambda () (define-key org-mode-map (kbd "s-o") 'ace-link-org))))
+;; should we show the ace-window key in modeline?
 (ace-window-display-mode t)
 (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
 (setq aw-background nil)

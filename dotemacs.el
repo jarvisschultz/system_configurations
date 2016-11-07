@@ -131,7 +131,8 @@
 ;; use gutter to display buffer position
 (setq-default indicate-buffer-boundaries 'left)
 (setq-default indicate-empty-lines +1)
-
+;; add system clipboard entries to kill ring before overwriting:
+(setq save-interprogram-paste-before-kill t)
 ;; Define hooks to set visibility options specific to console or window modes:
 (defvar after-make-console-frame-hooks '()
   "Hooks to run after creating a new TTY frame")
@@ -654,8 +655,8 @@
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; jedi configurations:
-(setq jedi:setup-function nil)
-(add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:setup-function nil)
+;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (add-hook 'jedi-mode-hook 'jedi-direx:setup)
 ;; (setq jedi:complete-on-dot t)
 (add-hook 'python-mode-hook
@@ -670,7 +671,9 @@
 	(setq python-indent-offset 4)
 	(setq tab-width 4)
 	(highlight-indentation-mode)
-	(setq electric-indent-chars (delq ?: electric-indent-chars))))
+	(setq electric-indent-chars (delq ?: electric-indent-chars))
+	(setq jedi:setup-function nil)
+	(jedi:setup)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

@@ -397,6 +397,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; WEB MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (require 'smartparens nil 'noerror)
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-quoting t)
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-current-element-highlight t)
+  ;; (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 ;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode t)
@@ -460,6 +474,10 @@
 	 (defun my/company-text-mode-hook ()
 	   (set (make-local-variable 'company-backends) '((company-dabbrev company-ispell company-files))))
 	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)
+	 ;; web mode
+	 ;; (defun my/company-web-mode-hook ()
+	 ;;   (set (make-local-variable 'company-backends) '((company-web-html company-dabbrev company-ispell company-files))))
+	 ;; (add-hook 'web-mode-hook 'my/company-web-mode-hook)
 	 ;; org mode
 	 (defun my/company-org-mode-hook ()
 	   (set (make-local-variable 'company-backends) '((company-web-html company-css company-dabbrev company-ispell company-files) company-yasnippet)))

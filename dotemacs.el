@@ -421,8 +421,6 @@
   (define-key global-map (kbd "C-S-j") #'company-try-hard))
 ;; Do not show pop-up automatically
 (customize-set-variable 'company-quickhelp-delay nil)
-;; Remove default binding for showing pop-up manually
-(define-key company-quickhelp-mode-map (kbd "M-h") nil)
 ;; Define binding for showing pop-up manually in company-active-map instead of
 ;; company-quickhelp-mode-map; this activates it only when we want completion.
 (with-eval-after-load 'company

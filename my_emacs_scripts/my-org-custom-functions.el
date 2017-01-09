@@ -55,4 +55,26 @@
    (split-string
 	 "xclip -verbose -i /tmp/org.html -t text/html -selection clipboard" " ")))
 
+(defun my/org-export-subtree-as-html nil
+  (interactive)
+  (let (deactivate-mark)
+	(save-excursion
+	  (org-mark-subtree)
+	  (org-html-export-to-html nil t))))
+
+(defun my/org-export-all-as-html nil
+  "Export all subtrees that are *not* tagged with :noexport: to
+separate files using html export.
+
+Note that subtrees must have the :EXPORT_FILE_NAME: property set
+to a unique value for this to work properly."
+  (interactive)
+  (save-excursion
+	(if (use-region-p)
+	  (message "region active")
+	  (progn (message "region not active")
+		(set-mark (point-min))
+		(goto-char (point-max))))
+	(org-map-entries (lambda () (my/org-export-subtree-as-html)) "-noexport" 'region-start-level)))
+
 (provide 'my-org-custom-functions)

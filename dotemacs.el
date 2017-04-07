@@ -84,10 +84,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; my dwim keybindings:
 (require 'my-dwim-functions)
-(global-set-key (kbd "M-s o") 'my-occur-dwim)
-(global-set-key (kbd "M-;") 'my-comment-dwim)
-(define-key isearch-mode-map (kbd "<backspace>") 'my-delete-nonmatch-isearch)
-(global-set-key [remap fill-paragraph] #'my-fill-paragraph-dwim)
+(global-set-key (kbd "M-s o") 'my/occur-dwim)
+(global-set-key (kbd "M-;") 'my/comment-dwim)
+(define-key isearch-mode-map (kbd "<backspace>") 'my/delete-nonmatch-isearch)
+(global-set-key [remap fill-paragraph] #'my/fill-paragraph-dwim)
 ;; add a function for re-setting variables that come from the environment:
 (require 'my-update-environment)
 ;; add functions for shifting individual cells in org tables:
@@ -147,14 +147,14 @@
 		 'after-make-window-system-frame-hooks
 	       'after-make-console-frame-hooks)))
 
-(defun set-my-custom-window-settings ()
+(defun set/my-custom-window-settings ()
   (toggle-scroll-bar -1)
   (set-scroll-bar-mode nil) 
   (set-frame-width (selected-frame) 102)
   (set-frame-height (selected-frame) 48)
 )
 
-(defun set-my-custom-terminal-settings ()
+(defun set/my-custom-terminal-settings ()
   "run any commands specific to no-window mode"
   )
 
@@ -162,9 +162,9 @@
 (add-hook 'after-init-hook
 	  (lambda () (run-after-make-frame-hooks (selected-frame))))
 (add-hook 'after-make-window-system-frame-hooks
-	  'set-my-custom-window-settings)
+	  'set/my-custom-window-settings)
 (add-hook 'after-make-console-frame-hooks
-	  'set-my-custom-terminal-settings)
+	  'set/my-custom-terminal-settings)
 
 ;; activate my zoom commands:
 (require 'zoom-fonts)
@@ -324,7 +324,7 @@
 (require 'join-region)
 ;; add my function that opens a file as sudo
 (require 'edit-as-root)
-(global-set-key (kbd "C-x F") 'my-find-file-as-root)
+(global-set-key (kbd "C-x F") 'my/find-file-as-root)
 ;; enable fancy-narrow from elpa
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa

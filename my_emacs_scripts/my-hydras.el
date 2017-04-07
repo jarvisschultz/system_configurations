@@ -263,9 +263,9 @@ Links, footnotes  C-c C-a    _L_: link          _U_: uri        _F_: footnote   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-c z") 'hydra-zoom/body)
 
-(defun my-org-hydra-keybindings ()
+(defun my/org-hydra-keybindings ()
   (local-set-key [f7] 'hydra-org-nav/body))
-(add-hook 'org-mode-hook 'my-org-hydra-keybindings)
+(add-hook 'org-mode-hook 'my/org-hydra-keybindings)
 
 (global-set-key [f8] 'hydra-window/body)
 

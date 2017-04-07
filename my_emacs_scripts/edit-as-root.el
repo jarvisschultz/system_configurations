@@ -1,5 +1,5 @@
 
-(defun my-find-file-as-root ()
+(defun my/find-file-as-root ()
   "Like `find-file, but automatically edit the file with
 root-privileges (using tramp/sudo), if the file is not writable by
 user."

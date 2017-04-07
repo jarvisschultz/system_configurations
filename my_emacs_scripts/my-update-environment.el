@@ -1,4 +1,4 @@
-(defun my-update-env (fn)
+(defun my/update-env (fn)
   (let ((str 
          (with-temp-buffer
            (insert-file-contents fn)

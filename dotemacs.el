@@ -880,8 +880,10 @@
 (add-to-list 'recentf-exclude ".*\\.emacs\\.d/session.*\\'")
 (add-to-list 'recentf-exclude ".*TAGS.*\\'")
 (add-to-list 'recentf-exclude ".*\\.pgf\\'")
-(add-to-list 'recentf-exclude "/tmp.*\\'")
+(add-to-list 'recentf-exclude "^/tmp/.*\\'")
 (add-to-list 'recentf-exclude ".*\\.gmm\\'") ;; gmail messages
+(add-to-list 'recentf-exclude "/sudo:.*\\'")
+(add-to-list 'recentf-exclude "/scp:.*\\'")
 (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

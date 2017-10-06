@@ -1,6 +1,7 @@
 
-;; (push "~/.emacs.d/" load-path)
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; SETUP MELPA/PACKAGE.EL ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; add miscellaneous packages dir to load path
 (add-to-list 'load-path "~/.emacs.d/misc-packages/")
 
@@ -30,7 +31,7 @@
 (load custom-file 'noerror)
 
 
-
+
 ;;;;;;;;;;;;;;;;;
 ;; KEYBINDINGS ;;
 ;;;;;;;;;;;;;;;;;
@@ -169,6 +170,8 @@
 ;; activate my zoom commands:
 (require 'zoom-fonts)
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; MOUSE BEHAVIORS ;;
 ;;;;;;;;;;;;;;;;;;;;;
@@ -389,14 +392,14 @@
 (when window-system (exec-path-from-shell-initialize))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; must be installed via elpa, or (require 'smartmparens)
 (when (require 'smartparens nil
 		'noerror) (show-smartparens-global-mode +1))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+
 ;; WEB MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'smartparens nil 'noerror)
   (setq web-mode-enable-auto-closing t)
@@ -410,7 +413,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode t)
@@ -516,7 +519,7 @@
 	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
 
-
+
 ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add autocomplete package:
 (require 'auto-complete-config)
@@ -695,7 +698,7 @@
 
 
 
-
+
 ;; FLYSPELL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Turn on FlySpell for some things by default
 (add-hook 'c-mode-hook (lambda () (flyspell-prog-mode)))
@@ -735,17 +738,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
-;; PROCESSING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add processing-emacs mode
-(add-to-list 'load-path "~/src/emacs_stuff/processing-emacs/")
-(autoload 'processing-mode "processing-mode" "Processing mode" t)
-(add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
-(setq processing-location "~/processing-2.0.1/")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
+;; ;; PROCESSING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; Add processing-emacs mode
+;; (add-to-list 'load-path "~/src/emacs_stuff/processing-emacs/")
+;; (autoload 'processing-mode "processing-mode" "Processing mode" t)
+;; (add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
+;; (setq processing-location "~/processing-2.0.1/")
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+;; 
 ;; ;; ICICLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; Icicle functionality
 ;; (require 'icicles)
@@ -859,7 +862,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; RECENTF CUSTOMIZATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; use recentf to store a list of recent files across sessions:
 (require 'recentf)
@@ -897,7 +900,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; edit-server ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; EDIT-SERVER ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; allows emacs to edit html entries from chrome using the "Edit with Emacs"
 ;; chrome extension.
 (when (locate-library "edit-server")
@@ -914,7 +917,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;; ;; CEDET MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (require 'semantic/bovine/gcc)
 ;; ;; (setq semantic-default-submodes nil)

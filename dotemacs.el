@@ -863,6 +863,8 @@
 ;; RECENTF CUSTOMIZATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; use recentf to store a list of recent files across sessions:
 (require 'recentf)
+(setq recentf-max-saved-items 100
+  recentf-max-menu-items 40)
 (recentf-mode 1)
 (setq recentf-last-list '())
 (defun recentf-save-if-changes ()
@@ -884,7 +886,14 @@
 (add-to-list 'recentf-exclude ".*\\.gmm\\'") ;; gmail messages
 (add-to-list 'recentf-exclude "/sudo:.*\\'")
 (add-to-list 'recentf-exclude "/scp:.*\\'")
-(global-set-key (kbd "C-c f") 'recentf-open-files)
+(defun recentf-ido-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+(global-set-key (kbd "C-c f") 'recentf-ido-find-file)
+;; (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

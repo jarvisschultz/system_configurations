@@ -1,4 +1,5 @@
 source ~/.tmux.conf
-unbind-key -n C-a
 # register x "`"
 # register x "^A"
+set -g prefix F12
+unbind-key -n C-a

@@ -515,7 +515,7 @@
      (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
 	 (define-key company-active-map (kbd "C-n") '(lambda () (interactive) (company-complete-common-or-cycle 1)))
 	 (define-key company-active-map (kbd "C-p") '(lambda () (interactive) (company-complete-common-or-cycle -1)))
-	 (setq company-idle-delay 0.2)
+	 (setq company-idle-delay 0.6)
 	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
 
@@ -889,6 +889,7 @@
 (add-to-list 'recentf-exclude ".*\\.gmm\\'") ;; gmail messages
 (add-to-list 'recentf-exclude "/sudo:.*\\'")
 (add-to-list 'recentf-exclude "/scp:.*\\'")
+(add-to-list 'recentf-exclude "\\.password-store/.*\\'")
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)

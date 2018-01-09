@@ -328,6 +328,7 @@
 ;; add my function that opens a file as sudo
 (require 'edit-as-root)
 (global-set-key (kbd "C-x F") 'my/find-file-as-root)
+(global-set-key (kbd "C-x V") 'my/find-alternative-file-with-sudo)
 ;; enable fancy-narrow from elpa
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa

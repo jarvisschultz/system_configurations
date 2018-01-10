@@ -779,7 +779,8 @@
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
-(setq projectile-mode-line '(:eval (format " P[ %s ]" (projectile-project-name))))
+(setq projectile-mode-line '(:eval (with-timeout (0.2 " P[ -- ]")
+                                     (format " P[ %s ]" (projectile-project-name)))))
 ;; set the value of tags-table-list to be safe as long as it is a string
 (defun list-of-stringsp (val)
   "test whether each element in list is a string"

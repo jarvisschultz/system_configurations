@@ -148,7 +148,7 @@ function girelease() {
 
 
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'
-alias go='xdg-open'
+alias go='my-xdg-open.sh'
 alias ur='sudo service udev reload'
 alias tt='nautilus . &'
 alias E='$EDITOR'

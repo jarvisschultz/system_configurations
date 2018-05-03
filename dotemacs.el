@@ -13,6 +13,8 @@
 (add-to-list 'package-archives
 	     '("melpa-stable" .
 	       "http://stable.melpa.org/packages/") 'APPEND)
+;; add org-mode packages:
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 ;; tools for benchmarking startup:
@@ -570,11 +572,12 @@
 (global-set-key "\C-x\C-r" ros-keymap)
 ;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
 ;; compilation buffer... let's fix that
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+(ignore-errors
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 ;; the way I am doing the following doesn't seem very safe!
 (defvar compile-history nil)
 (setq compile-history '("cd /home/jarvis/indigows/ && catkin_make "))

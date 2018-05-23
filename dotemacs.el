@@ -895,6 +895,7 @@
 (add-to-list 'recentf-exclude "/sudo:.*\\'")
 (add-to-list 'recentf-exclude "/scp:.*\\'")
 (add-to-list 'recentf-exclude "\\.password-store/.*\\'")
+(add-to-list 'recentf-exclude "^/dev/shm/.*\\'")
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)

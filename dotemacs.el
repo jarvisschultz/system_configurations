@@ -433,6 +433,12 @@
   (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
 ;; bind extra key to force starting company-completion
 (define-key global-map (kbd "<C-tab>") 'company-complete)
+;; Setup YCMD:
+(require 'company-ycmd)
+(set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
+(set-variable 'ycmd-global-config (file-truename "~/src/ycmd/ycmd/global_conf.py"))
+(add-hook 'c++-mode-hook 'ycmd-mode)
+;; define company backends for commonly used major modes:
 (eval-after-load 'company
   '(progn
 	 ;; company and jedi:
@@ -443,12 +449,19 @@
 	 (add-hook 'python-mode-hook 'my/company-python-mode-hook)
 	 ;; company and C/C++
 	 (defun my/company-c-mode-hook ()
-	   (irony-mode)
 	   (set (make-local-variable 'company-backends)
-		 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code)))
+	 	 '(company-ycmd))
 	   (add-to-list 'company-backends 'company-yasnippet t))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
+	 ;; company and C/C++
+	 ;; (defun my/company-c-mode-hook ()
+	 ;;   ;; (irony-mode)
+	 ;;   (set (make-local-variable 'company-backends)
+	 ;; 	 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code)))
+	 ;;   (add-to-list 'company-backends 'company-yasnippet t))
+	 ;; (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
+	 ;; (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
 	 ;; company and LaTeX:
 	 (defun my/company-latex-mode-hook ()
 	   (set (make-local-variable 'company-backends)
@@ -522,43 +535,43 @@
 	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
 
-
-;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add autocomplete package:
-(require 'auto-complete-config)
-;; (ac-config-default)
-;; (auto-complete-mode)
-;; (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
-(setq ac-ignore-case nil)
-(ac-flyspell-workaround)
-;; enable yasnippet with ac:
-(set-default 'ac-sources
-  '(ac-source-abbrev
-	 ac-source-dictionary
-	 ac-source-yasnippet
-	 ac-source-words-in-buffer
-	 ac-source-words-in-same-mode-buffers
-	 ;; ac-source-semantic
-	 ))
-;; turn on yasnippet by default for all modes
-(yas-global-mode)
-;; (defun my:ac-c-headers-init ()
-;;   ;; (require 'auto-complete-c-headers)
-;;   (add-to-list 'ac-sources 'ac-source-c-headers))
-;; (add-hook 'c++-mode-hook 'my:ac-c-headers-init)
-;; (add-hook 'c-mode-hook 'my:ac-c-headers-init)
-;; add hook for c-sources in c mode
-;; (require 'ac-c-headers)
-;; (add-hook 'c-mode-common-hook
-;;   (lambda ()
-;; 	(add-to-list 'ac-sources 'ac-source-c-headers)))
-	;; (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
-;; allow return key to also autocomplete:
-(define-key ac-completing-map "\C-m" nil)
-(setq ac-use-menu-map t)
-(define-key ac-menu-map "\C-m" 'ac-complete)
-(auto-complete-mode 0)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 
+;; ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ;; Add autocomplete package:
+;; (require 'auto-complete-config)
+;; ;; (ac-config-default)
+;; ;; (auto-complete-mode)
+;; ;; (define-key global-map (kbd "<C-tab>") 'ac-fuzzy-complete)
+;; (setq ac-ignore-case nil)
+;; (ac-flyspell-workaround)
+;; ;; enable yasnippet with ac:
+;; (set-default 'ac-sources
+;;   '(ac-source-abbrev
+;; 	 ac-source-dictionary
+;; 	 ac-source-yasnippet
+;; 	 ac-source-words-in-buffer
+;; 	 ac-source-words-in-same-mode-buffers
+;; 	 ;; ac-source-semantic
+;; 	 ))
+;; ;; turn on yasnippet by default for all modes
+;; ;; (yas-global-mode)
+;; ;; (defun my:ac-c-headers-init ()
+;; ;;   ;; (require 'auto-complete-c-headers)
+;; ;;   (add-to-list 'ac-sources 'ac-source-c-headers))
+;; ;; (add-hook 'c++-mode-hook 'my:ac-c-headers-init)
+;; ;; (add-hook 'c-mode-hook 'my:ac-c-headers-init)
+;; ;; add hook for c-sources in c mode
+;; ;; (require 'ac-c-headers)
+;; ;; (add-hook 'c-mode-common-hook
+;; ;;   (lambda ()
+;; ;; 	(add-to-list 'ac-sources 'ac-source-c-headers)))
+;; 	;; (add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+;; ;; allow return key to also autocomplete:
+;; (define-key ac-completing-map "\C-m" nil)
+;; (setq ac-use-menu-map t)
+;; (define-key ac-menu-map "\C-m" 'ac-complete)
+;; (auto-complete-mode 0)
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 

@@ -437,7 +437,6 @@
 (require 'company-ycmd)
 (set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
 (set-variable 'ycmd-global-config (file-truename "~/src/ycmd/ycmd/global_conf.py"))
-(add-hook 'c++-mode-hook 'ycmd-mode)
 ;; define company backends for commonly used major modes:
 (eval-after-load 'company
   '(progn
@@ -451,7 +450,8 @@
 	 (defun my/company-c-mode-hook ()
 	   (set (make-local-variable 'company-backends)
 	 	 '(company-ycmd))
-	   (add-to-list 'company-backends 'company-yasnippet t))
+	   (add-to-list 'company-backends 'company-yasnippet t)
+	   (ycmd-mode))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
 	 ;; company and C/C++

@@ -159,7 +159,7 @@ alias emacsclient="emacsclient -c "
 alias ga='gitk --all &'
 alias battstate='upower -i $(upower -e |grep batt) |grep --color=never -E "state|to\ full|percentage|to\ empty"'
 alias rget='env |grep --color=always "ROS\|CMAKE_PREFIX_PATH\|PYTHONPATH" |sort'
-alias xssh='ssh -c arcfour,blowfish-cbc -XC'
+alias xssh='ssh -XC'
 alias fixterm='echo -e "\033c"'
 alias catkin_export_make='catkin_make --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 alias catkin_export_config='catkin config --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'

@@ -127,7 +127,7 @@
 ;; set all themes to safe
 (setq custom-safe-themes t)
 ;; add color functionality
-(load-theme 'zenburn t)
+(load-theme 'tangotango t)
 ;; disable scroll bars
 (toggle-scroll-bar -1)
 (set-scroll-bar-mode nil) 
@@ -863,7 +863,7 @@
   'org-babel-load-languages
   '((python . t)
 	 (emacs-lisp . t)
-	 (sh . t)
+	 (shell . t)
 	 (C . t)))
 ;; set org to fontify languages:
 (setq org-src-fontify-natively t)

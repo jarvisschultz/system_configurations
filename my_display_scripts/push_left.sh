@@ -117,6 +117,7 @@ fi
 
 # move window
 wid=$((${quads[$key+1]}-${quads[$key]}))
+wmctrl -i -r ${winid} -b remove,maximized_vert
 wmctrl -i -r ${winid} -b remove,maximized_horz
 wmctrl -i -r ${winid} -e 0,${xloc},0,${wid},-1
 wmctrl -i -r ${winid} -b add,maximized_vert

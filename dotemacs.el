@@ -224,7 +224,12 @@
 (setq set-mark-command-repeat-pop t)
 ;; add tramp functionality:
 (require 'tramp)
-(setq tramp-default-method "scp")
+(setq tramp-default-method "ssh")
+(setq remote-file-name-inhibit-cache nil)
+(setq vc-ignore-dir-regexp
+  (format "%s\\|%s"
+	vc-ignore-dir-regexp
+	tramp-file-name-regexp))
 ;; (setq tramp-persistency-file-name nil)
 ;; (setq password-cache nil)
 ;; (setq password-cache-expiry 16)
@@ -578,7 +583,7 @@
 
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
-(add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp/")
+(add-to-list 'load-path "/opt/ros/melodic/share/emacs/site-lisp/")
 (require 'rosemacs)
 (invoke-rosemacs)
 ;; add a keymap for using rosemacs commands
@@ -593,7 +598,7 @@
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
 ;; the way I am doing the following doesn't seem very safe!
 (defvar compile-history nil)
-(setq compile-history '("cd /home/jarvis/indigows/ && catkin_make "))
+(setq compile-history '("cd /home/jarvis/catkinws/ && catkin_make "))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

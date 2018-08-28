@@ -63,7 +63,7 @@ then
 		echo "Answered yes!"
 		echo "" >> $HOME/.gitconfig
 		echo "[include]" >> $HOME/.gitconfig
-		echo "	path = .gitcustomconfig" >> $HOME/.gitconfig
+		echo "	path = ~/.gitcustomconfig" >> $HOME/.gitconfig
 	else
 		echo "Answered no!"
 	fi

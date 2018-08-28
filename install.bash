@@ -70,3 +70,9 @@ then
 fi
 ln -svbi $PWD/gitconfig.conf $HOME/.gitcustomconfig
 ##################################################
+
+
+##################################################
+# latex stuff
+ln -svbi $PWD/latexmkrc $HOME/.latexmkrc
+##################################################

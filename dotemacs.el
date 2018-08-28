@@ -868,7 +868,7 @@
   'org-babel-load-languages
   '((python . t)
 	 (emacs-lisp . t)
-	 (sh . t)
+	 (shell . t)
 	 (C . t)))
 ;; set org to fontify languages:
 (setq org-src-fontify-natively t)

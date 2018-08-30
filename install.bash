@@ -63,10 +63,16 @@ then
 		echo "Answered yes!"
 		echo "" >> $HOME/.gitconfig
 		echo "[include]" >> $HOME/.gitconfig
-		echo "	path = .gitcustomconfig" >> $HOME/.gitconfig
+		echo "	path = ~/.gitcustomconfig" >> $HOME/.gitconfig
 	else
 		echo "Answered no!"
 	fi
 fi
 ln -svbi $PWD/gitconfig.conf $HOME/.gitcustomconfig
+##################################################
+
+
+##################################################
+# latex stuff
+ln -svbi $PWD/latexmkrc $HOME/.latexmkrc
 ##################################################

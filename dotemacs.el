@@ -128,6 +128,9 @@
 (setq custom-safe-themes t)
 ;; add color functionality
 (load-theme 'tangotango t)
+(when (require 'highlight-indentation nil 'noerror)
+  (set-face-background 'highlight-indentation-face "#778899")
+  (set-face-background 'highlight-indentation-current-column-face "#2f4f4f"))
 ;; disable scroll bars
 (toggle-scroll-bar -1)
 (set-scroll-bar-mode nil) 
@@ -712,6 +715,7 @@
 	(setq python-indent-offset 4)
 	(setq tab-width 4)
 	(highlight-indentation-mode)
+	(highlight-indentation-current-column-mode)
 	(setq electric-indent-chars (delq ?: electric-indent-chars))
 	(setq jedi:setup-function nil)
 	(jedi:setup)))

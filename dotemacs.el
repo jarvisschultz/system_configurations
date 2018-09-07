@@ -354,7 +354,7 @@
 (when (require 'ace-link nil 'noerror)
   (ace-link-setup-default)
   (add-hook 'org-mode-hook
-	(lambda () (define-key org-mode-map (kbd "s-o") 'ace-link-org))))
+	(lambda () (define-key org-mode-map (kbd "s-f") 'ace-link-org))))
 ;; should we show the ace-window key in modeline?
 (ace-window-display-mode t)
 (set-face-attribute 'aw-leading-char-face nil :foreground "deep sky blue" :weight 'bold :height 3.0)
@@ -587,10 +587,13 @@
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
 (add-to-list 'load-path "/opt/ros/melodic/share/emacs/site-lisp/")
-(require 'rosemacs)
-(invoke-rosemacs)
-;; add a keymap for using rosemacs commands
-(global-set-key "\C-x\C-r" ros-keymap)
+(when (require 'rosemacs nil 'noerror)
+  (invoke-rosemacs)
+  ;; add a keymap for using rosemacs commands
+  (global-set-key "\C-x\C-r" ros-keymap)
+  ;; the way I am doing the following doesn't seem very safe!
+  (defvar compile-history nil)
+  (setq compile-history '("cd /home/jarvis/catkinws/ && catkin_make ")))
 ;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
 ;; compilation buffer... let's fix that
 (ignore-errors
@@ -599,9 +602,6 @@
     (when (eq major-mode 'compilation-mode)
       (ansi-color-apply-on-region (point-min) (point-max))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
-;; the way I am doing the following doesn't seem very safe!
-(defvar compile-history nil)
-(setq compile-history '("cd /home/jarvis/catkinws/ && catkin_make "))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

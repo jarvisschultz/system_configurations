@@ -586,14 +586,19 @@
 
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
-(add-to-list 'load-path "/opt/ros/melodic/share/emacs/site-lisp/")
-(when (require 'rosemacs nil 'noerror)
-  (invoke-rosemacs)
-  ;; add a keymap for using rosemacs commands
-  (global-set-key "\C-x\C-r" ros-keymap)
-  ;; the way I am doing the following doesn't seem very safe!
-  (defvar compile-history nil)
-  (setq compile-history '("cd /home/jarvis/catkinws/ && catkin_make ")))
+(if (getenv "ROS_DISTRO")
+	(let ((rpath (concat "/opt/ros/" (getenv "ROS_DISTRO") "/share/emacs/site/")))
+	  (if (file-directory-p rpath)
+		(add-to-list 'load-path rpath)
+		(message (format "Could not find ROS elisp path: %s" rpath))))
+  (message "No ROS_DISTRO environment variable"))
+(if (require 'rosemacs nil 'noerror)
+  (progn
+	(invoke-rosemacs)
+	;; add a keymap for using rosemacs commands
+	(global-set-key "\C-x\C-r" ros-keymap)
+	(message "rosemacs successfully loaded"))
+  (message "rosemacs could not be imported"))
 ;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
 ;; compilation buffer... let's fix that
 (ignore-errors

@@ -881,6 +881,14 @@
 	 (C . t)))
 ;; set org to fontify languages:
 (setq org-src-fontify-natively t)
+;; setup wgrep mode
+(add-hook 'ag-mode-hook #'wgrep-ag-setup)
+;; Workaround for issue where the edits in `wgrep' don't apply
+;; https://github.com/Wilfred/ag.el/issues/119
+;; actually prefer the grouped matches but wgrep is so useful
+(setq ag-group-matches nil)
+;; Don't generate a lot of ag buffers:
+(setq ag-reuse-buffers t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

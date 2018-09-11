@@ -587,7 +587,7 @@
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
 (if (getenv "ROS_DISTRO")
-	(let ((rpath (concat "/opt/ros/" (getenv "ROS_DISTRO") "/share/emacs/site/")))
+	(let ((rpath (concat "/opt/ros/" (getenv "ROS_DISTRO") "/share/emacs/site-lisp/")))
 	  (if (file-directory-p rpath)
 		(add-to-list 'load-path rpath)
 		(message (format "Could not find ROS elisp path: %s" rpath))))

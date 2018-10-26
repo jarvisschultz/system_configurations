@@ -60,7 +60,7 @@ function rcon(){
 
 function abspath () { case "$1" in /*)printf "%s\n" "$1";; *)printf "%s\n" "$PWD/$1";; esac; }
 
-rsource(){
+function rsource(){
 	# If you pass args to this function it adds them to a list of files to be
 	# sourced in the home dir. If you pass no args, it simply sources that file.
 	fname="${HOME}/.ros_source"
@@ -147,6 +147,15 @@ function girelease() {
 }
 
 
+function tmux_exec_all() {
+  for _window in $(tmux list-windows -F '#I'); do
+    for _pane in $(tmux list-panes -t ${_window} -F '#P'); do
+      tmux send-keys -t ${_window}.${_pane} "$@" Enter
+    done
+  done
+}
+
+
 alias eps2pgf='java -jar /home/jarvis/src/eps2pgf/eps2pgf.jar'
 alias go='my-xdg-open.sh'
 alias ur='sudo service udev reload'
@@ -163,6 +172,7 @@ alias xssh='ssh -XC'
 alias fixterm='echo -e "\033c"'
 alias catkin_export_make='catkin_make --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 alias catkin_export_config='catkin config --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
+alias resource_tmux="tmux_exec_all 'source ~/.bashrc'"
 
 ##########################
 # old functions/ aliases #

@@ -473,7 +473,7 @@
 	 ;; company and LaTeX:
 	 (defun my/company-latex-mode-hook ()
 	   (set (make-local-variable 'company-backends)
-		 '(completion-capf company-dabbrev company-ispell company-files company-yasnippet))
+		 '(company-capf company-dabbrev company-ispell company-files company-yasnippet))
 	   (company-auctex-init))
 	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
 	 ;; xml and html:

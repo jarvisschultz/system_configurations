@@ -801,7 +801,9 @@
 (ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
 (setq ido-enable-flex-matching t)
 (flx-ido-mode 1) ;; flexible matching
-(global-set-key (kbd "M-x") 'smex) ;; for M-x
+;; Use smex by default, but still provide a shortcut for regular M-x:
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "C-c M-x") 'execute-extended-command)
 (projectile-global-mode t) ;; searching project dirs (including git repos)
 (setq org-completion-use-ido t)
 ;; have ido use current window when switching buffers

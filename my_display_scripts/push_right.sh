@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get connected monitor data:
-out=$(xrandr --current | grep -i " connected")
+out=$(xrandr --current | grep -i "\ connected" | grep -E "[0-9]+x[0-9]+")
 echo "xrandr output:"
 echo "${out}" 
 echo

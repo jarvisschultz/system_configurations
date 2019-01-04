@@ -804,15 +804,16 @@
 ;; Use smex by default, but still provide a shortcut for regular M-x:
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
-(projectile-global-mode t) ;; searching project dirs (including git repos)
+(projectile-mode t) ;; searching project dirs (including git repos)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq org-completion-use-ido t)
 ;; have ido use current window when switching buffers
 (setq ido-default-buffer-method 'selected-window)
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
-(setq projectile-mode-line '(:eval (with-timeout (0.2 " P[ -- ]")
-                                     (format " P[ %s ]" (projectile-project-name)))))
+;; (setq projectile-mode-line '(:eval (with-timeout (0.2 " P[ -- ]")
+;;                                      (format " P[ %s ]" (projectile-project-name)))))
 ;; set the value of tags-table-list to be safe as long as it is a string
 (defun list-of-stringsp (val)
   "test whether each element in list is a string"

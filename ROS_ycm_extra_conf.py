@@ -18,23 +18,41 @@ import os
 import ycm_core
 
 
+
+def GetWorkspaceIncludes():
+    """Read ROS environment variables and return the appropriate include
+    directories for the workspace currently in use
+    """
+    ros_workspace_paths = os.path.expandvars('$ROS_PACKAGE_PATH').split(':')
+    includes = []
+    # now we need to iterate through all paths and add the include directories:
+    for i,p in enumerate(ros_workspace_paths):
+        bdir,enddir = os.path.split(p)
+        if "src" in enddir:
+            # this is likely a devel WS
+            dirname = os.path.join(bdir, "devel/include")
+        else:
+            # this is an install or base WS
+            dirname = os.path.join(bdir, "include")
+        if os.path.exists(dirname):
+            includes.append(dirname)
+    return includes
+
+
 def GetRosIncludePaths():
     """Return a list of potential include directories
 
-    The directories are looked for in $ROS_WORKSPACE.
+    The directories are looked for in the ROS environment variables
     """
     try:
         from rospkg import RosPack
     except ImportError:
         return []
     rospack = RosPack()
-    includes = []
-    includes.append(os.path.expandvars('$ROS_WORKSPACE') + '/devel/include')
+    includes = GetWorkspaceIncludes()
     for p in rospack.list():
         if os.path.exists(rospack.get_path(p) + '/include'):
             includes.append(rospack.get_path(p) + '/include')
-    for distribution in os.listdir('/opt/ros'):
-        includes.append('/opt/ros/' + distribution + '/include')
     return includes
 
 

@@ -216,6 +216,14 @@ if [ -n "$PATH" ]; then
   unset old_PATH x
 fi
 
+# enable ccache:
+if [ -d "/usr/lib/ccache" ]
+then
+	export PATH="/usr/lib/ccache:$PATH"
+fi
+
+# disable ROS_LANG
+export ROS_LANG_DISABLE=genlisp:geneus:gennodejs
 
 ### Added by the Heroku Toolbelt
 if [ -d /usr/local/heroku/bin ]

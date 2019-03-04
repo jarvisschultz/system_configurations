@@ -206,8 +206,43 @@
 (c-set-offset 'comment-intro 0)
 ;; set default tab width:
 (setq-default tab-width 4)
+;; if dtrt-indent is available, we will enable it for C and C++ buffers
+(when (require 'dtrt-indent nil 'noerror)
+  (add-hook 'c-mode-common-hook
+	(lambda () (dtrt-indent-mode 1)))
+  (add-hook 'c++-mode-common-hook
+	(lambda () (dtrt-indent-mode 1))))
 ;; set tabbing in lisp mode:
 (setq-default lisp-indent-offset 2)
+;; setup clang-format for projects that have a .clang_format file. Borrowed
+;; following snippets from here:
+;; https://eklitzke.org/smarter-emacs-clang-format
+;; Note, on current system I have built emacs26 from source and installed it
+;; into /usr/local/share, but the clang-format package that I install from
+;; apt-get installs the clang-format.el file to /usr/share, and my
+;; built-from-source emacs doesn't search there by default. I fixed this by
+;; providing a symbolic link in ~/.emacs.d
+(defun clang-format-buffer-smart ()
+  "Reformat buffer if .clang-format exists in the projectile root."
+  (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
+    (clang-format-buffer)))
+(defun my/clang-format-region ()
+  "Call `clang-format-region', but if prefix arg is passed, call `clang-format-buffer'"
+  (interactive)
+  (if (region-active-p)
+	(clang-format-region (region-beginning) (region-end))
+	(clang-format-buffer)))
+(when (require 'clang-format nil 'noerror)
+  (defun clang-format-bindings-c ()
+	(define-key c-mode-map (kbd "C-M-\\") 'my/clang-format-region))
+(defun clang-format-bindings-c++ ()
+  (define-key c++-mode-map (kbd "C-M-\\") 'my/clang-format-region))
+(add-hook 'c-mode-hook   'clang-format-bindings-c)
+(add-hook 'c++-mode-hook 'clang-format-bindings-c++))
+;;   (add-hook 'c-mode-hook
+;; 	(lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local)))
+;;   (add-hook 'c++-mode-hook
+;; 	(lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local))))
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
   (lambda () (subword-mode 1)))
@@ -721,6 +756,8 @@
 	(setq tab-width 4)
 	(highlight-indentation-mode)
 	(highlight-indentation-current-column-mode)
+	;; disable eldoc mode
+	(eldoc-mode 0)
 	(setq electric-indent-chars (delq ?: electric-indent-chars))
 	(setq jedi:setup-function nil)
 	(jedi:setup)))

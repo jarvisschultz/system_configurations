@@ -93,7 +93,7 @@ if [[ $- =~ i ]]; then
 		bind '"\C-\M-r": " \C-e\C-u\C-y\ey\C-u`__fzf_history__`\e\C-e\er\e^"'
 
 		# ALT-C - cd into the selected directory
-		bind '"\C-\M-c": " \C-e\C-u`__fzf_cd__`\e\C-e\er\C-m"'
+		bind '"\C-\M-o": " \C-e\C-u`__fzf_cd__`\e\C-e\er\C-m"'
 	fi
 
 fi

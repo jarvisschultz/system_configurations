@@ -201,6 +201,12 @@ fi
 #     source ~/.rvm/scripts/rvm
 # fi
 
+# add cargo for rust packages
+if [ -d "${HOME}/.cargo/bin" ]
+then
+	export PATH=$PATH:${HOME}/.cargo/bin
+fi
+
 # clear any duplicates in PATH
 if [ -n "$PATH" ]; then
   old_PATH=$PATH:; PATH=
@@ -231,3 +237,5 @@ then
 	export PATH="/usr/local/heroku/bin:$PATH"
 fi
 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

@@ -842,8 +842,14 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
 (projectile-mode t) ;; searching project dirs (including git repos)
+;; turn on projectile caching for faster functionality in large repos
+(setq projectile-enable-caching t)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (setq org-completion-use-ido t)
+;; change projectile to use fd if it is available:
+;; (if (executable-find "fd")
+;;   (progn
+;; 	(set-variable 'projectile-git-command )
 ;; have ido use current window when switching buffers
 (setq ido-default-buffer-method 'selected-window)
 ;; change projectile to use my utags script instead of ctags

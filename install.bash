@@ -76,3 +76,9 @@ ln -svbi $PWD/gitconfig.conf $HOME/.gitcustomconfig
 # latex stuff
 ln -svbi $PWD/latexmkrc $HOME/.latexmkrc
 ##################################################
+
+
+##################################################
+# FZF stuff
+ln -svbi $PWD/fzf.bash $HOME/.fzf.bash
+##################################################

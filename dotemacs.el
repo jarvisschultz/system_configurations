@@ -33,6 +33,9 @@
 (load custom-file 'noerror)
 
 
+;; temporary hack for emacs 26.1
+(require 'cl)
+
 
 ;;;;;;;;;;;;;;;;;
 ;; KEYBINDINGS ;;
@@ -761,6 +764,19 @@
 	(setq electric-indent-chars (delq ?: electric-indent-chars))
 	(setq jedi:setup-function nil)
 	(jedi:setup)))
+(defcustom python-autopep8-path (executable-find "autopep8")
+  "autopep8 executable path."
+  :group 'python
+  :type 'string)
+(defun python-autopep8 ()
+  "Automatically formats Python code to conform to the PEP 8 style guide.
+$ autopep8 --in-place --aggressive --aggressive <filename>"
+  (interactive)
+  (when (eq major-mode 'python-mode)
+    (shell-command
+     (format "%s --in-place --aggressive %s" python-autopep8-path
+             (shell-quote-argument (buffer-file-name))))
+    (revert-buffer t t t)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

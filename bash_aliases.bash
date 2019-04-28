@@ -173,6 +173,8 @@ alias fixterm='echo -e "\033c"'
 alias catkin_export_make='catkin_make --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 alias catkin_export_config='catkin config --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 alias resource_tmux="tmux_exec_all 'source ~/.bashrc'"
+alias qtdesigner5="qtchooser -run-tool=designer -qt=5"
+alias qtdesigner4="qtchooser -run-tool=designer -qt=4"
 
 ##########################
 # old functions/ aliases #

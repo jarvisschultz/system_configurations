@@ -209,11 +209,13 @@
 (c-set-offset 'comment-intro 0)
 ;; set default tab width:
 (setq-default tab-width 4)
-;; if dtrt-indent is available, we will enable it for C and C++ buffers
+;; if dtrt-indent is available, we will enable it for desired modes
 (when (require 'dtrt-indent nil 'noerror)
   (add-hook 'c-mode-common-hook
 	(lambda () (dtrt-indent-mode 1)))
   (add-hook 'c++-mode-common-hook
+	(lambda () (dtrt-indent-mode 1)))
+  (add-hook 'sh-mode-hook
 	(lambda () (dtrt-indent-mode 1))))
 ;; set tabbing in lisp mode:
 (setq-default lisp-indent-offset 2)
@@ -479,6 +481,22 @@
   (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
 ;; bind extra key to force starting company-completion
 (define-key global-map (kbd "<C-tab>") 'company-complete)
+(when (require 'lsp-mode nil 'noerror)
+  (add-hook 'c++-mode-common-hook #'lsp)
+  (add-hook 'c-mode-common-hook #'lsp))
+(when (require 'lsp-ui nil 'noerror)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+(when (require 'flycheck nil 'noerror)
+  (setq lsp-prefer-flymake nil)
+  (flycheck-define-checker cpp-roslint
+  "A C++ syntax checker that uses a modified version of Google's cpplint.py specifically tailored for following ROS Cpp Style Guides.
+
+  See more here:
+    - `http://wiki.ros.org/roslint'
+    - `http://wiki.ros.org/CppStyleGuide'"
+  :command ("cpplint" source-original)
+  :error-patterns ((error line-start (file-name) ":" line ": " (message) line-end))
+  :modes (c-mode c++-mode)))
 ;; Setup YCMD:
 (require 'company-ycmd)
 (set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
@@ -495,11 +513,18 @@
 	 ;; company and C/C++
 	 (defun my/company-c-mode-hook ()
 	   (set (make-local-variable 'company-backends)
-	 	 '(company-ycmd))
-	   (add-to-list 'company-backends 'company-yasnippet t)
-	   (ycmd-mode))
+	 	 '(company-lsp))
+	   (add-to-list 'company-backends 'company-yasnippet t))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
+	 ;; company and C/C++
+	 ;; (defun my/company-c-mode-hook ()
+	 ;;   (set (make-local-variable 'company-backends)
+	 ;; 	 '(company-ycmd))
+	 ;;   (add-to-list 'company-backends 'company-yasnippet t)
+	 ;;   (ycmd-mode))
+	 ;; (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
+	 ;; (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
 	 ;; company and C/C++
 	 ;; (defun my/company-c-mode-hook ()
 	 ;;   ;; (irony-mode)
@@ -893,6 +918,8 @@ $ autopep8 --in-place --aggressive --aggressive <filename>"
 (require 'helm)
 (require 'helm-config)
 (require 'helm-swoop)
+;; (setq helm-swoop-pre-input-function
+;;   (lambda () ""))
 (setq helm-swoop-split-direction 'split-window-horizontally)
 (setq
   helm-apropos-fuzzy-match t
@@ -915,6 +942,8 @@ $ autopep8 --in-place --aggressive --aggressive <filename>"
 ;; helm swoop keybindings:
 (global-set-key (kbd "C-c h s") 'helm-swoop)
 (global-set-key (kbd "C-c h S") 'helm-surfraw)
+(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c h M-?") 'helm-lsp-workspace-symbol)
 (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
 (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
 (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)

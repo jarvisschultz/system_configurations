@@ -178,6 +178,15 @@
 ;; activate my zoom commands:
 (require 'zoom-fonts)
 
+;; always highlight trailing whitespace and tab characters in programming modes
+(defun my/local-whitespace-mode ()
+  (interactive)
+  (setq-local whitespace-style '(face tabs tab-mark trailing))
+  (whitespace-mode 1))
+(add-hook 'prog-mode-hook 'my/local-whitespace-mode)
+(add-hook 'nxml-mode-hook 'my/local-whitespace-mode)
+(add-hook 'yaml-mode-hook 'my/local-whitespace-mode)
+(add-hook 'sh-mode-hook 'my/local-whitespace-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -216,6 +225,10 @@
   (add-hook 'c++-mode-common-hook
 	(lambda () (dtrt-indent-mode 1)))
   (add-hook 'sh-mode-hook
+	(lambda () (dtrt-indent-mode 1)))
+  (add-hook 'nxml-mode-hook
+	(lambda () (dtrt-indent-mode 1)))
+  (add-hook 'web-mode-hook
 	(lambda () (dtrt-indent-mode 1))))
 ;; set tabbing in lisp mode:
 (setq-default lisp-indent-offset 2)
@@ -795,11 +808,11 @@
   :type 'string)
 (defun python-autopep8 ()
   "Automatically formats Python code to conform to the PEP 8 style guide.
-$ autopep8 --in-place --aggressive --aggressive <filename>"
+$ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
   (interactive)
   (when (eq major-mode 'python-mode)
     (shell-command
-     (format "%s --in-place --aggressive %s" python-autopep8-path
+     (format "%s --in-place --aggressive --max-line-length 120 %s" python-autopep8-path
              (shell-quote-argument (buffer-file-name))))
     (revert-buffer t t t)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

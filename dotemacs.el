@@ -229,6 +229,8 @@
   (add-hook 'nxml-mode-hook
 	(lambda () (dtrt-indent-mode 1)))
   (add-hook 'web-mode-hook
+	(lambda () (dtrt-indent-mode 1)))
+  (add-hook 'cmake-mode-hook
 	(lambda () (dtrt-indent-mode 1))))
 ;; set tabbing in lisp mode:
 (setq-default lisp-indent-offset 2)

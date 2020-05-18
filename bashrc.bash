@@ -125,6 +125,7 @@ export DEFAULT_PYTHON=$PYTHONPATH
 ## ROS ENVIRONMENT SETUP:
 # let's set ROS_HOSTNAME by default
 export ROS_HOSTNAME=$(hostname)".local"
+export ROSCONSOLE_FORMAT='[${time}] [${node}] [${severity}]: ${message}'
 rcon > /dev/null
 rsource > /dev/null
 

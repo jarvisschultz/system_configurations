@@ -398,13 +398,13 @@
 (fancy-narrow-mode 1)
 ;; customize ace-jump-mode from elpa
 ;; (define-key global-map (kbd "s-a") 'ace-jump-mode)
-(setq avy-keys 
-      '(?a ?s ?d ?e ?f ?h ?j ?k ?l ?n ?m ?v ?r ?u))
+(setq avy-keys
+  '(?a ?s ?d ?e ?f ?h ?j ?k ?l ?n ?m ?v ?r ?u))
 (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l))
 (global-set-key (kbd "s-a") 'avy-goto-word-1)
 (global-set-key (kbd "s-c") 'avy-goto-char)
 (global-set-key (kbd "s-w") 'ace-window)
-(global-set-key (kbd "s-l") 'avy-goto-line)
+(global-set-key (kbd "s-g") 'avy-goto-line)
 ;; add bindings for ace link
 (when (require 'ace-link nil 'noerror)
   (ace-link-setup-default)
@@ -446,7 +446,10 @@
   (global-page-break-lines-mode))
 ;; which-key mode
 (when (require 'which-key nil 'noerror)
-  (which-key-mode))
+  (which-key-mode)
+  (which-key-setup-side-window-right-bottom)
+  (defun add-which-key-line (f &rest r) (progn (apply f (list (cons (+ 1 (car (car r))) (cdr (car r)))))))
+  (advice-add 'which-key--show-popup :around #'add-which-key-line))
 
 
 
@@ -528,7 +531,7 @@
 	 ;; company and C/C++
 	 (defun my/company-c-mode-hook ()
 	   (set (make-local-variable 'company-backends)
-	 	 '(company-lsp))
+	 	 '(company-capf))
 	   (add-to-list 'company-backends 'company-yasnippet t))
 	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
 	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)

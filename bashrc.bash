@@ -13,8 +13,8 @@ HISTCONTROL=ignoredups:ignorespace
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=5000
+HISTFILESIZE=100000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -36,7 +36,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -111,22 +111,22 @@ function nano() {
 }
 
 # add 256 color support for the terminal:
-# export TERM=xterm-256color 
+# export TERM=xterm-256color
 ## note that this causes problems with emacs when it tries to autoload
 ## color themes.
 
 
 ## python config
-export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
-export PATH=$PATH:$HOME/.local/bin
+# export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:/usr/local/lib:/usr/lib/python2.7/config:/usr/local/lib/python2.7/site-packages
+# export PATH=$PATH:$HOME/.local/bin
 export DEFAULT_PYTHON=$PYTHONPATH
 
 
 ## ROS ENVIRONMENT SETUP:
 # let's set ROS_HOSTNAME by default
-export ROS_HOSTNAME=$(hostname)".local"
+# export ROS_HOSTNAME=$(hostname)
 export ROSCONSOLE_FORMAT='[${time}] [${node}] [${severity}]: ${message}'
-rcon > /dev/null
+# rcon > /dev/null
 rsource > /dev/null
 
 
@@ -160,7 +160,7 @@ export CLICOLOR_FORCE="true"
 alias lsc='ls --color=always'
 alias llc='ls -lah --color=always'
 alias grepc='grep --color=always'
-    
+
 # disable XON/XOFF flow control for the connection to stty
 stty -ixon
 
@@ -183,7 +183,7 @@ export ALTERNATE_EDITOR=""
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 
 # add self-built texlive 2013 to PATH
-export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
+# export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
 
 # enable bash directory history
 acdpath=$(command -v acd_func.sh)
@@ -208,6 +208,62 @@ then
 	export PATH=$PATH:${HOME}/.cargo/bin
 fi
 
+# enable ccache:
+if [ -d "/usr/lib/ccache" ]
+then
+	export PATH="/usr/lib/ccache:$PATH"
+fi
+
+# disable ROS_LANG
+export ROS_LANG_DISABLE=genlisp:geneus:gennodejs
+
+# add FZF support
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# append and reload the history after each command
+# PROMPT_COMMAND="history -a; history -n"
+
+# set commands to ignore in history
+HISTIGNORE="ls:ll:cd:pwd:bg:fg:history:pass*"
+
+# Add pyenv
+# eval "$(pyenv virtualenv-init -)"
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# Add Vault URL env variable:
+export VAULT_ADDR="https://vault.outrider.ai"
+
+# Check for direnv
+which direnv > /dev/null 2>&1
+if [[ "0" -eq "$?" ]]; then
+	eval "$(direnv hook bash)"
+fi
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# add vcstool Bash completion
+VCS_COMPLETION_FILE="/usr/share/vcstool-completion/vcs.bash"
+if [ -f "${VCS_COMPLETION_FILE}" ]; then
+    source  ${VCS_COMPLETION_FILE}
+fi
+
+# setup forgit
+export FORGIT_INSTALL_DIR="/home/jschultz/src/forgit"
+if [ -d "$FORGIT_INSTALL_DIR" ]; then
+    source "$FORGIT_INSTALL_DIR/forgit.plugin.sh"
+    export PATH="$PATH:$FORGIT_INSTALL_DIR/bin"
+    source "$FORGIT_INSTALL_DIR/completions/git-forgit.bash"
+    export FORGIT_COPY_CMD="xclip -selection clipboard"
+fi
+
+
 # clear any duplicates in PATH
 if [ -n "$PATH" ]; then
   old_PATH=$PATH:; PATH=
@@ -222,21 +278,3 @@ if [ -n "$PATH" ]; then
   PATH=${PATH#:}
   unset old_PATH x
 fi
-
-# enable ccache:
-if [ -d "/usr/lib/ccache" ]
-then
-	export PATH="/usr/lib/ccache:$PATH"
-fi
-
-# disable ROS_LANG
-export ROS_LANG_DISABLE=genlisp:geneus:gennodejs
-
-### Added by the Heroku Toolbelt
-if [ -d /usr/local/heroku/bin ]
-then
-	export PATH="/usr/local/heroku/bin:$PATH"
-fi
-
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash

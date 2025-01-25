@@ -36,7 +36,7 @@ function parse_git_branch {
 MYPSDIR_AWK=$(cat << 'EOF'
 BEGIN { FS = OFS = "/" }
 { 
-   if (length($0) > 16 && NF > 3)
+   if (length($0) > 40 && NF > 3)
       print $1,".." NF-2 "..",$(NF-1),$NF
    else
       print $0
@@ -81,7 +81,7 @@ if [ -n "$TMUX" ] || [ "${TERMCAP#*screen}" != "${TERMCAP}" ]; then
 	    "Ubuntu")
 		GREEN="\[\033[0;32m\]"
 		# Use Ubuntu colors (grey / aubergine / orange)
-		PS1="${debian_chroot:+($debian_chroot)}\[\e[38;5;202m\]\$(byobu_prompt_status)\[\e[38;5;245m\]\u\[\e[00m\]@\[\e[38;5;13m\]\h\[\e[00m\]:\[\e[38;5;172m\]\$(eval 'echo ${MYPSDIR}')$GREEN\$(parse_git_branch)\[\e[00m\]\$(byobu_prompt_symbol) "
+		PS1="${debian_chroot:+($debian_chroot)}\[\e[38;5;202m\]\$(byobu_prompt_status)+\[\e[38;5;172m\]\$(eval 'echo ${MYPSDIR}')$GREEN\$(parse_git_branch)\[\e[00m\]\$(byobu_prompt_symbol) "
 		export GREP_COLORS="ms=01;38;5;202:mc=01;31:sl=:cx=:fn=01;38;5;132:ln=32:bn=32:se=00;38;5;242"
 		export LESS_TERMCAP_mb=$(printf '\e[01;31m')       # enter blinking mode – red
 		export LESS_TERMCAP_md=$(printf '\e[01;38;5;180m') # enter double-bright mode – bold light orange

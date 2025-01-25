@@ -14,7 +14,7 @@
 	     '("melpa-stable" .
 	       "http://stable.melpa.org/packages/") 'APPEND)
 ;; add org-mode packages:
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 ;; tools for benchmarking startup:
@@ -32,9 +32,29 @@
 ;; load custom file... if it doesn't exist, don't throw an error
 (load custom-file 'noerror)
 
-
 ;; temporary hack for emacs 26.1
-(require 'cl)
+(if (= emacs-major-version 26)
+  (require 'cl))
+(if (= emacs-major-version 27)
+  (require 'cl-lib))
+;; (require 'cl)
+
+
+;;;;;;;;;;;;;;
+;; MODELINE ;;
+;;;;;;;;;;;;;;
+(when (require 'diminish nil 'noerror)
+  (eval-after-load "anzu" '(diminish 'anzu-mode))
+  (eval-after-load "fancy-narrow" '(diminish 'fancy-narrow-mode))
+  (eval-after-load "page-break-lines" '(diminish 'page-break-lines-mode))
+  (eval-after-load "auto-revert" '(diminish 'auto-revert-mode))
+  (eval-after-load "beacon" '(diminish 'beacon-mode))
+  (eval-after-load "which-key" '(diminish 'which-key-mode))
+  (eval-after-load "Eldoc" '(diminish 'eldoc-mode))
+  (eval-after-load "Abbrev" '(diminish 'abbrev-mode))
+  (eval-after-load "dtrt-indent" '(diminish 'dtrt-indent-mode)))
+
+
 
 
 ;;;;;;;;;;;;;;;;;
@@ -82,6 +102,11 @@
 (global-set-key (kbd "M-RET") 'complete-tag)
 ;; add keybindings for windmove
 (windmove-default-keybindings 'meta)
+;; add framemove
+(require 'framemove)
+(windmove-default-keybindings)
+(setq framemove-hook-into-windmove t)
+
 
 
 
@@ -104,12 +129,14 @@
     (local-set-key (kbd "M-s-<down>") 'my/org-table-move-single-cell-down)
     (local-set-key (kbd "M-s-<left>") 'my/org-table-move-single-cell-left)
     (local-set-key (kbd "M-s-<right>") 'my/org-table-move-single-cell-right)))
-
+(require 'org-tempo)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WINDOWS, GRAPHICS AND APPEARANCE SETTINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; set frame title
+;; (setq frame-title-format "%b @ ODE")
 ;; Turn on window saving mode for restoring window configs:
 (winner-mode 1)
 ;; enable column numbering
@@ -117,7 +144,9 @@
 ;; disable startup message
 (setq inhibit-startup-message t)
 ;; set default fill column value
-(setq-default fill-column 80)
+(setq-default fill-column 120)
+;; Fill width for Git commits
+(add-hook 'git-commit-setup-hook (lambda () (setq fill-column 72)))
 ;; Turn on syntax highlighting
 (global-font-lock-mode t)
 ;; turn off menu bars:
@@ -136,7 +165,7 @@
   (set-face-background 'highlight-indentation-current-column-face "#2f4f4f"))
 ;; disable scroll bars
 (toggle-scroll-bar -1)
-(set-scroll-bar-mode nil) 
+(set-scroll-bar-mode nil)
 ;; use gutter to display buffer position
 (setq-default indicate-buffer-boundaries 'left)
 (setq-default indicate-empty-lines +1)
@@ -343,8 +372,8 @@
 (add-hook 'after-save-hook
   'executable-make-buffer-file-executable-if-script-p)
 ;; always remember where I was:
-(setq-default save-place t)
-(require 'saveplace)
+(setq-default save-place-mode t)
+;; (require 'saveplace)
 ;; turn on show-paren mode
 (show-paren-mode)
 ;; add function for running multi-occur on dired marked files:
@@ -360,6 +389,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; set isearch to use "flexible" matching (space in search is treated like any character)
 (setq search-whitespace-regexp ".*?")
+(when (require 'xclip nil 'noerror)
+  (xclip-mode t))
 
 
 
@@ -418,13 +449,6 @@
   (global-anzu-mode)
   (global-set-key (kbd "M-%") 'anzu-query-replace)
   (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
-(when (require 'diminish nil 'noerror)
-  (eval-after-load "anzu" '(diminish 'anzu-mode))
-  (eval-after-load "fancy-narrow" '(diminish 'fancy-narrow-mode))
-  (eval-after-load "page-break-lines" '(diminish 'page-break-lines-mode))
-  (eval-after-load "auto-revert" '(diminish 'auto-revert-mode))
-  (eval-after-load "beacon" '(diminish 'beacon-mode))
-  (eval-after-load "which-key" '(diminish 'which-key-mode)))
 ;; load hydras
 (when (require 'hydra nil 'noerror)
   (require 'my-hydras))
@@ -479,6 +503,11 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
+(fset 'my/fix-nxml-comment-box
+  (lambda (&optional arg) "Keyboard macro."
+    (interactive "p")
+    (kmacro-exec-ring-item
+      (quote ([134217837 67108896 5 134217848 99 111 109 109 101 110 116 45 98 111 120 return 16 1 14 16 67108896 14 14 14 201326629 92 40 60 33 45 45 92 41 92 40 45 43 92 41 92 40 45 45 62 92 41 return 92 49 92 44 40 114 101 112 108 97 99 101 45 114 101 103 101 120 112 45 105 110 45 115 116 114 105 110 103 32 34 45 34 32 34 126 34 32 92 50 41 92 51 return 33] 0 "%d")) arg)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -504,6 +533,13 @@
   (add-hook 'c-mode-common-hook #'lsp))
 (when (require 'lsp-ui nil 'noerror)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+;; (when (require 'ccls nil 'noerror)
+;;   (setq ccls-executable "/home/jschultz/src/ccls/Release/ccls"))
+;; (setq ccls-initialization-options
+;; '(:clang (:pathMappings [
+;;                           "/home/jschultz-dev/workspace/autoyard>/home/jschultz/autoyard"
+;;                           "/opt/ros/kinetic>/opt/ros/noetic"
+;;                           ])))
 (when (require 'flycheck nil 'noerror)
   (setq lsp-prefer-flymake nil)
   (flycheck-define-checker cpp-roslint
@@ -516,9 +552,9 @@
   :error-patterns ((error line-start (file-name) ":" line ": " (message) line-end))
   :modes (c-mode c++-mode)))
 ;; Setup YCMD:
-(require 'company-ycmd)
-(set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
-(set-variable 'ycmd-global-config (file-truename "~/src/ycmd/ycmd/global_conf.py"))
+;; (require 'company-ycmd)
+;; (set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
+;; (set-variable 'ycmd-global-config (file-truename "~/src/ycmd/ycmd/global_conf.py"))
 ;; define company backends for commonly used major modes:
 (eval-after-load 'company
   '(progn
@@ -611,7 +647,7 @@
 	  (rtags-stop-diagnostics)
 	  (rtags-quit-rdm)
 	  (define-key c-mode-base-map (kbd "<backtab>") nil))))
-;; company customizations: 
+;; company customizations:
 (eval-after-load 'company
   '(progn
      (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
@@ -623,8 +659,139 @@
 	 (setq company-idle-delay 0.6)
 	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
+;; Disable lsp when opening files in git-timemachine
+(defun my/lsp-mode-disconnect-hook ()
+  (if (bound-and-true-p lsp-mode)
+	(lsp-disconnect)))
+(add-hook 'git-timemachine-mode-hook 'my/lsp-mode-disconnect-hook)
 
-;; 
+
+
+;; COPILOT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'load-path "~/.emacs.d/elpa/copilot.el/")
+(when (require 'copilot nil 'noerror)
+  (message "Found copilot"))
+
+;; (defun rk/no-copilot-mode ()
+;;   "Helper for `rk/no-copilot-modes'."
+;;   (copilot-mode -1))
+
+;; (defvar rk/no-copilot-modes '(shell-mode
+;;                               inferior-python-mode
+;;                               eshell-mode
+;;                               term-mode
+;;                               vterm-mode
+;;                               comint-mode
+;;                               compilation-mode
+;;                               debugger-mode
+;;                               dired-mode-hook
+;;                               compilation-mode-hook
+;;                               flutter-mode-hook
+;;                               minibuffer-mode-hook)
+;;   "Modes in which copilot is inconvenient.")
+
+;; (defun rk/copilot-disable-predicate ()
+;;   "When copilot should not automatically show completions."
+;;   (or rk/copilot-manual-mode
+;;       (member major-mode rk/no-copilot-modes)
+;;       (company--active-p)))
+
+;; (add-to-list 'copilot-disable-predicates #'rk/copilot-disable-predicate)
+
+;; (defvar rk/copilot-manual-mode nil
+;;   "When `t' will only show completions when manually triggered, e.g. via M-C-<return>.")
+
+;; (defun rk/copilot-change-activation ()
+;;   "Switch between three activation modes:
+;; - automatic: copilot will automatically overlay completions
+;; - manual: you need to press a key (M-C-<return>) to trigger completions
+;; - off: copilot is completely disabled."
+;;   (interactive)
+;;   (if (and copilot-mode rk/copilot-manual-mode)
+;;       (progn
+;;         (message "deactivating copilot")
+;;         (global-copilot-mode -1)
+;;         (setq rk/copilot-manual-mode nil))
+;;     (if copilot-mode
+;;         (progn
+;;           (message "activating copilot manual mode")
+;;           (setq rk/copilot-manual-mode t))
+;;       (message "activating copilot mode")
+;;       (global-copilot-mode))))
+
+;; (define-key global-map (kbd "M-C-=") #'rk/copilot-change-activation)
+
+;; (defun rk/copilot-complete-or-accept ()
+;;   "Command that either triggers a completion or accepts one if one
+;; is available. Useful if you tend to hammer your keys like I do."
+;;   (interactive)
+;;   (if (copilot--overlay-visible)
+;;       (progn
+;;         (copilot-accept-completion)
+;;         (open-line 1)
+;;         (next-line))
+;;     (copilot-complete)))
+
+
+(defun copilot-complete-or-accept ()
+  "Command that either triggers a completion or accepts one if one
+is available."
+  (interactive)
+  (if (copilot--overlay-visible)
+      (progn
+        (copilot-accept-completion))
+    (copilot-complete)))
+
+;; (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "C-s-<down>") #'copilot-next-completion)
+(define-key copilot-completion-map (kbd "C-s-<up>") #'copilot-previous-completion)
+(define-key copilot-completion-map (kbd "C-s-<right>") #'copilot-accept-completion-by-word)
+(define-key copilot-completion-map (kbd "C-s-<next>") #'copilot-accept-completion-by-line)
+(define-key global-map (kbd "C-s-<return>") #'copilot-complete-or-accept)
+(define-key global-map (kbd "C-<return>") #'copilot-complete-or-accept)
+(define-key global-map (kbd "C-s-g") #'copilot-clear-overlay)
+
+;; (define-key copilot-completion-map (kbd "M-n") #'copilot-next-completion)
+;; (define-key copilot-completion-map (kbd "M-p") #'copilot-previous-completion)
+;; (define-key copilot-completion-map (kbd "M-f") #'copilot-accept-completion-by-word)
+;; (define-key copilot-completion-map (kbd "<right>") #'copilot-accept-completion)
+;; (define-key copilot-completion-map (kbd "C-f") #'copilot-accept-completion)
+;; (define-key copilot-completion-map (kbd "C-e") #'copilot-accept-completion-by-line)
+;; (define-key copilot-completion-map (kbd "C-g") #'copilot-clear-overlay)
+;; (define-key global-map (kbd "C-M-<return>") #'copilot-complete)
+;; (define-key global-map (kbd "C-s-g") #'copilot-clear-overlay)
+
+
+
+;; IVY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (require 'ivy nil 'noerror)
+  (when (require 'counsel nil 'noerror)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (ivy-mode 1)
+    (global-set-key (kbd "C-s") 'swiper-isearch)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "C-M-y") 'counsel-yank-pop)
+    ;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    ;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    ;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    ;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    ;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    ;; (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-c v") 'ivy-push-view)
+    (global-set-key (kbd "C-c V") 'ivy-pop-view)
+    (global-set-key (kbd "C-c f") 'counsel-recentf)
+    (global-set-key (kbd "C-c n") 'counsel-fzf)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-c i") 'counsel-imenu)))
+(when (require 'counsel-projectile nil 'noerror)
+  (counsel-projectile-mode))
+
+
 ;; ;; AUTOCOMPLTE MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; Add autocomplete package:
 ;; (require 'auto-complete-config)
@@ -678,7 +845,9 @@
 	(invoke-rosemacs)
 	;; add a keymap for using rosemacs commands
 	(global-set-key "\C-x\C-r" ros-keymap)
-	(message "rosemacs successfully loaded"))
+	(message "rosemacs successfully loaded")
+	(setq ros-node-update-interval 0)
+	(setq ros-topic-update-interval 0))
   (message "rosemacs could not be imported"))
 ;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
 ;; compilation buffer... let's fix that
@@ -694,96 +863,98 @@
 
 ;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add Latex functionality
-(require 'my-auctex-plugins)
-(auctex-latexmk-setup)
-(setq-default TeX-master nil)
-(setq TeX-parse-self t)
-(setq TeX-auto-save t)
-(setq TeX-electric-sub-and-superscript t)
-(setq TeX-save-query nil) 
-;; Add reverse LaTeX searching:
-(setq TeX-source-correlate-mode t)
-(setq TeX-source-correlate-method "synctex")
-(setq LaTeX-command "latex -file-line-error -shell-escape")
-;; set options for latex compilation
-(setq LaTeX-command "latex -file-line-error")
-;; turn on reftex by default
-(add-hook 'LaTeX-mode-hook 'reftex-mode)
-(add-hook 'bibtex-mode-hook 'reftex-mode)
-(setq reftex-plug-into-AUCTeX t)
-;; add common TeX variables as safe for local vars at end of doc
-(add-to-list 'safe-local-variable-values '(TeX-auto-parse-length . 999999))
-(add-to-list 'safe-local-variable-values '(TeX-auto-regexp-list . TeX-auto-full-regexp-list))
-(add-to-list 'safe-local-variable-values '(TeX-parse-self . t))
-(add-to-list 'safe-local-variable-values '(TeX-auto-save . t))
-(add-to-list 'safe-local-variable-values '(TeX-source-correlate-method . synctex))
-;; customize previewing:
-(setq
-  preview-auto-cache-preamble t
-  preview-gs-options (quote ("-q" "-dNOSAFER" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4"))
-  preview-scale-function 1.25)
-;; make reftex use frametitle and lecture for TOC
-(add-hook 'reftex-load-hook
-  (lambda ()
-	(setq reftex-section-levels
-	  (cons '("frametitle" . 7) 
-		reftex-section-levels))))
-;; allow reftex-view-crossref (C-c &) to follow cref macros:
-(setq reftex-view-crossref-extra '(("\\[c|C]ref" "\\label{%s}" 0)))
-;; makes reftex use cleveref for all styles by default:
-(defun reftex-format-cref (label def-fmt style)
-  (format "\\cref{%s}" label))
-(setq reftex-format-ref-function nil)
-(defun reftex-toggle-cref ()
-  "Function to toggle whether reftex should use cref latex package or not"
-  (interactive)
-  (if (eq reftex-format-ref-function nil)
+(when (require 'tex nil 'noerror)
+  (require 'my-auctex-plugins)
+  (auctex-latexmk-setup)
+  (setq-default TeX-master nil)
+  (setq TeX-parse-self t)
+  (setq TeX-auto-save t)
+  (setq TeX-electric-sub-and-superscript t)
+  (setq TeX-save-query nil)
+  ;; Add reverse LaTeX searching:
+  (setq TeX-source-correlate-mode t)
+  (setq TeX-source-correlate-method "synctex")
+  (setq LaTeX-command "latex -file-line-error -shell-escape")
+  ;; set options for latex compilation
+  (setq LaTeX-command "latex -file-line-error")
+  ;; turn on reftex by default
+  (add-hook 'LaTeX-mode-hook 'reftex-mode)
+  (add-hook 'bibtex-mode-hook 'reftex-mode)
+  (setq reftex-plug-into-AUCTeX t)
+  ;; add common TeX variables as safe for local vars at end of doc
+  (add-to-list 'safe-local-variable-values '(TeX-auto-parse-length . 999999))
+  (add-to-list 'safe-local-variable-values '(TeX-auto-regexp-list . TeX-auto-full-regexp-list))
+  (add-to-list 'safe-local-variable-values '(TeX-parse-self . t))
+  (add-to-list 'safe-local-variable-values '(TeX-auto-save . t))
+  (add-to-list 'safe-local-variable-values '(TeX-source-correlate-method . synctex))
+  ;; customize previewing:
+  (setq
+   preview-auto-cache-preamble t
+   preview-gs-options (quote ("-q" "-dNOSAFER" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4"))
+   preview-scale-function 1.25)
+  ;; make reftex use frametitle and lecture for TOC
+  (add-hook 'reftex-load-hook
+            (lambda ()
+              (setq reftex-section-levels
+                    (cons '("frametitle" . 7)
+                          reftex-section-levels))))
+  ;; allow reftex-view-crossref (C-c &) to follow cref macros:
+  (setq reftex-view-crossref-extra '(("\\[c|C]ref" "\\label{%s}" 0)))
+  ;; makes reftex use cleveref for all styles by default:
+  (defun reftex-format-cref (label def-fmt style)
+    (format "\\cref{%s}" label))
+  (setq reftex-format-ref-function nil)
+  (defun reftex-toggle-cref ()
+    "Function to toggle whether reftex should use cref latex package or not"
+    (interactive)
+    (if (eq reftex-format-ref-function nil)
 	(progn
 	  (setq reftex-format-ref-function 'reftex-format-cref)
 	  ;; disable reftex asking if I want to use things like \autoref, or \vref.
 	  (setq reftex-ref-macro-prompt nil))
-    (progn
-      (setq reftex-format-ref-function nil)
-      (setq reftex-ref-macro-prompt t)))
-  (message "Set reftex-format-ref-function to %s" reftex-format-ref-function))
-;; turn on cref by default:
-(reftex-toggle-cref)
-;; prevent reftex from scanning pgf files (.pstex_t) was there by default:
-(eval-after-load "reftex-vars"
-  '(progn
-     (add-to-list 'reftex-no-include-regexps "\\.pgf\\'")))
-;; add LaTeX-auto-complete mode
-;; (require 'auto-complete-auctex)
-;; binding for compiling beamer frames
-(add-hook 'LaTeX-mode-hook
-  (lambda () (define-key LaTeX-mode-map (kbd "C-M-x") 'tex-beamer-frame)))
-;; move by blank lines in LaTeX-mode:
-(add-hook 'LaTeX-mode-hook
-  (lambda () (progn
-			   (define-key LaTeX-mode-map
-				 (kbd "<C-down>") 'skip-to-next-blank-line)
-			   (define-key LaTeX-mode-map
-				 (kbd "<C-up>") 'skip-to-previous-blank-line))))
-;; turn on auto-fill for LaTeX mode:
-(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-;; setup fonts for math mode:
-(defface my/unimportant-latex-face
-  '((t :height 0.6
-       :inherit font-lock-comment-face))
-  "Face used on less relevant math commands.")
-(font-lock-add-keywords
- 'latex-mode
- `((,(rx "\\" (or (any ",.!;")
-                  (and (or "left" "right")
-                       symbol-end)))
-    0 'my/unimportant-latex-face prepend))
- 'end)
+      (progn
+        (setq reftex-format-ref-function nil)
+        (setq reftex-ref-macro-prompt t)))
+    (message "Set reftex-format-ref-function to %s" reftex-format-ref-function))
+  ;; turn on cref by default:
+  (reftex-toggle-cref)
+  ;; prevent reftex from scanning pgf files (.pstex_t) was there by default:
+  (eval-after-load "reftex-vars"
+    '(progn
+       (add-to-list 'reftex-no-include-regexps "\\.pgf\\'")))
+  ;; add LaTeX-auto-complete mode
+  ;; (require 'auto-complete-auctex)
+  ;; binding for compiling beamer frames
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (define-key LaTeX-mode-map (kbd "C-M-x") 'tex-beamer-frame)))
+  ;; move by blank lines in LaTeX-mode:
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (progn
+                         (define-key LaTeX-mode-map
+                           (kbd "<C-down>") 'skip-to-next-blank-line)
+                         (define-key LaTeX-mode-map
+                           (kbd "<C-up>") 'skip-to-previous-blank-line))))
+  ;; turn on auto-fill for LaTeX mode:
+  (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+  ;; setup fonts for math mode:
+  (defface my/unimportant-latex-face
+    '((t :height 0.6
+         :inherit font-lock-comment-face))
+    "Face used on less relevant math commands.")
+  (font-lock-add-keywords
+   'latex-mode
+   `((,(rx "\\" (or (any ",.!;")
+                    (and (or "left" "right")
+                         symbol-end)))
+      0 'my/unimportant-latex-face prepend))
+   'end))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
 
 ;; PYTHON ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'python-mode)
 ;; jedi configurations:
 ;; (setq jedi:setup-function nil)
 ;; (add-hook 'python-mode-hook 'jedi:setup)
@@ -797,6 +968,10 @@
 	(setq python-fill-docstring-style 'django)
 	;; comment region function
 	(local-set-key (kbd "C-c #") 'comment-region)
+	;; ref overloads
+	(local-set-key (kbd "M-.") 'jedi:goto-definition)
+	(local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
+	(local-set-key (kbd "M-?") 'helm-jedi-related-names)
 	;; python tab-width
 	(setq python-indent-offset 4)
 	(setq tab-width 4)
@@ -813,11 +988,11 @@
   :type 'string)
 (defun python-autopep8 ()
   "Automatically formats Python code to conform to the PEP 8 style guide.
-$ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
+$ autopep8 --in-place --aggressive --aggressive --max-line-length 120 <filename>"
   (interactive)
   (when (eq major-mode 'python-mode)
     (shell-command
-     (format "%s --in-place --aggressive --max-line-length 120 %s" python-autopep8-path
+     (format "%s --in-place --aggressive --aggressive --max-line-length 120 %s" python-autopep8-path
              (shell-quote-argument (buffer-file-name))))
     (revert-buffer t t t)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -892,25 +1067,25 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
 
 
 ;; IDO, Projectile, Helm, Org ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(ido-mode 1) ;; turn on ido mode
+(ido-mode nil) ;; turn on ido mode
 (setq ido-everywhere t)
-(ido-ubiquitous-mode 1) ;; replace stock completion with ido in most places
+(ido-ubiquitous-mode nil) ;; replace stock completion with ido in most places
 (setq ido-enable-flex-matching t)
 (flx-ido-mode 1) ;; flexible matching
 ;; Use smex by default, but still provide a shortcut for regular M-x:
-(global-set-key (kbd "M-x") 'smex)
+;; (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-c M-x") 'execute-extended-command)
 (projectile-mode t) ;; searching project dirs (including git repos)
 ;; turn on projectile caching for faster functionality in large repos
 (setq projectile-enable-caching t)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(setq org-completion-use-ido t)
+;; (setq org-completion-use-ido t)
 ;; change projectile to use fd if it is available:
 ;; (if (executable-find "fd")
 ;;   (progn
 ;; 	(set-variable 'projectile-git-command )
 ;; have ido use current window when switching buffers
-(setq ido-default-buffer-method 'selected-window)
+;; (setq ido-default-buffer-method 'selected-window)
 ;; change projectile to use my utags script instead of ctags
 ;; (setq projectile-tags-command "utags %s")
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
@@ -934,7 +1109,7 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
 ;; going to simply run helm default configuration here (don't think I want helm
 ;; on, but some functions are nice):
 (require 'helm)
-(require 'helm-config)
+;; (require 'helm-config)
 (require 'helm-swoop)
 ;; (setq helm-swoop-pre-input-function
 ;;   (lambda () ""))
@@ -979,8 +1154,8 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
 ;; other helm keybindings:
 (global-set-key (kbd "C-c h C-x b") 'helm-mini)
 ;; use org bullets if installed:
-(when (require 'org-bullets nil 'noerror)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; (when (require 'org-bullets nil 'noerror)
+;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 ;; setup languages to use with org-babel:
 (org-babel-do-load-languages
   'org-babel-load-languages
@@ -1021,7 +1196,7 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
 (setq recentf-last-list '())
 (defun recentf-save-if-changes ()
   "If the file list has changed, we will re-save it."
-  (unless (equalp recentf-last-list recentf-list)
+  (unless (cl-equalp recentf-last-list recentf-list)
     (setq recentf-last-list recentf-list)
     (recentf-save-list)))
 ;; (run-at-time t 300 'recentf-save-if-changes) ;; run occasionally
@@ -1046,7 +1221,7 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
   (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
     (when file
       (find-file file))))
-(global-set-key (kbd "C-c f") 'recentf-ido-find-file)
+;; (global-set-key (kbd "C-c f") 'recentf-ido-find-file)
 ;; (global-set-key (kbd "C-c f") 'recentf-open-files)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1054,10 +1229,10 @@ $ autopep8 --in-place --aggressive --max-line-length 120 <filename>"
 ;; EDIT-SERVER ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; allows emacs to edit html entries from chrome using the "Edit with Emacs"
 ;; chrome extension.
-(when (locate-library "edit-server")
-  (require 'edit-server)
-  (setq edit-server-new-frame nil)
-  (edit-server-start))
+;; (when (locate-library "edit-server")
+;;   (require 'edit-server)
+;;   (setq edit-server-new-frame nil)
+;;   (edit-server-start))
 ;; read on http://www.emacswiki.org/emacs/Edit_with_Emacs that the following was
 ;; required to work with gmail. Actually it seems that the gmail-message-mode
 ;; was sufficient https://github.com/Bruce-Connor/gmail-mode/

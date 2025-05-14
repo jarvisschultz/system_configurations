@@ -182,12 +182,12 @@
 'after-make-window-system-frame-hooks'"
   (select-frame frame)
   (run-hooks (if window-system
-		 'after-make-window-system-frame-hooks
-	       'after-make-console-frame-hooks)))
+         'after-make-window-system-frame-hooks
+           'after-make-console-frame-hooks)))
 
 (defun set/my-custom-window-settings ()
   (toggle-scroll-bar -1)
-  (set-scroll-bar-mode nil) 
+  (set-scroll-bar-mode nil)
   (set-frame-width (selected-frame) 102)
   (set-frame-height (selected-frame) 48)
 )
@@ -198,11 +198,11 @@
 
 (add-hook 'after-make-frame-functions 'run-after-make-frame-hooks)
 (add-hook 'after-init-hook
-	  (lambda () (run-after-make-frame-hooks (selected-frame))))
+      (lambda () (run-after-make-frame-hooks (selected-frame))))
 (add-hook 'after-make-window-system-frame-hooks
-	  'set/my-custom-window-settings)
+      'set/my-custom-window-settings)
 (add-hook 'after-make-console-frame-hooks
-	  'set/my-custom-terminal-settings)
+      'set/my-custom-terminal-settings)
 
 ;; activate my zoom commands:
 (require 'zoom-fonts)
@@ -250,17 +250,17 @@
 ;; if dtrt-indent is available, we will enable it for desired modes
 (when (require 'dtrt-indent nil 'noerror)
   (add-hook 'c-mode-common-hook
-	(lambda () (dtrt-indent-mode 1)))
+    (lambda () (dtrt-indent-mode 1)))
   (add-hook 'c++-mode-common-hook
-	(lambda () (dtrt-indent-mode 1)))
+    (lambda () (dtrt-indent-mode 1)))
   (add-hook 'sh-mode-hook
-	(lambda () (dtrt-indent-mode 1)))
+    (lambda () (dtrt-indent-mode 1)))
   (add-hook 'nxml-mode-hook
-	(lambda () (dtrt-indent-mode 1)))
+    (lambda () (dtrt-indent-mode 1)))
   (add-hook 'web-mode-hook
-	(lambda () (dtrt-indent-mode 1)))
+    (lambda () (dtrt-indent-mode 1)))
   (add-hook 'cmake-mode-hook
-	(lambda () (dtrt-indent-mode 1))))
+    (lambda () (dtrt-indent-mode 1))))
 ;; set tabbing in lisp mode:
 (setq-default lisp-indent-offset 2)
 ;; setup clang-format for projects that have a .clang_format file. Borrowed
@@ -279,19 +279,19 @@
   "Call `clang-format-region', but if prefix arg is passed, call `clang-format-buffer'"
   (interactive)
   (if (region-active-p)
-	(clang-format-region (region-beginning) (region-end))
-	(clang-format-buffer)))
+    (clang-format-region (region-beginning) (region-end))
+    (clang-format-buffer)))
 (when (require 'clang-format nil 'noerror)
   (defun clang-format-bindings-c ()
-	(define-key c-mode-map (kbd "C-M-\\") 'my/clang-format-region))
+    (define-key c-mode-map (kbd "C-M-\\") 'my/clang-format-region))
 (defun clang-format-bindings-c++ ()
   (define-key c++-mode-map (kbd "C-M-\\") 'my/clang-format-region))
 (add-hook 'c-mode-hook   'clang-format-bindings-c)
 (add-hook 'c++-mode-hook 'clang-format-bindings-c++))
 ;;   (add-hook 'c-mode-hook
-;; 	(lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local)))
+;;      (lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local)))
 ;;   (add-hook 'c++-mode-hook
-;; 	(lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local))))
+;;      (lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local))))
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
   (lambda () (subword-mode 1)))
@@ -315,8 +315,8 @@
 (setq remote-file-name-inhibit-cache nil)
 (setq vc-ignore-dir-regexp
   (format "%s\\|%s"
-	vc-ignore-dir-regexp
-	tramp-file-name-regexp))
+    vc-ignore-dir-regexp
+    tramp-file-name-regexp))
 ;; (setq tramp-persistency-file-name nil)
 ;; (setq password-cache nil)
 ;; (setq password-cache-expiry 16)
@@ -341,16 +341,16 @@
 ;; add keybinding for activating wdired-mode
 (add-hook 'dired-mode-hook 
   (lambda ()
-	(define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
+    (define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
 ;; enable unzipping within Dired
 (eval-after-load "dired-aux"
   '(add-to-list 'dired-compress-file-suffixes 
-	 '("\\.zip\\'" ".zip" "unzip")))
+     '("\\.zip\\'" ".zip" "unzip")))
 ;; change dired file associations:
 (setq dired-guess-shell-alist-user
   '(("\\.pdf\\'" "evince")
-	 ("\\.tex\\'" "pdflatex")
-	 ("\\.ods\\'\\|\\.xlsx?\\'\\|\\.docx?\\'\\|\\.csv\\'\\|\\.pptx?\\'" "libreoffice")))
+     ("\\.tex\\'" "pdflatex")
+     ("\\.ods\\'\\|\\.xlsx?\\'\\|\\.docx?\\'\\|\\.csv\\'\\|\\.pptx?\\'" "libreoffice")))
 ;; use ibuffer by default instead of list-buffers
 (defalias 'list-buffers 'ibuffer)
 ;; set abbrev mode settings
@@ -358,7 +358,7 @@
 ;; prevent cursor from moving over prompts in minibuffer
 (setq minibuffer-prompt-properties 
   (quote
-	(read-only t point-entered minibuffer-avoid-prompt cursor-intangible t face minibuffer-prompt)))
+    (read-only t point-entered minibuffer-avoid-prompt cursor-intangible t face minibuffer-prompt)))
 ;; set emacs completions to be case-insensitive
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
@@ -457,8 +457,8 @@
   (global-set-key (kbd "C-s-s") 'swiper)
   (setq ivy-display-style 'fancy)
   (defun bjm-swiper-recenter (&rest args)
-	"recenter display after swiper"
-	(recenter))
+    "recenter display after swiper"
+    (recenter))
   (advice-add 'swiper :after #'bjm-swiper-recenter))
 ;; if beacon is installed use it:
 (when (require 'beacon nil 'noerror)
@@ -489,7 +489,7 @@
 ;; SMARTPARENS MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; must be installed via elpa, or (require 'smartmparens)
 (when (require 'smartparens nil
-		'noerror) (show-smartparens-global-mode +1))
+        'noerror) (show-smartparens-global-mode +1))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -510,6 +510,13 @@
       (quote ([134217837 67108896 5 134217848 99 111 109 109 101 110 116 45 98 111 120 return 16 1 14 16 67108896 14 14 14 201326629 92 40 60 33 45 45 92 41 92 40 45 43 92 41 92 40 45 45 62 92 41 return 92 49 92 44 40 114 101 112 108 97 99 101 45 114 101 103 101 120 112 45 105 110 45 115 116 114 105 110 103 32 34 45 34 32 34 126 34 32 92 50 41 92 51 return 33] 0 "%d")) arg)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; MAGIT MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (require 'my-magit-functions nil 'noerror)
+  ;; Add the function to the post-finish hook
+  (add-hook 'git-commit-post-finish-hook #'my/run-gitlint-after-commit)
+  (setq my/gitlint-pyenv-version "3.8.10/envs/gitlint"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

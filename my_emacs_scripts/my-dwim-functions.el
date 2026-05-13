@@ -3,14 +3,14 @@
 symbol at point"
   (interactive)
   (let ((occur-dwim-candidate
-  	(if (region-active-p)
-  	  (buffer-substring-no-properties
-  		(region-beginning)
-  		(region-end))
-  	  (thing-at-point 'symbol))))
-  	(if (stringp occur-dwim-candidate)
-  	  (push occur-dwim-candidate regexp-history)
-	  nil))
+    (if (region-active-p)
+      (buffer-substring-no-properties
+        (region-beginning)
+        (region-end))
+      (thing-at-point 'symbol))))
+    (if (stringp occur-dwim-candidate)
+      (push occur-dwim-candidate regexp-history)
+      nil))
   (call-interactively 'occur))
 
 
@@ -18,9 +18,9 @@ symbol at point"
   "call FUNCTION using region if it is active, otherwise use current line as
 region"
   (if (region-active-p)
-	(funcall function (region-beginning) (region-end))
-	;; else
-	(funcall function (point-at-bol) (point-at-eol))))
+    (funcall function (region-beginning) (region-end))
+    ;; else
+    (funcall function (point-at-bol) (point-at-eol))))
 
 
 (defun my/comment-dwim ()
@@ -60,5 +60,12 @@ not active"
     (message "Opening %s..." file)
     (call-process "xdg-open" nil 0 nil file)
     (message "Opening %s done" file)))
+
+
+(defun my/open-current-file-with-default ()
+  "Open the current buffer file directly in the default program."
+  (interactive)
+  (browse-url-xdg-open (concat "file://" (buffer-file-name))))
+
 
 (provide 'my-dwim-functions)

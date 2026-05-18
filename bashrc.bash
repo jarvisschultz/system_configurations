@@ -98,6 +98,13 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+# Load custom completion scripts
+if [ -d ~/.bash_completion.d ]; then
+    for f in ~/.bash_completion.d/*; do
+        [ -f "$f" ] && . "$f"
+    done
+fi
+
 # make nano automatically open with sudo when necessary
 function nano() {
     nano=`which nano`;

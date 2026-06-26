@@ -12,7 +12,7 @@
 ;; 	       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
 	     '("melpa-stable" .
-	       "http://stable.melpa.org/packages/") 'APPEND)
+           "https://stable.melpa.org/packages/") 'APPEND)
 ;; add org-mode packages:
 ;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
@@ -339,7 +339,7 @@
 ;; allow wdired to change file permissions
 (setq wdired-allow-to-change-permissions t)
 ;; add keybinding for activating wdired-mode
-(add-hook 'dired-mode-hook 
+(add-hook 'dired-mode-hook
   (lambda ()
     (define-key dired-mode-map (kbd "C-c C-q") 'wdired-change-to-wdired-mode)))
 ;; enable unzipping within Dired
@@ -535,18 +535,33 @@
   (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
 ;; bind extra key to force starting company-completion
 (define-key global-map (kbd "<C-tab>") 'company-complete)
+;; Pick clangd per-project WITHOUT hardcoding any path: if the file's repo ships a `.claude/lsp/clangd-docker' wrapper
+;; run clangd through that wrapper; otherwise fall back to whatever clangd is on PATH. Generalizes to any repo that
+;; provides the wrapper, so the path is discovered, never literal.
 (when (require 'lsp-mode nil 'noerror)
+  (defun my/clangd-command (&rest _)
+    (let* ((root (locate-dominating-file
+                  (or (buffer-file-name) default-directory)
+                  ".claude/lsp/clangd-docker"))
+           (wrapper (and root (expand-file-name
+                               ".claude/lsp/clangd-docker" root))))
+      (if (and wrapper (file-executable-p wrapper))
+          (list wrapper)
+        (list (or (executable-find "clangd") "clangd")))))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection #'my/clangd-command)
+    :activation-fn (lambda (&rest _)
+                     (memq major-mode
+                           '(c-mode c++-mode objc-mode c-ts-mode c++-ts-mode)))
+    :major-modes '(c-mode c++-mode objc-mode c-ts-mode c++-ts-mode)
+    :priority 1            ; beat lsp-mode's built-in clangd client (-1)
+    :add-on? nil
+    :server-id 'clangd-auto))
   (add-hook 'c++-mode-common-hook #'lsp)
   (add-hook 'c-mode-common-hook #'lsp))
 (when (require 'lsp-ui nil 'noerror)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-;; (when (require 'ccls nil 'noerror)
-;;   (setq ccls-executable "/home/jschultz/src/ccls/Release/ccls"))
-;; (setq ccls-initialization-options
-;; '(:clang (:pathMappings [
-;;                           "/home/jschultz-dev/workspace/autoyard>/home/jschultz/autoyard"
-;;                           "/opt/ros/kinetic>/opt/ros/noetic"
-;;                           ])))
 (when (require 'flycheck nil 'noerror)
   (setq lsp-prefer-flymake nil)
   (flycheck-define-checker cpp-roslint

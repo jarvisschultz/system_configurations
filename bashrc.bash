@@ -285,3 +285,39 @@ if [ -n "$PATH" ]; then
   PATH=${PATH#:}
   unset old_PATH x
 fi
+
+# Completion for s5cmd
+_s5cmd_cli_bash_autocomplete() {
+    if [[ "${COMP_WORDS[0]}" != "source" ]]; then
+        COMPREPLY=()
+        local opts cur cmd
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        cmd="${COMP_LINE:0:$COMP_POINT}"
+        [ "${COMP_LINE:COMP_POINT-1:$COMP_POINT}" == " " ] \
+            && cmd="${cmd} ''"
+        opts=$($cmd --generate-bash-completion)
+
+        while IFS='' read -r line;
+        do
+          COMPREPLY+=("$line");
+        done \
+            < <(compgen -o bashdefault -o default -o nospace -W "${opts}" -- "${cur}")
+
+        return 0
+    fi
+}
+
+# call the _s5cmd_cli_bash_autocomplete to complete s5cmd command.
+complete -o nospace -F _s5cmd_cli_bash_autocomplete s5cmd
+
+# setup asdf
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+. <(asdf completion bash)
+
+# Added by Antigravity CLI installer
+export PATH="/home/jschultz/.local/bin:$PATH"
+
+# setup tc dev completion
+source <(~/tc_module/dev completion)
+# setup tcdev (dev-container wrapper) completion — verbs of tcdev + dev
+[ -x ~/work/tc-devcontainer-setup/host/tcdev ] && source <(~/work/tc-devcontainer-setup/host/tcdev completion)

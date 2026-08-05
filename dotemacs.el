@@ -521,6 +521,10 @@
 
 ;; CORFU MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'corfu nil 'noerror)
+  ;; disable company as it conflicts with corfu
+  (remove-hook 'after-init-hook 'global-company-mode)
+  (when (fboundp 'global-company-mode)
+    (global-company-mode -1))
   (setq corfu-cycle t)
   (setq corfu-auto t)
   (setq corfu-auto-prefix 2)

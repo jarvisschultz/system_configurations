@@ -519,26 +519,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; COMPANY MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-hook 'after-init-hook 'global-company-mode)
-(company-quickhelp-mode t)
-(when (require 'company-statistics nil 'noerror)
-  (add-hook 'after-init-hook 'company-statistics-mode))
-(when (require 'company-try-hard nil 'noerror)
-  (define-key company-active-map (kbd "C-j") #'company-try-hard)
-  (define-key global-map (kbd "C-S-j") #'company-try-hard))
-;; Do not show pop-up automatically
-(customize-set-variable 'company-quickhelp-delay nil)
-;; Define binding for showing pop-up manually in company-active-map instead of
-;; company-quickhelp-mode-map; this activates it only when we want completion.
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "C-?") #'company-quickhelp-manual-begin))
-;; bind extra key to force starting company-completion
-(define-key global-map (kbd "<C-tab>") 'company-complete)
+;; CORFU MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (require 'corfu nil 'noerror)
+  (setq corfu-cycle t)
+  (setq corfu-auto t)
+  (setq corfu-auto-prefix 2)
+  (setq corfu-auto-delay 0.6)
+  (setq corfu-preselect 'prompt)
+  (global-corfu-mode)
+  ;; corfu-history replaces company-statistics (ranks candidates you've
+  ;; picked before); persist it across sessions via savehist
+  (when (require 'corfu-history nil 'noerror)
+    (corfu-history-mode)
+    (with-eval-after-load 'savehist
+      (add-to-list 'savehist-additional-variables 'corfu-history)))
+  ;; corfu-popupinfo replaces company-quickhelp; keep it manual like before
+  ;; instead of auto-popping the doc window
+  (when (require 'corfu-popupinfo nil 'noerror)
+    (corfu-popupinfo-mode)
+    (setq corfu-popupinfo-delay nil)
+    (define-key corfu-map (kbd "C-?") #'corfu-popupinfo-toggle))
+  (define-key corfu-map (kbd "TAB") #'corfu-complete)
+  (define-key corfu-map (kbd "<tab>") #'corfu-complete)
+  (define-key corfu-map (kbd "S-TAB") #'corfu-previous)
+  (define-key corfu-map (kbd "<backtab>") #'corfu-previous)
+  (define-key corfu-map (kbd "C-n") #'corfu-next)
+  (define-key corfu-map (kbd "C-p") #'corfu-previous))
+;; bind extra key to force starting completion-at-point (corfu's entry point)
+(define-key global-map (kbd "<C-tab>") 'completion-at-point)
 ;; Pick clangd per-project WITHOUT hardcoding any path: if the file's repo ships a `.claude/lsp/clangd-docker' wrapper
 ;; run clangd through that wrapper; otherwise fall back to whatever clangd is on PATH. Generalizes to any repo that
 ;; provides the wrapper, so the path is discovered, never literal.
 (when (require 'lsp-mode nil 'noerror)
+  (setq lsp-completion-provider :capf)
   (defun my/clangd-command (&rest _)
     (let* ((root (locate-dominating-file
                   (or (buffer-file-name) default-directory)
@@ -577,75 +590,62 @@
 ;; (require 'company-ycmd)
 ;; (set-variable 'ycmd-server-command `("python", (file-truename "~/src/ycmd/ycmd")))
 ;; (set-variable 'ycmd-global-config (file-truename "~/src/ycmd/ycmd/global_conf.py"))
-;; define company backends for commonly used major modes:
-(eval-after-load 'company
-  '(progn
-	 ;; company and jedi:
-	 (defun my/company-python-mode-hook ()
-	   (set (make-local-variable 'company-backends) '(company-jedi))
-	   (add-to-list 'company-backends 'company-dabbrev-code t)
-	   (add-to-list 'company-backends 'company-yasnippet t))
-	 (add-hook 'python-mode-hook 'my/company-python-mode-hook)
-	 ;; company and C/C++
-	 (defun my/company-c-mode-hook ()
-	   (set (make-local-variable 'company-backends)
-	 	 '(company-capf))
-	   (add-to-list 'company-backends 'company-yasnippet t))
-	 (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
-	 (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
-	 ;; company and C/C++
-	 ;; (defun my/company-c-mode-hook ()
-	 ;;   (set (make-local-variable 'company-backends)
-	 ;; 	 '(company-ycmd))
-	 ;;   (add-to-list 'company-backends 'company-yasnippet t)
-	 ;;   (ycmd-mode))
-	 ;; (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
-	 ;; (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
-	 ;; company and C/C++
-	 ;; (defun my/company-c-mode-hook ()
-	 ;;   ;; (irony-mode)
-	 ;;   (set (make-local-variable 'company-backends)
-	 ;; 	 '((company-irony company-etags company-gtags company-c-headers company-dabbrev-code)))
-	 ;;   (add-to-list 'company-backends 'company-yasnippet t))
-	 ;; (add-hook 'c-mode-common-hook 'my/company-c-mode-hook)
-	 ;; (add-hook 'c++-mode-common-hook 'my/company-c-mode-hook)
-	 ;; company and LaTeX:
-	 (defun my/company-latex-mode-hook ()
-	   (set (make-local-variable 'company-backends)
-		 '(company-capf company-dabbrev company-ispell company-files company-yasnippet))
-	   (company-auctex-init))
-	 (add-hook 'LaTeX-mode-hook 'my/company-latex-mode-hook)
-	 ;; xml and html:
-	 (defun my/company-tml-mode-hook ()
-	   (set (make-local-variable 'company-backends)
-		 '(company-capf
-			(company-web-html company-nxml company-css)
-			company-dabbrev-code company-files company-ispell company-yasnippet)))
-	 (add-hook 'nxml-mode-hook 'my/company-tml-mode-hook)
-	 (add-hook 'html-mode-hook 'my/company-tml-mode-hook)
-	 (add-hook 'web-mode-hook 'my/company-tml-mode-hook)
-	 ;; CMake
-	 ;; (defun my/company-cmake-mode-hook ()
-	 ;;   (add-to-list 'company-backends 'company-cmake))
-	 ;; (add-hook 'cmake-mode-hook 'my/company-cmake-mode-hook)
-	 ;; elisp:
-	 (defun my/company-elisp-mode-hook ()
-	   (set (make-local-variable 'company-backends)
-			'((company-capf company-keywords company-dabbrev-code company-yasnippet)))
-	   (add-to-list 'company-backends 'company-files t))
-	 (add-hook 'emacs-lisp-mode-hook 'my/company-elisp-mode-hook)
-	 ;; text mode
-	 (defun my/company-text-mode-hook ()
-	   (set (make-local-variable 'company-backends) '((company-dabbrev company-ispell company-files))))
-	 (add-hook 'text-mode-hook 'my/company-text-mode-hook)
-	 ;; web mode
-	 ;; (defun my/company-web-mode-hook ()
-	 ;;   (set (make-local-variable 'company-backends) '((company-web-html company-dabbrev company-ispell company-files))))
-	 ;; (add-hook 'web-mode-hook 'my/company-web-mode-hook)
-	 ;; org mode
-	 (defun my/company-org-mode-hook ()
-	   (set (make-local-variable 'company-backends) '((company-web-html company-css company-dabbrev company-ispell company-files) company-yasnippet)))
-	 (add-hook 'org-mode-hook 'my/company-org-mode-hook)))
+;; define capf stacks (via cape + yasnippet-capf) for commonly used major modes:
+(when (require 'cape nil 'noerror)
+  (require 'yasnippet-capf nil 'noerror)
+  ;; jedi has no native capf, so bridge the old company backend through cape
+  (defun my/capf-python-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-capf-super (cape-company-to-capf 'company-jedi)
+				       #'yasnippet-capf)
+		      #'cape-dabbrev #'cape-file)))
+  (add-hook 'python-mode-hook 'my/capf-python-mode-hook)
+  ;; C/C++: lsp-mode already registers a completion-at-point-function, so
+  ;; just layer yasnippet on top of it instead of company-capf
+  (defun my/capf-c-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-capf-super #'lsp-completion-at-point #'yasnippet-capf)
+		      #'cape-dabbrev)))
+  (add-hook 'c-mode-common-hook 'my/capf-c-mode-hook)
+  (add-hook 'c++-mode-common-hook 'my/capf-c-mode-hook)
+  ;; LaTeX:
+  (defun my/capf-latex-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-capf-super #'lsp-completion-at-point #'yasnippet-capf)
+		      #'cape-dabbrev #'cape-ispell #'cape-file))
+    (company-auctex-init))
+  (add-hook 'LaTeX-mode-hook 'my/capf-latex-mode-hook)
+  ;; xml and html:
+  (defun my/capf-tml-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-capf-super
+		       #'lsp-completion-at-point
+		       (cape-company-to-capf 'company-web-html)
+		       (cape-company-to-capf 'company-nxml)
+		       (cape-company-to-capf 'company-css)
+		       #'yasnippet-capf)
+		      #'cape-dabbrev-code #'cape-file #'cape-ispell)))
+  (add-hook 'nxml-mode-hook 'my/capf-tml-mode-hook)
+  (add-hook 'html-mode-hook 'my/capf-tml-mode-hook)
+  (add-hook 'web-mode-hook 'my/capf-tml-mode-hook)
+  ;; elisp:
+  (defun my/capf-elisp-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-capf-super #'elisp-completion-at-point #'yasnippet-capf)
+		      #'cape-keyword #'cape-dabbrev-code #'cape-file)))
+  (add-hook 'emacs-lisp-mode-hook 'my/capf-elisp-mode-hook)
+  ;; text mode
+  (defun my/capf-text-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list #'cape-dabbrev #'cape-ispell #'cape-file)))
+  (add-hook 'text-mode-hook 'my/capf-text-mode-hook)
+  ;; org mode
+  (defun my/capf-org-mode-hook ()
+    (setq-local completion-at-point-functions
+		(list (cape-company-to-capf 'company-web-html)
+		      (cape-company-to-capf 'company-css)
+		      #'cape-dabbrev #'cape-ispell #'cape-file #'yasnippet-capf)))
+  (add-hook 'org-mode-hook 'my/capf-org-mode-hook))
 (defvar my/cmake-ide-enable-flag nil
   "Set to true once we have properly enabled `cmake-ide' in a
   single Emacs session.")
@@ -669,17 +669,6 @@
 	  (rtags-stop-diagnostics)
 	  (rtags-quit-rdm)
 	  (define-key c-mode-base-map (kbd "<backtab>") nil))))
-;; company customizations:
-(eval-after-load 'company
-  '(progn
-     (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
-     (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
-	 (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
-     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-	 (define-key company-active-map (kbd "C-n") '(lambda () (interactive) (company-complete-common-or-cycle 1)))
-	 (define-key company-active-map (kbd "C-p") '(lambda () (interactive) (company-complete-common-or-cycle -1)))
-	 (setq company-idle-delay 0.6)
-	 (setq company-minimum-prefix-length 2)))
 (yas-global-mode)
 ;; Disable lsp when opening files in git-timemachine
 (defun my/lsp-mode-disconnect-hook ()

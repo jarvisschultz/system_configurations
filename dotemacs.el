@@ -605,53 +605,95 @@
 ;; candidates for what you've typed -- it does NOT fall through to the next
 ;; entry unless that function is marked non-exclusive. So every "primary"
 ;; source below (lsp, jedi-via-cape, elisp-completion-at-point) is wrapped in
-;; cape-wrap-nonexclusive and merged into ONE cape-capf-super alongside the
+;; cape-capf-nonexclusive and merged into ONE cape-capf-super alongside the
 ;; fallbacks (yasnippet-capf, cape-dabbrev, cape-file, ...) so they're all
 ;; tried together instead of the primary source silently blocking the rest.
 (when (require 'cape nil 'noerror)
   (require 'yasnippet-capf nil 'noerror)
+  ;; company-web provides company-web-html/-jade/-slim as separate,
+  ;; optional third-party backends (unlike company-nxml/company-css, which
+  ;; ship inside company.el itself) -- require it so the functions actually
+  ;; exist to be bridged, in case some machine or checkout is missing it.
+  (require 'company-web nil 'noerror)
+  ;; cape-company-to-capf wraps a company backend lazily: it doesn't check
+  ;; that the backend function actually exists until something tries to
+  ;; call it, so a missing/optional package (company-web not installed,
+  ;; etc.) surfaces as a runtime "void-function" error deep in Corfu rather
+  ;; than a clean failure at setup time. Guard with fboundp and return nil
+  ;; instead, so callers can delq nil it out of their capf list.
+  (defun my/company-backend-capf (backend)
+    (when (fboundp backend)
+      (cape-capf-nonexclusive (cape-company-to-capf backend))))
+  ;; lsp-completion-mode (a minor mode lsp-mode turns on itself once the
+  ;; server connects) unconditionally does its own setq-local on
+  ;; completion-at-point-functions when it enables -- it doesn't check or
+  ;; append to whatever a major-mode hook set beforehand, it just replaces
+  ;; it. Since that happens *after* c-mode-common-hook/LaTeX-mode-hook/etc
+  ;; already ran, our cape-capf-super stack gets clobbered the moment the
+  ;; server finishes connecting. So instead of setting
+  ;; completion-at-point-functions directly for lsp-backed modes, we stash
+  ;; the fallbacks we want (yasnippet/dabbrev/etc) in this buffer-local var,
+  ;; and re-merge them in `lsp-completion-mode-hook', which runs *after*
+  ;; lsp-mode's own setup, so ours wins.
+  (defvar-local my/capf-fallbacks nil)
+  (defun my/capf-merge-lsp-fallbacks ()
+    (when (and (bound-and-true-p lsp-completion-mode) my/capf-fallbacks)
+      (setq-local completion-at-point-functions
+		  (list (apply #'cape-capf-super
+			       (cape-capf-nonexclusive #'lsp-completion-at-point)
+			       my/capf-fallbacks)))))
+  (add-hook 'lsp-completion-mode-hook #'my/capf-merge-lsp-fallbacks)
   ;; jedi has no native capf, so bridge the old company backend through cape
   (defun my/capf-python-mode-hook ()
     (setq-local completion-at-point-functions
-		(list (cape-capf-super
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-jedi))
-		       #'yasnippet-capf
-		       #'cape-dabbrev
-		       #'cape-file))))
+		(list (apply #'cape-capf-super
+			     (delq nil
+				   (list (my/company-backend-capf 'company-jedi)
+					 #'yasnippet-capf
+					 #'cape-dabbrev
+					 #'cape-file))))))
   (add-hook 'python-mode-hook 'my/capf-python-mode-hook)
-  ;; C/C++: lsp-mode already registers a completion-at-point-function, so
-  ;; just layer yasnippet + dabbrev on top of it instead of company-capf
+  ;; C/C++: set the stack immediately (covers the window before lsp
+  ;; connects, and the case where it never does), and store the fallbacks
+  ;; so my/capf-merge-lsp-fallbacks can re-attach them once lsp-completion-mode
+  ;; turns on and stomps on completion-at-point-functions.
   (defun my/capf-c-mode-hook ()
+    (setq-local my/capf-fallbacks (list #'yasnippet-capf #'cape-dabbrev))
     (setq-local completion-at-point-functions
 		(list (cape-capf-super
-		       (cape-wrap-nonexclusive #'lsp-completion-at-point)
+		       (cape-capf-nonexclusive #'lsp-completion-at-point)
 		       #'yasnippet-capf
 		       #'cape-dabbrev))))
   (add-hook 'c-mode-common-hook 'my/capf-c-mode-hook)
   (add-hook 'c++-mode-common-hook 'my/capf-c-mode-hook)
   ;; LaTeX:
   (defun my/capf-latex-mode-hook ()
+    (setq-local my/capf-fallbacks
+		(list #'yasnippet-capf #'cape-dabbrev #'cape-dict #'cape-file))
     (setq-local completion-at-point-functions
 		(list (cape-capf-super
-		       (cape-wrap-nonexclusive #'lsp-completion-at-point)
+		       (cape-capf-nonexclusive #'lsp-completion-at-point)
 		       #'yasnippet-capf
 		       #'cape-dabbrev
-		       #'cape-ispell
+		       #'cape-dict
 		       #'cape-file)))
     (company-auctex-init))
   (add-hook 'LaTeX-mode-hook 'my/capf-latex-mode-hook)
   ;; xml and html:
   (defun my/capf-tml-mode-hook ()
+    (setq-local my/capf-fallbacks
+		(delq nil
+		      (list (my/company-backend-capf 'company-web-html)
+			    (my/company-backend-capf 'company-nxml)
+			    (my/company-backend-capf 'company-css)
+			    #'yasnippet-capf
+			    #'cape-dabbrev-code
+			    #'cape-file
+			    #'cape-dict)))
     (setq-local completion-at-point-functions
-		(list (cape-capf-super
-		       (cape-wrap-nonexclusive #'lsp-completion-at-point)
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-web-html))
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-nxml))
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-css))
-		       #'yasnippet-capf
-		       #'cape-dabbrev-code
-		       #'cape-file
-		       #'cape-ispell))))
+		(list (apply #'cape-capf-super
+			     (cape-capf-nonexclusive #'lsp-completion-at-point)
+			     my/capf-fallbacks))))
   (add-hook 'nxml-mode-hook 'my/capf-tml-mode-hook)
   (add-hook 'html-mode-hook 'my/capf-tml-mode-hook)
   (add-hook 'web-mode-hook 'my/capf-tml-mode-hook)
@@ -659,7 +701,7 @@
   (defun my/capf-elisp-mode-hook ()
     (setq-local completion-at-point-functions
 		(list (cape-capf-super
-		       (cape-wrap-nonexclusive #'elisp-completion-at-point)
+		       (cape-capf-nonexclusive #'elisp-completion-at-point)
 		       #'yasnippet-capf
 		       #'cape-keyword
 		       #'cape-dabbrev-code
@@ -668,18 +710,19 @@
   ;; text mode
   (defun my/capf-text-mode-hook ()
     (setq-local completion-at-point-functions
-		(list #'cape-dabbrev #'cape-ispell #'cape-file)))
+		(list #'cape-dabbrev #'cape-dict #'cape-file)))
   (add-hook 'text-mode-hook 'my/capf-text-mode-hook)
   ;; org mode
   (defun my/capf-org-mode-hook ()
     (setq-local completion-at-point-functions
-		(list (cape-capf-super
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-web-html))
-		       (cape-wrap-nonexclusive (cape-company-to-capf 'company-css))
-		       #'yasnippet-capf
-		       #'cape-dabbrev
-		       #'cape-ispell
-		       #'cape-file))))
+		(list (apply #'cape-capf-super
+			     (delq nil
+				   (list (my/company-backend-capf 'company-web-html)
+					 (my/company-backend-capf 'company-css)
+					 #'yasnippet-capf
+					 #'cape-dabbrev
+					 #'cape-dict
+					 #'cape-file))))))
   (add-hook 'org-mode-hook 'my/capf-org-mode-hook))
 (defvar my/cmake-ide-enable-flag nil
   "Set to true once we have properly enabled `cmake-ide' in a

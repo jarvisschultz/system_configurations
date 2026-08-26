@@ -687,7 +687,7 @@
 			    (my/company-backend-capf 'company-nxml)
 			    (my/company-backend-capf 'company-css)
 			    #'yasnippet-capf
-			    #'cape-dabbrev-code
+			    #'cape-dabbrev
 			    #'cape-file
 			    #'cape-dict)))
     (setq-local completion-at-point-functions
@@ -704,7 +704,7 @@
 		       (cape-capf-nonexclusive #'elisp-completion-at-point)
 		       #'yasnippet-capf
 		       #'cape-keyword
-		       #'cape-dabbrev-code
+		       #'cape-dabbrev
 		       #'cape-file))))
   (add-hook 'emacs-lisp-mode-hook 'my/capf-elisp-mode-hook)
   ;; text mode

@@ -1,12 +1,13 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == */home/jschultz/.fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/home/jschultz/.fzf/bin"
-fi
-
-# Auto-completion
-# ---------------
-[[ $- == *i* ]] && source "/home/jarvis/.fzf/shell/completion.bash" 2> /dev/null
+# Prepend (and de-duplicate) so ~/.fzf/bin wins over a distro fzf in /usr/bin,
+# which may be too old for "fzf --bash" below.
+__fzf_bin="${HOME}/.fzf/bin"
+PATH=":${PATH}:"
+PATH="${PATH//:"${__fzf_bin}":/:}"
+PATH="${PATH#:}"; PATH="${PATH%:}"
+PATH="${__fzf_bin}${PATH:+:${PATH}}"
+unset __fzf_bin
 
 # Key bindings
 # ------------

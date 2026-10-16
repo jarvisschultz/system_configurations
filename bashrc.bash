@@ -197,7 +197,7 @@ acdpath=$(command -v acd_func.sh)
 if [ -f "$acdpath" ]; then
     source $acdpath
     # add a keybinding:
-    bind -x "\"\C-\M-i\":cd_func -- ;"
+    bind -x "\"\e\C-i\":cd_func -- ;"
 fi
 
 # add byobu colorprompt

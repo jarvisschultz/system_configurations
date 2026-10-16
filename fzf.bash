@@ -83,18 +83,18 @@ if [[ $- =~ i ]]; then
 
     # CTRL-T - Paste the selected file path into the command line
     if [ $BASH_VERSINFO -gt 3 ]; then
-      bind -x '"\C-\M-f": "fzf-file-widget"'
+      bind -x '"\e\C-f": "fzf-file-widget"'
     elif __fzf_use_tmux__; then
-      bind '"\C-\M-f": " \C-u \C-a\C-k`__fzf_select_tmux__`\e\C-e\C-y\C-a\C-d\C-y\ey\C-h"'
+      bind '"\e\C-f": " \C-u \C-a\C-k`__fzf_select_tmux__`\e\C-e\C-y\C-a\C-d\C-y\ey\C-h"'
     else
-        bind '"\C-\M-f": " \C-u \C-a\C-k`__fzf_select__`\e\C-e\C-y\C-a\C-y\ey\C-h\C-e\er \C-h"'
+        bind '"\e\C-f": " \C-u \C-a\C-k`__fzf_select__`\e\C-e\C-y\C-a\C-y\ey\C-h\C-e\er \C-h"'
     fi
 
     # CTRL-R - Paste the selected command from history into the command line
-    bind '"\C-\M-r": " \C-e\C-u\C-y\ey\C-u`__fzf_history__`\e\C-e\er\e^"'
+    bind '"\e\C-r": " \C-e\C-u\C-y\ey\C-u`__fzf_history__`\e\C-e\er\e^"'
 
     # ALT-C - cd into the selected directory
-    bind '"\C-\M-o": " \C-e\C-u`__fzf_cd__`\e\C-e\er\C-m"'
+    bind '"\e\C-o": " \C-e\C-u`__fzf_cd__`\e\C-e\er\C-m"'
   fi
 
 fi

@@ -271,7 +271,13 @@ if [ -d "$FORGIT_INSTALL_DIR" ]; then
 fi
 
 
-# clear any duplicates in PATH
+# setup asdf
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+# ~/.local/bin (pipx tools, claude, antigravity) must beat pyenv shims
+export PATH="$HOME/.local/bin:$PATH"
+
+# clear any duplicates in PATH (keep last of all PATH edits)
 if [ -n "$PATH" ]; then
   old_PATH=$PATH:; PATH=
   while [ -n "$old_PATH" ]; do
@@ -310,14 +316,17 @@ _s5cmd_cli_bash_autocomplete() {
 # call the _s5cmd_cli_bash_autocomplete to complete s5cmd command.
 complete -o nospace -F _s5cmd_cli_bash_autocomplete s5cmd
 
-# setup asdf
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# asdf completion (asdf shims are added to PATH above the dedup block)
 . <(asdf completion bash)
 
-# Added by Antigravity CLI installer
-export PATH="/home/jschultz/.local/bin:$PATH"
+# pipx setup
+export PIPX_DEFAULT_PYTHON=/usr/bin/python3
 
 # setup tc dev completion
 source <(~/tc_module/dev completion)
 # setup tcdev (dev-container wrapper) completion — verbs of tcdev + dev
 [ -x ~/work/tc-devcontainer-setup/host/tcdev ] && source <(~/work/tc-devcontainer-setup/host/tcdev completion)
+
+# ntfy topic for Claude Code phone notifications (kept out of the synced ~/.claude repo)
+export NTFY_TOPIC=tc-jschultz-fbd6822b
+

@@ -580,7 +580,79 @@
     :add-on? nil
     :server-id 'clangd-auto))
   (add-hook 'c++-mode-common-hook #'lsp)
-  (add-hook 'c-mode-common-hook #'lsp))
+  (add-hook 'c-mode-common-hook #'lsp)
+  ;; Same per-project discovery for Python: use the repo's `.claude/lsp/pylsp-docker' wrapper if present, else a host
+  ;; pylsp. The sidecar runs pyls without ROS sourced, so hand jedi the ROS + catkin devel paths as extra_paths.
+  (defun my/pylsp-wrapper (dir)
+    "The repo's `.claude/lsp/pylsp-docker' wrapper above DIR, or nil."
+    (let* ((root (locate-dominating-file dir ".claude/lsp/pylsp-docker"))
+           (wrapper (and root (expand-file-name
+                               ".claude/lsp/pylsp-docker" root))))
+      (and wrapper (file-executable-p wrapper) wrapper)))
+  (defun my/pylsp-command (&rest _)
+    (list (or (my/pylsp-wrapper (or (buffer-file-name) default-directory))
+              (executable-find "pylsp")
+              "pylsp")))
+  (defcustom my/pylsp-extra-paths nil
+    "Extra import paths handed to the Python language server (jedi's extra_paths).
+Absolute entries are passed as-is (paths as the server sees them, e.g. inside
+the LSP container); relative entries are expanded against the project root.
+Set per machine with Customize, or per project in .dir-locals.el; nil means none."
+    :type '(repeat string)
+    :safe (lambda (v) (and (listp v) (seq-every-p #'stringp v)))
+    :group 'environment)
+  (defcustom my/pylsp-environment nil
+    "Python environment the host pylsp analyzes (jedi's environment): a venv or
+pyenv directory, or a python executable. A relative value is expanded against
+the project root. nil means auto-detect, see `my/pylsp-detect-environment'.
+Set per project in .dir-locals.el. Never sent to the tc_module sidecar, whose
+server only knows container paths."
+    :type '(choice (const :tag "Auto-detect" nil) string)
+    :safe (lambda (v) (or (null v) (stringp v)))
+    :group 'environment)
+  (defun my/pylsp-detect-environment (root)
+    "A .venv/ or venv/ in ROOT, else the pyenv version named by ROOT's .python-version, else nil."
+    (or (seq-find (lambda (d) (file-executable-p (expand-file-name "bin/python" d)))
+                  (mapcar (lambda (d) (expand-file-name d root)) '(".venv" "venv")))
+        (let* ((file (expand-file-name ".python-version" root))
+               (name (and (file-readable-p file)
+                          (car (split-string (with-temp-buffer
+                                               (insert-file-contents file)
+                                               (buffer-string))))))
+               (dir (and name (expand-file-name
+                               name (expand-file-name "versions" (or (getenv "PYENV_ROOT") "~/.pyenv"))))))
+          ;; "system" or a version that isn't installed resolves to no directory
+          (and dir (file-directory-p dir) dir))))
+  (defun my/pylsp-settings (root)
+    ;; read the values as seen from the project root, so a .dir-locals.el there overrides the Customize value
+    (let* ((vals (with-temp-buffer
+                   (setq default-directory (file-name-as-directory root))
+                   (hack-dir-local-variables-non-file-buffer)
+                   (cons my/pylsp-extra-paths my/pylsp-environment)))
+           (env (and (not (my/pylsp-wrapper root))
+                     (if (cdr vals)
+                         (expand-file-name (cdr vals) root)
+                       (my/pylsp-detect-environment root))))
+           (jedi (ht ("extra_paths"
+                      (vconcat (mapcar (lambda (p) (expand-file-name p root)) (car vals)))))))
+      (when env
+        (puthash "environment" env jedi)
+        (lsp--info "pylsp-auto: analyzing with the Python environment in %s" env))
+      ;; the sidecar's pyls reads the "pyls" section, a host python-lsp-server reads "pylsp"
+      (ht ("pyls" (ht ("plugins" (ht ("jedi" jedi)))))
+          ("pylsp" (ht ("plugins" (ht ("jedi" jedi))))))))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection #'my/pylsp-command)
+    :major-modes '(python-mode python-ts-mode)
+    :priority 1            ; beat lsp-mode's built-in pylsp/pyright clients
+    :add-on? nil
+    :server-id 'pylsp-auto
+    :initialized-fn (lambda (workspace)
+                      (with-lsp-workspace workspace
+                        (lsp--set-configuration
+                         (my/pylsp-settings (lsp--workspace-root workspace)))))))
+  (add-hook 'python-mode-hook #'lsp))
 (when (require 'lsp-ui nil 'noerror)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 (when (require 'flycheck nil 'noerror)
@@ -604,7 +676,7 @@
 ;; the first function that claims the point, even if it returns zero
 ;; candidates for what you've typed -- it does NOT fall through to the next
 ;; entry unless that function is marked non-exclusive. So every "primary"
-;; source below (lsp, jedi-via-cape, elisp-completion-at-point) is wrapped in
+;; source below (lsp, elisp-completion-at-point) is wrapped in
 ;; cape-capf-nonexclusive and merged into ONE cape-capf-super alongside the
 ;; fallbacks (yasnippet-capf, cape-dabbrev, cape-file, ...) so they're all
 ;; tried together instead of the primary source silently blocking the rest.
@@ -643,15 +715,13 @@
 			       (cape-capf-nonexclusive #'lsp-completion-at-point)
 			       my/capf-fallbacks)))))
   (add-hook 'lsp-completion-mode-hook #'my/capf-merge-lsp-fallbacks)
-  ;; jedi has no native capf, so bridge the old company backend through cape
+  ;; Python: lsp-backed (pyls), same pattern as C/C++ below
   (defun my/capf-python-mode-hook ()
+    (setq-local my/capf-fallbacks (list #'yasnippet-capf #'cape-dabbrev #'cape-file))
     (setq-local completion-at-point-functions
 		(list (apply #'cape-capf-super
-			     (delq nil
-				   (list (my/company-backend-capf 'company-jedi)
-					 #'yasnippet-capf
-					 #'cape-dabbrev
-					 #'cape-file))))))
+			     (cape-capf-nonexclusive #'lsp-completion-at-point)
+			     my/capf-fallbacks))))
   (add-hook 'python-mode-hook 'my/capf-python-mode-hook)
   ;; C/C++: set the stack immediately (covers the window before lsp
   ;; connects, and the case where it never does), and store the fallbacks
@@ -1079,10 +1149,7 @@ Customize; nil means none."
 	(setq python-fill-docstring-style 'django)
 	;; comment region function
 	(local-set-key (kbd "C-c #") 'comment-region)
-	;; ref overloads
-	(local-set-key (kbd "M-.") 'jedi:goto-definition)
-	(local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
-	(local-set-key (kbd "M-?") 'helm-jedi-related-names)
+	;; M-. / M-, / M-? come from lsp-mode via xref (definition / back / references)
 	;; python tab-width
 	(setq python-indent-offset 4)
 	(setq tab-width 4)
@@ -1090,9 +1157,7 @@ Customize; nil means none."
 	(highlight-indentation-current-column-mode)
 	;; disable eldoc mode
 	(eldoc-mode 0)
-	(setq electric-indent-chars (delq ?: electric-indent-chars))
-	(setq jedi:setup-function nil)
-	(jedi:setup)))
+	(setq electric-indent-chars (delq ?: electric-indent-chars))))
 (defcustom python-autopep8-path (executable-find "autopep8")
   "autopep8 executable path."
   :group 'python

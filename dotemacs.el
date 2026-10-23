@@ -923,20 +923,42 @@ is available."
 
 ;; ROSEMACS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Add functionality for rosemacs
+(defcustom my/ros-shims-dir nil
+  "Directory of rospack/rosstack/rosmsg/rossrv shims used when ROS is not
+installed on this host (e.g. shims that run them inside a dev container).
+Set per machine with Customize; nil means no shims."
+  :type '(choice (const :tag "None" nil) directory)
+  :group 'environment)
+(defcustom my/rosemacs-dir nil
+  "Directory containing rosemacs.el, used when ROS is not installed on this
+host (e.g. a checkout of ros_emacs_utils/rosemacs). Set per machine with
+Customize; nil means none."
+  :type '(choice (const :tag "None" nil) directory)
+  :group 'environment)
 (if (getenv "ROS_DISTRO")
 	(let ((rpath (concat "/opt/ros/" (getenv "ROS_DISTRO") "/share/emacs/site-lisp/")))
 	  (if (file-directory-p rpath)
 		(add-to-list 'load-path rpath)
 		(message (format "Could not find ROS elisp path: %s" rpath))))
-  (message "No ROS_DISTRO environment variable"))
+  ;; No host ROS: load rosemacs from my/rosemacs-dir, and find the ROS commands
+  ;; in my/ros-shims-dir
+  (let ((rpath (and my/rosemacs-dir (expand-file-name my/rosemacs-dir)))
+		(shims (and my/ros-shims-dir (expand-file-name my/ros-shims-dir))))
+	(if (and rpath (file-directory-p rpath) shims (file-directory-p shims))
+		(progn
+		  (add-to-list 'load-path rpath)
+		  (add-to-list 'exec-path shims)
+		  (setenv "PATH" (concat shims path-separator (getenv "PATH"))))
+	  (message "No ROS_DISTRO, and my/rosemacs-dir or my/ros-shims-dir unset"))))
 (if (require 'rosemacs nil 'noerror)
   (progn
+	;; no roscore: disable topic/node polling before invoke starts it
+	(setq ros-node-update-interval 0)
+	(setq ros-topic-update-interval 0)
 	(invoke-rosemacs)
 	;; add a keymap for using rosemacs commands
 	(global-set-key "\C-x\C-r" ros-keymap)
-	(message "rosemacs successfully loaded")
-	(setq ros-node-update-interval 0)
-	(setq ros-topic-update-interval 0))
+	(message "rosemacs successfully loaded"))
   (message "rosemacs could not be imported"))
 ;; since ROS Groovy, catkin inserts ansi-color sequences into the output of the
 ;; compilation buffer... let's fix that

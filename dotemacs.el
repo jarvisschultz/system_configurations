@@ -623,27 +623,59 @@ server only knows container paths."
                                name (expand-file-name "versions" (or (getenv "PYENV_ROOT") "~/.pyenv"))))))
           ;; "system" or a version that isn't installed resolves to no directory
           (and dir (file-directory-p dir) dir))))
+  (defcustom my/pylsp-max-line-length nil
+    "Maximum line length pycodestyle allows in the Python language server.
+Set per machine with Customize, or per project in .dir-locals.el; nil means
+the server's default (79)."
+    :type '(choice (const :tag "Server default" nil) integer)
+    :safe (lambda (v) (or (null v) (integerp v)))
+    :group 'environment)
   (defun my/pylsp-settings (root)
     ;; read the values as seen from the project root, so a .dir-locals.el there overrides the Customize value
-    (let* ((vals (with-temp-buffer
-                   (setq default-directory (file-name-as-directory root))
-                   (hack-dir-local-variables-non-file-buffer)
-                   (cons my/pylsp-extra-paths my/pylsp-environment)))
-           (env (and (not (my/pylsp-wrapper root))
-                     (if (cdr vals)
-                         (expand-file-name (cdr vals) root)
-                       (my/pylsp-detect-environment root))))
-           (jedi (ht ("extra_paths"
-                      (vconcat (mapcar (lambda (p) (expand-file-name p root)) (car vals)))))))
+    (pcase-let* ((`(,extra-paths ,environment ,max-line-length)
+                  (with-temp-buffer
+                    (setq default-directory (file-name-as-directory root))
+                    (hack-dir-local-variables-non-file-buffer)
+                    (list my/pylsp-extra-paths my/pylsp-environment my/pylsp-max-line-length)))
+                 (env (and (not (my/pylsp-wrapper root))
+                           (if environment
+                               (expand-file-name environment root)
+                             (my/pylsp-detect-environment root))))
+                 (jedi (ht ("extra_paths"
+                            (vconcat (mapcar (lambda (p) (expand-file-name p root)) extra-paths)))))
+                 (pycodestyle (if max-line-length (ht ("maxLineLength" max-line-length)) (ht)))
+           ;; pylsp-mypy (host pylsp only, if installed) runs mypy in pylsp's own venv; point it at the project's
+           ;; interpreter so imports resolve against that environment. `t' stands for pylsp-mypy's default args.
+           (mypy (ht ("enabled" t)
+                     ("overrides"
+                      (vconcat (and env (list "--python-executable"
+                                              (if (file-directory-p env)
+                                                  (expand-file-name "bin/python" env)
+                                                env)))
+                               (list t))))))
       (when env
         (puthash "environment" env jedi)
         (lsp--info "pylsp-auto: analyzing with the Python environment in %s" env))
       ;; the sidecar's pyls reads the "pyls" section, a host python-lsp-server reads "pylsp"
-      (ht ("pyls" (ht ("plugins" (ht ("jedi" jedi)))))
-          ("pylsp" (ht ("plugins" (ht ("jedi" jedi))))))))
+      (ht ("pyls" (ht ("plugins" (ht ("jedi" jedi) ("pycodestyle" pycodestyle)))))
+          ("pylsp" (ht ("plugins" (ht ("jedi" jedi) ("pycodestyle" pycodestyle) ("pylsp_mypy" mypy))))))))
+  ;; pylsp plugins look tools up on PATH first (pylsp-mypy prefers any `mypy' there over its own), and a pyenv shim
+  ;; there exits 127 unless the directory's pyenv version has the tool. Start pylsp without the shim dirs, so its
+  ;; plugins fall back to the copies in pylsp's own venv; project interpreters are passed explicitly instead.
+  (defun my/pylsp-process-environment ()
+    (let ((pyenv-root (file-name-as-directory
+                       (expand-file-name (or (getenv "PYENV_ROOT") "~/.pyenv")))))
+      `(("PATH" . ,(string-join
+                    (seq-remove (lambda (d)
+                                  (let ((d (directory-file-name (expand-file-name d))))
+                                    (and (string-prefix-p pyenv-root d)
+                                         (string= (file-name-nondirectory d) "shims"))))
+                                (split-string (getenv "PATH") path-separator t))
+                    path-separator)))))
   (lsp-register-client
    (make-lsp-client
     :new-connection (lsp-stdio-connection #'my/pylsp-command)
+    :environment-fn #'my/pylsp-process-environment
     :major-modes '(python-mode python-ts-mode)
     :priority 1            ; beat lsp-mode's built-in pylsp/pyright clients
     :add-on? nil
@@ -652,6 +684,16 @@ server only knows container paths."
                       (with-lsp-workspace workspace
                         (lsp--set-configuration
                          (my/pylsp-settings (lsp--workspace-root workspace)))))))
+  ;; Runs before `lsp' in python-mode-hook (depth -90):
+  ;; - lsp-diagnostics turns flycheck-mode on *before* it sets flycheck-checker to `lsp', so that first check
+  ;;   auto-selects flycheck's own python-ruff (chaining to python-mypy). Point flycheck at `lsp' up front.
+  ;; - pyenv shims make a tool installed in *any* pyenv version look present on PATH, but they exit 127 unless the
+  ;;   version active for this directory has it. Only let lsp-mode's ruff add-on start where ruff actually runs.
+  (defun my/python-pre-lsp-setup ()
+    (setq-local flycheck-checker 'lsp)
+    (unless (ignore-errors (eq 0 (process-file "ruff" nil nil nil "--version")))
+      (setq-local lsp-disabled-clients (cons 'ruff lsp-disabled-clients))))
+  (add-hook 'python-mode-hook #'my/python-pre-lsp-setup -90)
   (add-hook 'python-mode-hook #'lsp))
 (when (require 'lsp-ui nil 'noerror)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))

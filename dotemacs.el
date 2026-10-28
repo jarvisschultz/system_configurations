@@ -518,6 +518,20 @@
   (setq my/gitlint-pyenv-version "3.8.10/envs/gitlint"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; JS DEVELOPMENT TOOLING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Work helpers that live in js_development_tooling rather than here
+(defcustom my/jsdt-emacs-dir nil
+  "Directory of js_development_tooling's Emacs helpers (its emacs/ folder),
+loaded at startup. Set per machine with Customize; nil means none."
+  :type '(choice (const :tag "None" nil) directory)
+  :group 'environment)
+(let ((jpath (and my/jsdt-emacs-dir (expand-file-name my/jsdt-emacs-dir))))
+  (when (and jpath (file-directory-p jpath))
+	(add-to-list 'load-path jpath)
+	(require 'jsdt nil 'noerror)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; CORFU MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (require 'corfu nil 'noerror)

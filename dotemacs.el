@@ -516,6 +516,7 @@
   ;; Add the function to the post-finish hook
   (add-hook 'git-commit-post-finish-hook #'my/run-gitlint-after-commit)
   (setq my/gitlint-pyenv-version "3.8.10/envs/gitlint"))
+(with-eval-after-load 'transient (transient-bind-q-to-quit))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 

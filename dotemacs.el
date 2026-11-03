@@ -1005,6 +1005,11 @@ is available."
     (global-set-key (kbd "C-c k") 'counsel-ag)
     (global-set-key (kbd "C-c i") 'counsel-imenu)))
 (when (require 'counsel-projectile nil 'noerror)
+  ;; projectile >= 3.x loads `projectile-known-projects' lazily, but
+  ;; counsel-projectile-switch-project reads the variable directly, so the
+  ;; first call after startup offers no candidates. Force the load first.
+  (advice-add 'counsel-projectile-switch-project :before
+              (lambda (&rest _) (projectile-known-projects)))
   (counsel-projectile-mode))
 
 

@@ -5,10 +5,17 @@
 # source branch deleted, then `git fetch --prune`), and delete the branch.
 # A worktree is only a candidate when:
 #   - it is not the main worktree and not the one you are standing in
-#   - `git status` is empty (no modified, staged or untracked files)
-# `git worktree remove` (no --force) re-checks cleanliness and refuses
-# locked worktrees and ones with initialized submodules; those are reported
-# and left alone.
+#   - `git status --ignore-submodules=none` is empty: no modified, staged or
+#     untracked files, in the worktree or inside any submodule, and no
+#     submodule moved off its recorded commit
+#   - every initialized submodule has no stash and no commit (on HEAD or a
+#     local branch) that is missing from its remotes
+#
+# Git refuses to remove any worktree with initialized submodules, clean or
+# not (even after `submodule deinit`), and removing one with --force deletes
+# the submodules' git dirs under .git/worktrees/<name>/modules. So a
+# worktree with submodules is removed with --force only after the checks
+# above. A single --force still refuses locked worktrees.
 #
 # -n  list what would be removed and why others were skipped, then exit.
 # Otherwise it lists, asks once, and removes on "y".
@@ -26,8 +33,19 @@ while IFS=$'\t' read -r branch wt; do
     if [[ $wt == "$main_wt" ]]; then echo "skip  $branch  (main worktree)"; continue; fi
     if [[ $wt == "$here" ]]; then echo "skip  $branch  (current worktree)"; continue; fi
     if [[ ! -d $wt ]]; then echo "skip  $branch  ($wt missing; run git worktree prune)"; continue; fi
-    if [[ -n $(git -C "$wt" status --porcelain 2>/dev/null | head -1) ]]; then
+    if [[ -n $(git -C "$wt" status --porcelain --ignore-submodules=none 2>/dev/null | head -1) ]]; then
         echo "skip  $branch  (dirty: $wt)"; continue
+    fi
+    # Submodule git dirs are deleted with the worktree; refuse if they hold
+    # anything that exists nowhere else.
+    at_risk=$(git -C "$wt" submodule foreach --quiet --recursive '
+        if [ -n "$(git rev-list -1 HEAD --branches --not --remotes)" ]; then
+            echo "$displaypath: unpushed commits"
+        elif [ -n "$(git stash list | head -1)" ]; then
+            echo "$displaypath: stash"
+        fi' 2>&1)
+    if [[ -n $at_risk ]]; then
+        echo "skip  $branch  (submodule ${at_risk//$'\n'/; })"; continue
     fi
     names+=("$branch") paths+=("$wt") shas+=("$(git rev-parse --short "refs/heads/$branch")")
 done < <(git for-each-ref \
@@ -43,7 +61,9 @@ read -r -p "Remove these ${#names[@]} worktrees and delete their branches? [y/N]
 [[ $ans == [yY] ]] || { echo "aborted"; exit 1; }
 
 for i in "${!names[@]}"; do
-    if git worktree remove "${paths[i]}"; then
+    force=()
+    [[ -n $(git -C "${paths[i]}" submodule status --recursive 2>/dev/null | grep -v '^-') ]] && force=(--force)
+    if git worktree remove "${force[@]}" "${paths[i]}"; then
         git branch -D "${names[i]}"
         # Recoverable until gc: git branch <name> <sha>
         echo "removed ${names[i]} (was ${shas[i]})"

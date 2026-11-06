@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# git wtclean [-n]
+#
+# Remove linked worktrees whose branch's upstream is gone (MR merged and
+# source branch deleted, then `git fetch --prune`), and delete the branch.
+# A worktree is only a candidate when:
+#   - it is not the main worktree and not the one you are standing in
+#   - `git status` is empty (no modified, staged or untracked files)
+# `git worktree remove` (no --force) re-checks cleanliness and refuses
+# locked worktrees and ones with initialized submodules; those are reported
+# and left alone.
+#
+# -n  list what would be removed and why others were skipped, then exit.
+# Otherwise it lists, asks once, and removes on "y".
+set -uo pipefail
+
+dry=0
+[[ ${1:-} == -n ]] && dry=1
+
+main_wt=$(git worktree list --porcelain | sed -n '1s/^worktree //p')
+here=$(git rev-parse --show-toplevel)
+
+names=() paths=() shas=()
+while IFS=$'\t' read -r branch wt; do
+    [[ -z $wt ]] && continue                 # not in a worktree: `git bdorph`
+    if [[ $wt == "$main_wt" ]]; then echo "skip  $branch  (main worktree)"; continue; fi
+    if [[ $wt == "$here" ]]; then echo "skip  $branch  (current worktree)"; continue; fi
+    if [[ ! -d $wt ]]; then echo "skip  $branch  ($wt missing; run git worktree prune)"; continue; fi
+    if [[ -n $(git -C "$wt" status --porcelain 2>/dev/null | head -1) ]]; then
+        echo "skip  $branch  (dirty: $wt)"; continue
+    fi
+    names+=("$branch") paths+=("$wt") shas+=("$(git rev-parse --short "refs/heads/$branch")")
+done < <(git for-each-ref \
+    --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%09%(worktreepath)%(end)' \
+    refs/heads | sed '/^$/d')
+
+if (( ${#names[@]} == 0 )); then echo "nothing to clean"; exit 0; fi
+
+for i in "${!names[@]}"; do echo "clean ${names[i]}  ${shas[i]}  ${paths[i]}"; done
+(( dry )) && exit 0
+
+read -r -p "Remove these ${#names[@]} worktrees and delete their branches? [y/N] " ans </dev/tty
+[[ $ans == [yY] ]] || { echo "aborted"; exit 1; }
+
+for i in "${!names[@]}"; do
+    if git worktree remove "${paths[i]}"; then
+        git branch -D "${names[i]}"
+        # Recoverable until gc: git branch <name> <sha>
+        echo "removed ${names[i]} (was ${shas[i]})"
+    else
+        echo "left    ${names[i]} (worktree remove refused)"
+    fi
+done

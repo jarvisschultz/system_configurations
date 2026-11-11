@@ -266,11 +266,16 @@
 ;; setup clang-format for projects that have a .clang_format file. Borrowed
 ;; following snippets from here:
 ;; https://eklitzke.org/smarter-emacs-clang-format
-;; Note, on current system I have built emacs26 from source and installed it
-;; into /usr/local/share, but the clang-format package that I install from
-;; apt-get installs the clang-format.el file to /usr/share, and my
-;; built-from-source emacs doesn't search there by default. I fixed this by
-;; providing a symbolic link in ~/.emacs.d
+;;
+;; clang-format.el comes from apt (/usr/share/emacs/site-lisp/clang-format-N);
+;; put the newest one on load-path rather than relying on a symlink in
+;; ~/.emacs.d/misc-packages (the old one pointed at clang-format-6.0 and went
+;; dangling on the 24.04 upgrade, silently disabling all of this).
+(let ((dirs (sort (file-expand-wildcards
+                    "/usr/share/emacs/site-lisp/clang-format-*")
+              (lambda (a b) (version< (file-name-nondirectory b)
+                              (file-name-nondirectory a))))))
+  (when dirs (add-to-list 'load-path (car dirs))))
 (defun clang-format-buffer-smart ()
   "Reformat buffer if .clang-format exists in the projectile root."
   (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
@@ -281,17 +286,12 @@
   (if (region-active-p)
     (clang-format-region (region-beginning) (region-end))
     (clang-format-buffer)))
-(when (require 'clang-format nil 'noerror)
-  (defun clang-format-bindings-c ()
-    (define-key c-mode-map (kbd "C-M-\\") 'my/clang-format-region))
-(defun clang-format-bindings-c++ ()
-  (define-key c++-mode-map (kbd "C-M-\\") 'my/clang-format-region))
-(add-hook 'c-mode-hook   'clang-format-bindings-c)
-(add-hook 'c++-mode-hook 'clang-format-bindings-c++))
-;;   (add-hook 'c-mode-hook
-;;      (lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local)))
-;;   (add-hook 'c++-mode-hook
-;;      (lambda () (add-hook 'before-save-hook #'clang-format-buffer-smart nil 'local))))
+(if (not (require 'clang-format nil 'noerror))
+  (message "clang-format.el not found; C-M-\\ formatting disabled")
+  (defun my/clang-format-bind-key ()
+    (local-set-key (kbd "C-M-\\") 'my/clang-format-region))
+  (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
+    (add-hook hook 'my/clang-format-bind-key)))
 ;; Turn on CamelCase mode by default
 (add-hook 'c-mode-common-hook
   (lambda () (subword-mode 1)))

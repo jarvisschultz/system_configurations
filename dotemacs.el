@@ -368,6 +368,11 @@
 ;; turn on markdown mode for certain files
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode)) ;; gfm = github-flavored
+;; Emacs 28+ opens non-HTML file:// URLs in Emacs (browse-url-default-handlers).
+;; Send Markdown to Chrome instead; xdg-open has no text/markdown default here.
+(with-eval-after-load 'browse-url
+  (add-to-list 'browse-url-handlers
+               '("\\`file:.*\\.\\(md\\|markdown\\)\\'" . browse-url-chrome)))
 ;; automatically make hash-bang files executable
 (add-hook 'after-save-hook
   'executable-make-buffer-file-executable-if-script-p)
